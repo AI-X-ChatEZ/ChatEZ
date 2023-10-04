@@ -1,0 +1,97 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: 'Godo';
+  font-style: normal;
+  font-weight: 400;
+  src: url('//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoM.woff2') format('woff2'),
+    url('//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoM.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Godo';
+  font-style: normal;
+  font-weight: 700;
+  src: url('//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoB.woff2') format('woff2'),
+    url('//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoB.woff') format('woff');
+}
+
+.godo * {
+  font-family: 'Godo', sans-serif;
+}
+
+body,
+header,
+section,
+nav,
+fieldset,
+legend,
+div,
+aside,
+footer,
+address,
+p,
+img,
+ol,
+ul,
+li,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+small,
+button,
+del,
+input,
+dl,
+dt,
+dd,
+iframe,
+textarea {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+img {
+  vertical-align: bottom;
+}
+a {
+  color: inherit;
+  text-decoration: none !important;
+}
+a:hover {
+  text-decoration: none !important;
+}
+input,
+textarea {
+  font-size: inherit;
+  color: inherit;
+}
+ol,
+ul,
+li {
+  list-style: none;
+}
+body {
+  font-size: 16px;
+  font-family: Godo, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', Dotum, '돋움', sans-serif;
+  color: #151515;
+}
+.blind {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  padding: 1px;
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  overflow: hidden;
+}
+address {
+  font-style: normal;
+}
+small {
+  font-size: inherit;
+}
