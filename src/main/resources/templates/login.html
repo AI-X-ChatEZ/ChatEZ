@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate = "~{index_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div  layout:fragment="content">
+    <form th:action="@{/signin}" method="post">
+        <label for="email">email</label>
+    <input type="text" name="email" id="email">
+        <label for="password">password</label>
+    <input type="password" name="password" id="password">
+        <button type="submit">login</button>
+    </form>
+</div>
+
+</body>
+</html>
