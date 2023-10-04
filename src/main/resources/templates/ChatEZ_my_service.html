@@ -1,0 +1,28 @@
+<html layout:decorate="~{ChatEZ_layout}">
+    <div layout:fragment="content" class="service_content">
+        <div class="content_service">
+            <h3><img th:src="@{img/service_logo_on.png}" alt="service_logo" class="category_logo">
+                <span>마이서비스</span>
+            </h3>
+            <button type="button" class="btn btn-primary"><img th:src="@{img/plus_icon.png}" alt="plus_icon" class="plus_icon">생성하기</button>
+        </div>
+        <div class="chatEZ_list">
+            <table>
+                <tr>
+                    <th>이름</th>
+                    <th>URL</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <td><img th:src="@{img/chatbot_icon.png}" alt="chatbot_icon" class="chatbot_icon"><span>ChatEZ Assistant</span></td>
+                    <td>http://chatez.com/assistant</td>
+                    <td><button type="button" class="btn btn-light">실행</button></td>
+                    <td><button type="button" class="btn btn-light">수정</button></td>
+                    <td><button type="button" class="btn btn-light">삭제</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</html>
