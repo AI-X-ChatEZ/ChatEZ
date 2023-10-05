@@ -16,7 +16,9 @@
           ><img src="/img/ChatEZ_logo.svg" alt="ChatEz" /><span>ChatEZ</span></a
           >
         </h1>
-        <div><a href="/login" class="btn login_btn">로그인</a></div>
+        <div><a th:href="@{/login}" class="btn login_btn" sec:authorize="isAnonymous()">로그인</a>
+        <a th:href="@{/logout}" class="btn login_btn" sec:authorize="isAuthenticated()">로그아웃</a>
+        </div>
       </div>
     </header>
 <!--    <header th:replace="~{header :: headerFragment}"></header>-->

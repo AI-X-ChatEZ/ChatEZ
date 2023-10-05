@@ -13,7 +13,7 @@
         ChatEZ로<br />
         빠르고 간편하게 서비스 맞춤 대화형 AI를 만들어보세요.
     </p>
-    <form th:action="@{/signup}" method="post" th:object="${memberForm}" class="join center">
+    <form th:action="@{/join}" method="post" th:object="${memberForm}" class="join center">
         <div class="center form_box">
             <div th:replace="~{form_errors :: formErrorsFragment}"></div>
             <div class="inner_box">
@@ -80,7 +80,7 @@
         </div>
         <div class="center button row justify-content-between">
             <button class="col-4 btn" type="submit">가입하기</button>
-            <button class="col-4 btn btn-secondary" type="reset">취소</button>
+            <button class="col-4 btn btn-secondary" onclick="history.back()">취소</button>
         </div>
     </form>
 </div>

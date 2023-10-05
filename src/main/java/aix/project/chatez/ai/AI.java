@@ -15,7 +15,7 @@ public class AI {
     @Column(name = "ai_id")
     private Long aiId;
 
-    @Column(name="ai_name", nullable=false)
+    @Column(name="ai_name", nullable=false, unique = true)
     private String aiName;
 
     @ManyToOne(fetch=FetchType.LAZY, optional=false)

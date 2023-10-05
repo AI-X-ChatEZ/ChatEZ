@@ -22,42 +22,19 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable().cors().disable()
-                .authorizeHttpRequests(request -> request
-                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin(login -> login
-                        .loginPage("/signin")
-//                        .loginProcessingUrl("/success")
-                        .usernameParameter("name")
-                        .passwordParameter("password")
-                        .defaultSuccessUrl("/success", true)
-                        .permitAll()
-                )
-                .logout(withDefaults());
-
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+        http.authorizeHttpRequests((authorizeHttpRequests)->
+                        authorizeHttpRequests.requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
+                .formLogin((formLogin) -> formLogin
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/"))
+                .logout((logout) -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true));
         return http.build();
     }
-//    @Bean
-//    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-//                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
-//                .formLogin((formLogin) -> formLogin
-//                        .loginPage("/signin")
-//                        .defaultSuccessUrl("/success"))
-////                .logout((logout) -> logout
-////                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-////                        .logoutSuccessUrl("/")
-////                        .invalidateHttpSession(true));
-//        ;
-//        return http.build();
-//    }
 
     @Bean
     PasswordEncoder passwordEncoder(){
@@ -69,4 +46,6 @@ public class SecurityConfig {
             throws Exception{
         return  authenticationConfiguration.getAuthenticationManager();
     }
+
+
 }

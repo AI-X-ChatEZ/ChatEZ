@@ -6,7 +6,6 @@
 header {
   width: 1400px;
   height: 110px;
-  margin-top: 40px;
   border-bottom: 1px solid #3366ff;
 }
 header > div {
@@ -36,7 +35,7 @@ h1 span {
 }
 div.index_container {
   width: 1400px;
-  height: 1055px;
+  height: 1200px;
   background-color: #3366ff;
 }
 div.index_container > div {
@@ -51,9 +50,37 @@ div.index_container .quote {
 div.index_container .quote > span {
   font-size: 67px;
 }
-div.index_container .image > img {
+div.index_container .image > svg {
   width: 560px;
 }
+/* svg : START*/
+      .left {
+        animation: rotate-left 8s infinite;
+        transform-origin: 50% 50%;
+        transform-box: fill-box;
+      }
+      @keyframes rotate-left {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(365deg);
+        }
+      }
+      .right {
+        animation: rotate-right 8s infinite;
+        transform-origin: 50% 50%;
+        transform-box: fill-box;
+      }
+      @keyframes rotate-right {
+        from {
+          transform: rotate(-0deg);
+        }
+        to {
+          transform: rotate(-365deg);
+        }
+      }
+/* svg : END*/
 div.index_container .join {
   width: 193px;
   height: 92px;
@@ -70,7 +97,7 @@ footer {
   color: #fff;
   width: 1400px;
   background-color: #373737;
-  padding-bottom: 190px;
+  padding-bottom: 80px;
 }
 footer > div {
   width: 1300px;
@@ -101,7 +128,7 @@ footer .info p {
 
 /* login_container : START */
 [class$='container'] {
-  margin-top: 100px;
+  padding-top: 100px;
 }
 [class$='container'] h2 {
   font-size: 30px;
@@ -174,6 +201,9 @@ form > div.form_box {
 form > div.form_box>div.inner_box{
   width: 680px;
 }
+form > div.form_box>div.inner_box label{
+    line-height:38px;
+}
 form > div.form_box div.confirmCheck{
   margin-left: 350px;
   margin-top: -40px;
@@ -185,6 +215,19 @@ form > div.form_box div.scroll{
   height: 163px;
   overflow: hidden; overflow-y: scroll; text-align: left;
 
+}
+/* 스크롤바의 폭 너비 */
+div.scroll::-webkit-scrollbar {
+    width: 10px;
+}
+
+div.scroll::-webkit-scrollbar-thumb {
+    background: #85a2fb; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 둥근 테두리 */
+}
+
+div.scroll::-webkit-scrollbar-track {
+    background: rgba(30, 30, 30, .1);  /*스크롤바 뒷 배경 색상*/
 }
 div.form_check{
   text-align: right;
