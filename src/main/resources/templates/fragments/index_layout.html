@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <title>ChatEz - 새벽배송보다 빠른 대화형 AI생성 서비스</title>
     <link rel="icon" href="img/favicon-32x32.png" type="image/x-icon" />
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{css/style.css}" />
   </head>
   <body>
     <!-- header-->
@@ -23,6 +23,7 @@
     <!-- 각 페이지의 container내용-->
     <th:block layout:fragment="content"></th:block>
     <!-- footer -->
-    <footer th:replace="~{footer :: footerFragment}"></footer>
+    <footer  th:replace="~{fragments/footer :: footerFragment}"></footer>
+    <th:block layout:fragment="script"></th:block>
   </body>
 </html>

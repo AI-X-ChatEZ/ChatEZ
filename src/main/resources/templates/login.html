@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorate = "~{index_layout}">
+<html lang="ko" layout:decorate = "~{fragments/index_layout.html}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>로그인 - ChatEZ</title>
     <link rel="icon" href="img/favicon-32x32.png" type="image/x-icon" />
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{css/style.css}" />
   </head>
   <body>
     <div layout:fragment="content" class="login_container">
@@ -14,10 +14,10 @@
       <h2 class="text-center">로그인</h2>
       <p class="text-center">
         ChatEZ로<br />
-        빠르고 간편하게 서비스 맞춤 대화형 AI를 만들어보세요
+        빠르고 간편하게 서비스 맞춤 대화형 AI를 만들어보세요.
       </p>
-      <div class="login_box center">
-        <form action="" class="center d-flex justify-content-between">
+      <div class="center login_box">
+        <form action="" method="post" class="center d-flex justify-content-between">
           <div class="input_box">
           <div class="row">
             <label for="email" class="col-3">이메일</label>
@@ -32,7 +32,7 @@
         </form>
         <div class="join_link center d-flex justify-content-around">
           <p>아직 회원이 아니신가요?</p>
-          <a href="/join" class="d-block btn btn-secondary">회원가입</a>fff
+          <a href="/join" class="d-block btn btn-secondary">회원가입</a>
         </div>
       </div>
     </div>

@@ -18,30 +18,30 @@ public class MemberController {
 
     private final MemberService memberService;
 
-@GetMapping("/signup")
-public String signUp(MemberForm memberForm){
-    return "sign_up";
+@GetMapping("/join")
+public String join(MemberForm memberForm){
+    return "join";
 }
 
-@PostMapping("/signup")
-public String signUp(@Valid MemberForm memberForm, BindingResult bindingResult){
+@PostMapping("/join")
+public String join(@Valid MemberForm memberForm, BindingResult bindingResult){
 
     if(bindingResult.hasErrors()){
-        return "/sign_up";
+        return "/join";
     }
 
     if (!memberForm.getPassword1().equals(memberForm.getPassword2())) {
         bindingResult.rejectValue("password2", "passwordInCorrect",
                 "패스워드가 서로 일치하지 않습니다.");
-        return "/sign_up";
+        return "/join";
     }
 
     try{
         memberService.save(memberForm.getName(),memberForm.getEmail(),
                 memberForm.getPassword1());
     }catch (DataIntegrityViolationException e){
-        bindingResult.reject("signupFailed", "이미등록된 사용자 입니다.");
-        return "/sign_up";
+        bindingResult.reject("joinFailed", "이미등록된 사용자 입니다.");
+        return "/join";
     }
     return "redirect:/myservice";
 }
@@ -51,8 +51,8 @@ public String myService(){
     return "my_service";
 }
 
-@GetMapping("/signin")
-public String signIn(){
+@GetMapping("/login")
+public String login(){
     return "login";
 }
 

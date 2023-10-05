@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate = "~{fragments/index_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 - ChatEZ</title>
+    <link rel="stylesheet" type="text/css" th:href="@{css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{css/style.css}" />
+</head>
+<body>
+<div class="join_container" layout:fragment="content">
+    <h2 class="text-center">회원가입</h2>
+    <p class="text-center">
+        ChatEZ로<br />
+        빠르고 간편하게 서비스 맞춤 대화형 AI를 만들어보세요.
+    </p>
+    <form th:action="@{/signup}" method="post" th:object="${memberForm}" class="join center">
+        <div class="center form_box">
+            <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+            <div class="inner_box">
+                <div class="row my-5">
+                    <label for="name" class="col">이름</label>
+                    <input class="col form-control" type="text" name="name" id="name" placeholder="홍길동" required />
+                </div>
+                <div class="row my-5">
+                    <label for="email" class="col">이메일</label>
+                    <input
+                            class="col form-control"
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="chatez@chatez.com"
+                            required
+                    />
+                </div>
+                <div class="row my-5">
+                    <label for="password1" class="col">비밀번호</label>
+                    <input
+                            class="col form-control"
+                            type="password"
+                            name="password1"
+                            id="password1"
+                            placeholder="영 대소문자, 특수문자, 숫자만 가능합니다."
+                            required
+                    />
+                </div>
+                <div class="row my-5">
+                    <label for="password2" class="col">비밀번호 확인</label>
+                    <input
+                            class="col form-control"
+                            type="password"
+                            name="password2"
+                            id="password2"
+                            placeholder="영 대소문자, 특수문자, 숫자만 가능합니다."
+                            required
+                            onchange="passwordInput()"
+                    />
+                </div>
+                <div class="confirmCheck">
+                    <span id="confirmCheck" class="blind"></span>
+                </div>
+            </div>
+            <div class="my-3">이용약관</div>
+            <div class="form-control scroll my-3">
+                chatez는 소기업과 소상공인을 위한 대화형 AI 맞춤 생성 서비스입니다. <br />
+                이 서비스를 통해 소기업과 소상공인은 매뉴얼이나 제품 정보를 입력함으로써 특정 사업 또는 정보에 특화된 대화형
+                AI를 쉽고 빠르게 생성할 수 있습니다. chatez는 openai의 gpt 3.5 turbo API를 활용하여 사용자의 쿼리와 관련된
+                문서를 찾고, 이를 기반으로 최종 답변을 생성합니다. 이를 통해 소기업과 소상공인은 경제적인 부담을 덜고, 고객
+                응대의 효율성을 향상시킬 수 있습니다. chatez를 통해 누구나 손쉽게 대화형 AI를 활용할 수 있게 되어,
+                사회적으로 선한 파급 효과를 얻을 수 있습니다. chatez는 소기업과 소상공인을 위한 대화형 AI 맞춤 생성
+                서비스입니다. 이 서비스를 통해 소기업과 소상공인은 매뉴얼이나 제품 정보를 입력함으로써 특정 사업 또는 정보에
+                특화된 대화형 AI를 쉽고 빠르게 생성할 수 있습니다. chatez는 openai의 gpt 3.5 turbo API를 활용하여 사용자의
+                쿼리와 관련된 문서를 찾고, 이를 기반으로 최종 답변을 생성합니다. 이를 통해 소기업과 소상공인은 경제적인
+                부담을 덜고, 고객 응대의 효율성을 향상시킬 수 있습니다. chatez를 통해 누구나 손쉽게 대화형 AI를 활용할 수
+                있게 되어, 사회적으로 선한 파급 효과를 얻을 수 있습니다.
+            </div>
+            <div class="form_check my-3">
+                <input type="checkbox" name="consent" id="consent" class="form-check-input" required />
+                <label for="consent" class="form-check-label">동의 합니다.</label>
+            </div>
+        </div>
+        <div class="center button row justify-content-between">
+            <button class="col-4 btn" type="submit">가입하기</button>
+            <button class="col-4 btn btn-secondary" type="reset">취소</button>
+        </div>
+    </form>
+</div>
+<script  layout:fragment="script">
+    function passwordInput() {
+      const password1 = document.getElementById('password1').value;
+      const password2 = document.getElementById('password2').value;
+      if (password1 != '' && password2 != '') {
+        if (password1 !== password2) {
+          confirmCheck.innerText = '비밀번호가 일치하지 않습니다.';
+          confirmCheck.style.color = 'red';
+          confirmCheck.classList.remove('blind');
+        } else {
+          confirmCheck.innerText = '비밀번호가 서로 일치합니다.';
+          confirmCheck.classList.add('same');
+          confirmCheck.style.color = 'green';
+          confirmCheck.classList.remove('blind');
+        }
+      }
+    }
+</script>
+</body>
+</html>
