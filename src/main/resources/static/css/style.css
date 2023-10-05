@@ -3,63 +3,70 @@
 @import url(reset.css);
 
 /*화면 css*/
-html, body, .container-fluid, .row {
+html, body, .layout {
     height: 100%;
 }
 
-.col-md-2{
-    padding: 20px; position:relative; 
+.layout_left{
+    min-height: 920px;
+    width: 300px;
+    padding: 20px;
+    position:relative;
+    float: left;
 }
 
-.col-md-2 h2 img{
-    width: 88px; height: 88px; 
-    vertical-align: middle; 
+.layout_left .ChatEZ_logo{
+    width: 88px; height: 88px;
+    vertical-align: middle;
     margin-right: 20px;
     margin-left: 20px;
 }
 
-.col-md-2 h2{
-    font-weight: bold; 
+.layout_left h2{
+    font-weight: bold;
     font-size: 34px;
 }
 
-.col-md-2 a{
+.layout_left a{
     text-decoration: none;
     color: #151515;
 }
 
-.col-md-2 p img{
-    width: 54px; 
-    height: 54px; 
-    vertical-align: middle; 
+.layout_left p img{
+    width: 54px;
+    height: 54px;
+    vertical-align: middle;
     margin-right: 20px;
     margin-left: 20px;
 }
 
-.col-md-2 p{ 
-    position: absolute; 
-    bottom: 50px; 
+.layout_left p {
+    position: absolute;
+    bottom: 50px;
+    left: 20px;
     font-size: 26px;
 }
 
-.col-md-2 #logout_text{
+.layout_left #logout_text{
     padding-left: 10px;
 }
 
-.col-md-10 {
+.layout_right {
     background-color: #E6ECFF;
     height: 100%;
+    width: 1600px;
+    float: right;
 }
 
 /*버튼 css*/
 .btn.btn-outline-light {
-    border: 0;color: #BBDEFF; 
+    border: 0;color: #BBDEFF;
     font-size: 26px;
 }
 
 .btn.btn-outline-light img{
-    width: 54px; 
-    height: 54px; 
+    width: 54px;
+    height: 54px;
     vertical-align: middle;
 }
 
@@ -67,15 +74,15 @@ html, body, .container-fluid, .row {
     position: relative;
 }
 
-.col-md-2 > ul > li:nth-child(1) .category_logo_off, 
-.col-md-2 > ul > li:nth-child(1) .category_logo_on {
+.layout_left > ul > li:nth-child(1) .category_logo_off,
+.layout_left > ul > li:nth-child(1) .category_logo_on {
     position: absolute;
     top: 12px;
     left: 20px;
 }
 
-.col-md-2 > ul > li:nth-child(2) .category_logo_off, 
-.col-md-2 > ul > li:nth-child(2) .category_logo_on {
+.layout_left > ul > li:nth-child(2) .category_logo_off,
+.layout_left > ul > li:nth-child(2) .category_logo_on {
     position: absolute;
     top: 16px;
     left: 20px;
@@ -85,28 +92,28 @@ html, body, .container-fluid, .row {
     opacity: 0;
 }
 
-.col-md-2 > ul > li:nth-child(1) .category_text {
+.layout_left > ul > li:nth-child(1) .category_text {
     padding-left: 50px;
     color: #BBDEFF;
 }
 
-.col-md-2 > ul > li:nth-child(2) .category_text {
+.layout_left > ul > li:nth-child(2) .category_text {
     padding-left: 30px;
     color: #BBDEFF;
 }
 
-.col-md-2 ul {margin-top: 50px;}
-.col-md-2 ul li{margin-left: 10px;}
-.col-md-2 ul li button{width: 270px; height: 80px; border-radius: 20px;}
-.col-md-2 ul li button:hover {background-color: #FFF;}/*버튼 css*/
+.layout_left ul {margin-top: 50px;}
+.layout_left ul li{margin-left: 10px;}
+.layout_left ul li button{width: 270px; height: 80px; border-radius: 20px;}
+.layout_left ul li button:hover {background-color: #FFF;}/*버튼 css*/
 .btn.btn-outline-light {
-    border: 0;color: #BBDEFF; 
+    border: 0;color: #BBDEFF;
     font-size: 26px;
 }
 
 .btn.btn-outline-light img{
-    width: 54px; 
-    height: 54px; 
+    width: 54px;
+    height: 54px;
     vertical-align: middle;
 }
 
@@ -115,7 +122,7 @@ html, body, .container-fluid, .row {
 }
 
 .btn:hover .category_logo {
-    opacity: 0; 
+    opacity: 0;
     transition: opacity 0.3s ease-in-out;
 }
 
@@ -133,16 +140,16 @@ html, body, .container-fluid, .row {
     position: relative;
 }
 
-.col-md-2 > ul > li:nth-child(1) .category_logo_off, 
-.col-md-2 > ul > li:nth-child(1) .category_logo_on {
+.layout_left > ul > li:nth-child(1) .category_logo_off,
+.layout_left > ul > li:nth-child(1) .category_logo_on {
     position: absolute;
     top: 12px;
     left: 20px;
     transition: opacity 0.3s ease-in-out;
 }
 
-.col-md-2 > ul > li:nth-child(2) .category_logo_off, 
-.col-md-2 > ul > li:nth-child(2) .category_logo_on {
+.layout_left > ul > li:nth-child(2) .category_logo_off,
+.layout_left > ul > li:nth-child(2) .category_logo_on {
     position: absolute;
     top: 16px;
     left: 20px;
@@ -153,218 +160,45 @@ html, body, .container-fluid, .row {
     opacity: 0;
 }
 
-.col-md-2 > ul > li:nth-child(1) .category_text {
+.layout_left > ul > li:nth-child(1) .category_text {
     padding-left: 50px;
     transition: color 0.3s ease-in-out;
     color: #BBDEFF;
 }
 
-.col-md-2 > ul > li:nth-child(2) .category_text {
+.layout_left > ul > li:nth-child(2) .category_text {
     padding-left: 30px;
     transition: color 0.3s ease-in-out;
     color: #BBDEFF;
 }
 
-.col-md-2 ul {margin-top: 50px;}
-.col-md-2 ul li{margin-left: 10px; margin-top: 20px;}
-.col-md-2 ul li button{width: 270px; height: 80px; border-radius: 20px;}
-.col-md-2 ul li button:hover{background-color: #E6ECFF;}
+.layout_left ul {margin-top: 50px;}
+.layout_left ul li{margin-left: 10px; margin-top: 20px;}
+.layout_left ul li button{width: 270px; height: 80px; border-radius: 20px;}
+.layout_left ul li button:hover{background-color: #E6ECFF;}
 
 /*컨텐츠 레이아웃 영역*/
-.col-md-10 {
+.layout_right {
     padding-right: 40px;
     padding-left: 40px;
 }
 
-.col-md-10 #user{
+.layout_right {
+    min-width: 1400px; /* 최소 너비를 1400px로 설정 */
+    /* 기존의 스타일 코드 */
+}
+
+.layout_right #user{
+    min-width: 1400px;
     display: block;
     padding:10px 60px 10px 0;
     font-size: 22px;
     text-align: right;
 }
 
-.col-md-10 img{
+.layout_right #user img{
     width: 54px;
     height: 54px;
     vertical-align: middle;
     margin-right: 20px;
-}
-
-/*컨텐츠 영역*/
-.btn-outline-light.active,
-.show > .btn-outline-light.dropdown-toggle {
-    background-color: #E6ECFF !important;
-}
-
-.btn.btn-outline-light.active .category_logo_off,
-.btn.btn-outline-light.active .category_logo_on {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.btn.btn-outline-light.active .category_logo_on {
-    opacity: 1;
-}
-
-.btn.btn-outline-light.active .category_text {
-    color: #3366FF !important;
-    transition: color 0.3s ease-in-out;
-}
-
-.service_content {
-    background-color: #FFF; 
-    width: 100%; 
-    height: 85vh;
-    border-radius: 20px;
-    padding: 20px 30px 20px 30px;
-}
-
-.content_service{
-    border-bottom:2px solid #ddd;
-    height: 90px;
-}
-
-.content_service h3{
-    padding-top: 14px;
-    padding-left: 20px;
-    font-size: 26px;
-    float: left;
-} 
-
-.content_service .btn-primary{
-    width: 210px;
-    height: 70px;
-    float: right;
-    background-color: #3366FF;
-    font-size: 22px;
-    border-radius: 20px;
-}
-
-.content_service .btn-primary:hover{
-    background-color: #3366FF;
-}
-
-.content_service .btn-primary img{
-    margin-top: -5px;
-}
-
-.plus_icon{
-    width: 30px !important;
-    height: 38px !important;
-}
-
-
-.chatEZ_list tr td{
-    padding: 5px 0 5px 0;
-    background-color: #ddd;
-}
-
-.chatEZ_list table tr th{
-    padding: 10px 0 10px 0;
-    text-align: center;
-    font-size: 22px;
-}
-
-.chatEZ_list table tr th:nth-child(1){
-    width: 25%;
-}
-
-.chatEZ_list table tr th:nth-child(2){
-    width: 55%;
-}
-
-.chatEZ_list tr td button{
-    width: 150px;
-}
-
-.chatEZ_list table tr td{
-    padding-right: 20px;
-    text-align: center;
-    font-size: 18px;
-}
-
-.chatEZ_list .btn-light{
-    background-color: #FFF;
-    border: 2px solid #151515;
-    color: #151515;
-    border-radius: 10px;
-}
-
-.btn-light:active {
-    background-color: #E6ECFF !important;
-    color: #151515 !important;
-    border-color: #151515 !important;
-}
-
-/**/
-.btn-outline-light.active,
-.show > .btn-outline-light.dropdown-toggle {
-    background-color: #E6ECFF !important;
-}
-
-.btn.btn-outline-light.active .category_logo_off,
-.btn.btn-outline-light.active .category_logo_on {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.btn.btn-outline-light.active .category_logo_on {
-    opacity: 1;
-}
-
-.chat_list{
-    float: left;
-    width: 23%;
-    height: 85vh;
-    background-color: #fff;
-    border-radius: 20px;
-    padding: 30px 20px 30px 20px;
-}
-
-.chat_list h2{
-    padding-bottom: 10px;
-    border-bottom: 2px solid #ddd;
-}
-
-.file_manager h3{
-    padding-bottom: 10px;
-    border-bottom: 2px solid #ddd;
-}
-
-.file_manager{
-    font-size: 22px;
-    float: right;
-    width: 75%;
-    height: 85vh;
-    background-color: #fff;
-    border-radius: 20px;
-    padding: 30px 20px 30px 20px;
-}
-
-.file_list input{
-    width: 20px;
-    height: 20px;
-}
-
-.file_list table tr th{
-    padding: 10px 0 10px 0;
-    text-align: center;
-}
-
-.file_list table tr th:nth-child(2){
-    width: 55%;
-}
-
-.file_list table tr th:nth-child(n+3):nth-child(-n+5){
-    width: 15%;
-}
-
-.file_list table tr td:nth-child(n+3):nth-child(-n+5){
-    text-align: center;
-}
-
-.file_list img{
-    margin-left: 20px;
-    width: 44px;
-    height: 44px;
 }

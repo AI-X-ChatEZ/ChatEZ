@@ -5,19 +5,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MainController {
-    
-    @GetMapping("/ChatEZ_layout")
-    public String ChatEZ_layout(){
-        return "ChatEZ_layout";
+
+    @GetMapping("/service_layout")
+    public String service_layout(){
+        return "service_layout";
     }
 
-    @GetMapping("/ChatEZ_my_service")
+    @GetMapping("/my_service")
     public String my_service(){
-        return "ChatEZ_my_service";
+        return "my_service";
     }
 
-    @GetMapping("/ChatEZ_file_manager")
+    @GetMapping("/file_manager")
     public String file_manager(){
-        return "ChatEZ_file_manager";
+        return "file_manager";
     }
 }

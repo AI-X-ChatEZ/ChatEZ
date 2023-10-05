@@ -1,0 +1,33 @@
+<html layout:decorate="~{service_layout}">
+<div layout:fragment="content" class="file_manager_content">
+    <div class="chat_list">
+        <h2><img th:src="@{img/list_icon.png}" alt="list_icon" class="list_icon">생성 목록</h2>
+        <ul>
+            <li><img th:src="@{img/chatapp_icon.png}" alt="chatapp_icon" class="chatapp_icon"><span>EastTunn ChatBot</span></li>
+        </ul>
+    </div>
+    <div class="file_manager">
+        <h3><img th:src="@{img/manager_logo_on.png}" alt="manager_logo" class="manager_logo">파일 관리</h3>
+        <div class="file_list">
+            <div id="file_title">
+                <ul>
+                    <li><input type="checkbox"></li>
+                    <li>이름</li>
+                    <li>크기</li>
+                    <li>형식</li>
+                    <li>업로드일</li>
+                </ul>
+            </div>
+            <div id="file_index">
+                <ul>
+                    <li><input type="checkbox"></li>
+                    <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file"><span>ChatEZ Assistant</span></li>
+                    <li>8GB</li>
+                    <li>TXT</li>
+                    <li>2023-10-03</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

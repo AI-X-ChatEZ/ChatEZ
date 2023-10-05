@@ -1,0 +1,85 @@
+<html layout:decorate="~{service_layout}">
+<div layout:fragment="content" class="service_content">
+    <div class="service">
+        <h3><img th:src="@{img/service_logo_on.png}" alt="service_logo" class="category_logo">
+            <span>마이서비스</span>
+        </h3>
+        <button type="button" class="btn btn-primary" id="showPanel">
+            <img th:src="@{img/plus_icon.png}" alt="plus_icon" class="plus_icon">생성하기
+        </button>
+    </div>
+    <div id="newScreen" class="hide panel">
+        <div class="panel_left">
+            <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>생성하기</span></h4>
+            <p id="imageContainer">
+                <img th:src="@{img/profile_icon.png}" alt="profile_icon" class="profile_icon" id="uploadProfile">
+            </p>
+            <input type="file" id="fileInput" style="display: none;" accept="image/*">
+            <p><input type="text" id="aiName" placeholder="대화형 AI 이름 입력"></p>
+        </div>
+        <div class="panel_right">
+            <input type="file" id="fileInput" style="display: none;">
+            <button id="fileUpload">
+                <img th:src="@{img/upload_icon.png}" alt="upload_icon" class="upload_icon">파일 선택
+            </button>
+            <ul>
+                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
+                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
+                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
+                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
+                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
+                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
+                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
+                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
+                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
+                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
+                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
+                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
+                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
+                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
+            </ul>
+            <button id="createAi">확인</button>
+            <button id="createClose">취소</button>
+        </div>
+    </div>
+    <div class="chatEZ_list">
+        <table>
+            <tr>
+                <th>이름</th>
+                <th>URL</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <td><img th:src="@{img/chatbot_icon.png}" alt="chatbot_icon" class="chatbot_icon"><span>ChatEZ Assistant</span></td>
+                <td>http://chatez.com/assistant</td>
+                <td><button type="button" class="btn btn-light" id="startChat">실행</button></td>
+
+                <div id="chatScreen" class="hide panel">
+                    <h4><img th:src="@{img/chatbot_icon.png}" alt="chatbot_icon" class="chatbot_icon">ChatEZ Assistant
+                        <button id="chatClose"><img th:src="@{img/option_icon.png}" alt="option_icon" class="option_icon"></button></h4>
+                    <ul>
+                        <li></li>
+                    </ul>
+                    <p><input type="text" id="question" placeholder="이곳에 메세지를 입력하세요.">
+                        <button><img th:src="@{img/up_arrow_icon.png}" alt="up_arrow_icon" class="up_arrow_icon"></button></p>
+                </div>
+
+                <td><button type="button" class="btn btn-light" id="updatePanel">수정</button></td>
+                <div id="updateScreen" class="hide panel">
+                    <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>생성하기</span></h4>
+                    <p id="imageContainer">
+                        <img th:src="@{img/profile_icon.png}" alt="profile_icon" class="profile_icon" id="updateProfile">
+                    </p>
+                    <input type="file" id="fileInput" style="display: none;" accept="image/*">
+                    <p><input type="text" id="aiName" placeholder="대화형 AI 이름 입력"></p>
+                    <p id="updateButton"><button id="createAi">확인</button><button id="updateClose">취소</button></p>
+                </div>
+
+                <td><button type="button" class="btn btn-light">삭제</button></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</html>
