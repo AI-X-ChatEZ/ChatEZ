@@ -1,3 +1,152 @@
 @charset "utf-8";
 
 @import url(reset.css);
+
+/* header :START */
+header{
+  width: 1400px;
+  height: 110px;
+  margin-top: 40px;
+  border-bottom: 1px solid #3366ff;
+}
+header>div{
+  width: 1300px;
+}
+h1 img{
+  width: 86px;
+}
+h1 a{width: 190px;display: flex;}
+h1 span{font-size: 25px;display: block;margin-top: 25px;}
+.login_btn{
+  background-color: #3366ff;
+  color:#fff;
+  margin-top: 34px;
+}
+/* header :END */
+/* index-container : START */
+[class$="container"]{
+  width: 1400px;
+}
+div.index_container{
+  width: 1400px;
+  height: 1055px;
+  background-color: #3366ff;
+}
+div.index_container>div{
+  width: 1300px;
+  padding: 200px 0 85px;
+}
+div.index_container .quote{
+  color: #fff;
+  font-size: 60px;
+  margin-top: 142px;
+}
+div.index_container .quote>span{
+  font-size: 67px;
+}
+div.index_container .image>img{
+  width: 560px;
+}
+div.index_container .join{
+  width: 193px;
+  height: 92px;
+  font-size: 30px;
+  line-height: 92px;
+  background-color: #fff;
+  text-align: center;
+  margin: 0 auto;
+  border-radius: 25px;
+}
+/* index-container : END */
+/* footer : START */
+footer{
+  color: #fff;
+  width: 1400px;
+  background-color: #373737;
+  padding-bottom: 190px;
+}
+footer>div{
+  width: 1300px;
+  padding: 40px 0 ;
+  border-bottom: 1px solid #fff;
+}
+footer .top{
+  width: 1300px;
+}
+footer .top>.btmlogo span{
+  font-size: 27px;
+  line-height: 60px;
+}
+footer .top>.btmlogo img{
+  width: 86px;
+}
+footer .top nav>ul{
+  width: 440px;
+  margin-top: 30px;
+}
+footer .info{
+  margin-left: 215px;
+}
+footer .info p{
+  margin-bottom: 20px;
+}
+/* footer : END */
+
+/* login_container : START */
+div.login_container{
+  margin-top: 100px;
+  
+}
+div.login_container h2{
+  font-size: 30px;
+  margin-bottom: 40px;
+}
+div.login_container h2~p{
+  color: #5d5d5d;
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 110px;
+}
+div.login_container div.login_box{
+  width: 800px;
+  height: 430px;
+  background: #eaf0fe;
+  border-radius: 10px;
+  margin-bottom: 370px;
+}
+div.login_container div.login_box form{
+  padding-top: 100px;
+  width: 715px;
+  font-size: 22px;
+}
+div.login_container div.login_box form .input_box{
+  width: 535px;
+}
+div.login_container div.login_box form label{
+  line-height: 67px;
+}
+div.login_container div.login_box form input{
+  height: 67px;
+  margin-bottom: 20px;
+}
+div.login_container div.login_box form button.submit_btn{
+  width: 150px;
+  height: 150px;
+  color: #fff;
+  font-size: inherit;
+  background-color: #3366ff;
+}
+div.login_container .join_link{
+  width: 350px;
+  margin-top: 50px;
+  font-size: 18px;
+  line-height: 2.5;
+}
+div.login_container .join_link>a{
+  width: 110px;
+  height: 55px;
+  font-size: inherit;
+  line-height: inherit
+}
+
+/* login_container : END */

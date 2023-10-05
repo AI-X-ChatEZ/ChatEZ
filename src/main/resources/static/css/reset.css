@@ -29,8 +29,8 @@ b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video, input {
 	margin: 0;
@@ -73,6 +73,9 @@ body {
   width: 1px;
   margin: -1px;
   overflow: hidden;
+}
+.center{
+  margin: 0 auto;
 }
 address {
   font-style: normal;

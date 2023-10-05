@@ -1,19 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" layout:decorate = "~{index_layout}">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div  layout:fragment="content">
-    <form th:action="@{/signin}" method="post">
-        <label for="email">email</label>
-    <input type="text" name="email" id="email">
-        <label for="password">password</label>
-    <input type="password" name="password" id="password">
-        <button type="submit">login</button>
-    </form>
-</div>
-
-</body>
+<html lang="ko" layout:decorate = "~{index_layout}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인 - ChatEZ</title>
+    <link rel="icon" href="img/favicon-32x32.png" type="image/x-icon" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div layout:fragment="content" class="login_container">
+      <div class="center">
+      <h2 class="text-center">로그인</h2>
+      <p class="text-center">
+        ChatEZ로<br />
+        빠르고 간편하게 서비스 맞춤 대화형 AI를 만들어보세요
+      </p>
+      <div class="login_box center">
+        <form action="" class="center d-flex justify-content-between">
+          <div class="input_box">
+          <div class="row">
+            <label for="email" class="col-3">이메일</label>
+            <input type="email" name="email" id="email" class="form-control col" />
+          </div>
+          <div class="row">
+            <label for="password" class="col-3">비밀번호</label>
+            <input type="password" name="password" id="password" class="form-control col">
+          </div>
+        </div>
+        <button type="submit" class="btn submit_btn">로그인</button>
+        </form>
+        <div class="join_link center d-flex justify-content-around">
+          <p>아직 회원이 아니신가요?</p>
+          <a href="/join" class="d-block btn btn-secondary">회원가입</a>fff
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
 </html>

@@ -1,11 +1,36 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title> ChatEz - 새벽배송보다 빠른 대화형 AI생성 서비스</title>
+<html lang="ko" layout:decorate="~{indexLayout}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatEZ - 새벽배송보다 빠른 대화형 AI생성 서비스</title>
     <link rel="icon" href="img/favicon-32x32.png" type="image/x-icon" />
-</head>
-<body>
-
-</body>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="d-flex justify-content-between center">
+      <h1>
+        <a href="/"
+          ><img src="/img/ChatEZ_logo.svg" alt="ChatEz" /><span>ChatEZ</span></a
+        >
+      </h1>
+      <div><a href="/login" class="btn login_btn">로그인</a></div>
+    </div>
+    </header>
+    <div layout:fragment="content" class="index_container">
+      <div class="d-flex justify-content-between center">
+        <div class="quote">
+          새벽 배송보다 빠른<br />
+          대화형 AI 생성 서비스,<br />
+          <span>ChatEZ</span>
+        </div>
+        <div class="image">
+          <img src="/img/ChatEZ_logo_white.svg" alt="ChatEz 로고" />
+        </div>
+      </div>
+      <a href="/join" class="join d-block">시작하기</a>
+    </div>
+  </body>
 </html>
