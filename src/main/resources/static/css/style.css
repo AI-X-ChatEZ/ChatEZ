@@ -4,12 +4,11 @@
 
 /* header :START */
 header {
-  width: 1400px;
-  height: 110px;
-  border-bottom: 1px solid #3366ff;
+  height: 130px;
+  padding: 20px;
 }
 header > div {
-  width: 1300px;
+  min-width: 1300px;
 }
 h1 img {
   width: 86px;
@@ -31,10 +30,11 @@ h1 span {
 /* header :END */
 /* index-container : START */
 [class$='container'] {
-  width: 1400px;
+  border-top: 1px solid #3366ff;
+  min-width: 1400px;
 }
 div.index_container {
-  width: 1400px;
+
   height: 1200px;
   background-color: #3366ff;
 }
@@ -95,17 +95,17 @@ div.index_container .join {
 /* footer : START */
 footer {
   color: #fff;
-  width: 1400px;
+  min-width: 1400px;
   background-color: #373737;
-  padding-bottom: 80px;
+  padding: 0 20px 80px;
 }
 footer > div {
-  width: 1300px;
+  min-width: 1300px;
   padding: 40px 0;
   border-bottom: 1px solid #fff;
 }
 footer .top {
-  width: 1300px;
+  min-width: 1300px;
 }
 footer .top > .btmlogo span {
   font-size: 27px;
@@ -245,3 +245,40 @@ div.button>button.btn:first-child{
   color: #fff;
 }
 /* join : END */
+
+/* welcome: START */
+.welcome_container p{
+  font-size: 40px;
+  text-align: center;
+  font-weight: 700;
+  line-height: 2em;
+  margin: 0 auto;
+}
+.welcome_container div.welcome{
+  position: relative;
+  margin: 50px auto;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background-color: #3366ff;
+}
+.welcome_container div.welcome::after{
+  content:"";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url(../img/ChatEZ_logo_white.svg);
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+}
+.welcome_container button#login{
+  display: block;
+  background-color: #3366ff;
+  margin: 0 auto;
+  font-weight: 700;
+}
+/* welcome: END */
+
+
+

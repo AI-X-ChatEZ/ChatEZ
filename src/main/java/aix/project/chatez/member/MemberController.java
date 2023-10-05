@@ -43,12 +43,12 @@ public String join(@Valid MemberForm memberForm, BindingResult bindingResult){
         bindingResult.reject("joinFailed", "이미등록된 사용자 입니다.");
         return "/join";
     }
-    return "redirect:/myservice";
+    return "redirect:/welcome";
 }
 
-@GetMapping("/myservice")
+@GetMapping("/welcome")
 public String myService(){
-    return "my_service";
+    return "welcome";
 }
 
 @GetMapping("/login")
