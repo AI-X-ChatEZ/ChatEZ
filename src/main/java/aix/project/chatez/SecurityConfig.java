@@ -1,9 +1,5 @@
 package aix.project.chatez;
 
-
-
-
-import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -16,23 +12,30 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
+
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+
         http.authorizeHttpRequests((authorizeHttpRequests)->
-                        authorizeHttpRequests.requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
-                .formLogin((formLogin) -> formLogin
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/"))
-                .logout((logout) -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/")
-                        .invalidateHttpSession(true));
+                authorizeHttpRequests.requestMatchers(new AntPathRequestMatcher("/service/**")).authenticated()
+                        .anyRequest().permitAll());
+
+        //login & out
+        http.formLogin((formLogin) -> formLogin
+                .loginPage("/login")
+                .usernameParameter("email")
+                .defaultSuccessUrl("/"))
+        .logout((logout) -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+        );
         return http.build();
     }
 

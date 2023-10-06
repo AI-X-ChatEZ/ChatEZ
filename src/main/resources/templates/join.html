@@ -15,7 +15,7 @@
     </p>
     <form th:action="@{/join}" method="post" th:object="${memberForm}" class="join center">
         <div class="center form_box">
-            <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+            <div th:replace="~{fragments/form_errors :: formErrorsFragment}"></div>
             <div class="inner_box">
                 <div class="row my-5">
                     <label for="name" class="col">이름</label>
