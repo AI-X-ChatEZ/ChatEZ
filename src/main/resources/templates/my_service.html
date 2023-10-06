@@ -14,29 +14,16 @@
             <p id="imageContainer">
                 <img th:src="@{img/profile_icon.png}" alt="profile_icon" class="profile_icon" id="uploadProfile">
             </p>
-            <input type="file" id="fileInput" style="display: none;" accept="image/*">
+            <input type="file" id="imageInput" style="display: none;" accept="image/*">
             <p><input type="text" id="aiName" placeholder="대화형 AI 이름 입력"></p>
         </div>
         <div class="panel_right">
-            <input type="file" id="fileInput" style="display: none;">
+            <input type="file" id="fileInput" style="display: none;" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple >
             <button id="fileUpload">
                 <img th:src="@{img/upload_icon.png}" alt="upload_icon" class="upload_icon">파일 선택
             </button>
-            <ul>
-                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
-                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
-                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
-                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
-                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
-                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
-                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
-                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
-                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
-                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
-                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
-                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
-                <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">txt.txt
-                    <span><img th:src="@{img/close_icon.png}" alt="close-icon" class="close-icon"></span></li>
+            <ul id="fileList">
+                <!-- 선택 파일 목록 -->
             </ul>
             <button id="createAi">확인</button>
             <button id="createClose">취소</button>
@@ -59,11 +46,13 @@
                 <div id="chatScreen" class="hide panel">
                     <h4><img th:src="@{img/chatbot_icon.png}" alt="chatbot_icon" class="chatbot_icon">ChatEZ Assistant
                         <button id="chatClose"><img th:src="@{img/option_icon.png}" alt="option_icon" class="option_icon"></button></h4>
-                    <ul>
-                        <li></li>
-                    </ul>
-                    <p><input type="text" id="question" placeholder="이곳에 메세지를 입력하세요.">
-                        <button><img th:src="@{img/up_arrow_icon.png}" alt="up_arrow_icon" class="up_arrow_icon"></button></p>
+                    <div class="chat">
+                        <ul id="chatContent">
+                            <!-- 대화내용 -->
+                        </ul>
+                    </div>
+                    <p><textarea id="question" placeholder="이곳에 메세지를 입력하세요." maxlength="100" rows="1"></textarea>
+                        <button id="sendMessage"><img th:src="@{img/up_arrow_icon.png}" alt="up_arrow_icon" class="up_arrow_icon"></button></p>
                 </div>
 
                 <td><button type="button" class="btn btn-light" id="updatePanel">수정</button></td>
@@ -72,8 +61,8 @@
                     <p id="imageContainer">
                         <img th:src="@{img/profile_icon.png}" alt="profile_icon" class="profile_icon" id="updateProfile">
                     </p>
-                    <input type="file" id="fileInput" style="display: none;" accept="image/*">
-                    <p><input type="text" id="aiName" placeholder="대화형 AI 이름 입력"></p>
+                    <input type="file" id="imageUpdate" style="display: none;" accept="image/*">
+                    <p><input type="text" id="updateName" placeholder="대화형 AI 이름 입력"></p>
                     <p id="updateButton"><button id="createAi">확인</button><button id="updateClose">취소</button></p>
                 </div>
 

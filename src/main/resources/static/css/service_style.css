@@ -349,7 +349,8 @@
     float: right;
 }
 
-#aiName{
+#aiName,
+#updateName{
     margin-top: 30px;
     padding-bottom: 5px;
     border-bottom: 2px solid #151515;
@@ -465,14 +466,18 @@
 }
 
 #chatScreen.panel #chatClose{
-    margin-right:20px;
     border-radius: 50px;
     background-color: #FFF;
     float: right;
 }
 
-#chatScreen.panel ul {
-    height: 480px;
+#chatScreen.panel #chatContent {
+    padding: 20px;
+}
+
+#question:focus {
+    outline: none;
+    border: none;
 }
 
 #chatScreen.panel .up_arrow_icon{
@@ -482,9 +487,9 @@
 
 #chatScreen.panel p{
     width: 340px;
-    height: 50px;
     border-radius: 50px;
     background-color: #D5DEF9;
+    box-sizing: border-box;
 }
 
 #chatScreen.panel p button{
@@ -494,7 +499,44 @@
 }
 
 #chatScreen.panel #question{
-    font-size: 20px;
+    width: 250px;
+    font-size: 16px;
     background-color: #D5DEF9;
     margin-top: 10px;
+    overflow-y: auto;
+    max-height: 115px;
+    resize: none;
+}
+
+.chat {
+    height: 480px;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+}
+
+#chatContent {
+    text-align: right;
+    width: 100%;
+}
+
+#chatContent li{
+    background-color: #3366FF;
+    color: #FFF;
+    display: block;
+    width: fit-content;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    max-width: 80%;
+    word-wrap: break-word;
+    text-align: left;
+    float: right;
+    clear: both;
+}
+
+#chatScreen.panel p textarea {
+    padding: 4px 0;
+    overflow-y: hidden;
+    resize: none;
 }
