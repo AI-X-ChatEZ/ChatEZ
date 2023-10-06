@@ -1,4 +1,4 @@
-<html layout:decorate="~{service_layout}">
+<html layout:decorate="~{service/service_layout}">
 <div layout:fragment="content" class="service_content">
     <div class="service">
         <h3><img th:src="@{img/service_logo_on.png}" alt="service_logo" class="category_logo">
@@ -57,13 +57,13 @@
 
                 <td><button type="button" class="btn btn-light" id="updatePanel">수정</button></td>
                 <div id="updateScreen" class="hide panel">
-                    <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>생성하기</span></h4>
+                    <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>수정하기</span></h4>
                     <p id="imageContainer">
                         <img th:src="@{img/profile_icon.png}" alt="profile_icon" class="profile_icon" id="updateProfile">
                     </p>
                     <input type="file" id="imageUpdate" style="display: none;" accept="image/*">
                     <p><input type="text" id="updateName" placeholder="대화형 AI 이름 입력"></p>
-                    <p id="updateButton"><button id="createAi">확인</button><button id="updateClose">취소</button></p>
+                    <p id="updateButton"><button id="updateAi">확인</button><button id="updateClose">취소</button></p>
                 </div>
 
                 <td><button type="button" class="btn btn-light">삭제</button></td>

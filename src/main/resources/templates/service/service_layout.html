@@ -32,7 +32,7 @@
 
     <!-- 두 번째 컬럼 -->
     <div class="layout_right">
-        <div id="user"><img th:src="@{img/user_icon.png}" alt="user_icon"><sapn>user1</sapn></div>
+        <div id="user"><img th:src="@{img/user_icon.png}" alt="user_icon"><span th:text="${userName}"></span></div>
         <div><th:block layout:fragment="content"></th:block></div>
     </div>
 </div>

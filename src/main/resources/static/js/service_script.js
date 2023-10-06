@@ -173,3 +173,23 @@ document.addEventListener('input', function(e) {
         chat.style.height = (initialChatHeight + deltaHeight) + 'px';
     }
 });
+
+document.getElementById("createAi").addEventListener("click", function() {
+    var fileInput = document.getElementById('imageInput');
+    var imageFile = fileInput.files[0];
+    var formData = new FormData();
+
+    formData.append('imageFile', imageFile);
+
+    fetch("http://localhost:8080/upload", {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+});
