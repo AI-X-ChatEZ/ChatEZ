@@ -24,7 +24,12 @@ public class MemberService {
 
     public Member findByMemberNo(Long memberNo){
         return memberRepository.findById(memberNo)
-                .orElseThrow(()-> new IllegalArgumentException("알수 없는 사용자"));
+                .orElseThrow(()-> new IllegalArgumentException("알 수 없는 사용자"));
+    }
+
+    public Member findByEmail(String email){
+        return memberRepository.findByEmail(email)
+                .orElseThrow(()->new IllegalArgumentException("알 수 없는 사용자"));
     }
 
 //    public Member getMember(String name){
