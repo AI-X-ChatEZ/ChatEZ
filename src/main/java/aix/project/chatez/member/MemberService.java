@@ -14,13 +14,17 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Member save(String name, String email, String password ){
-        Member member = new Member();
-        member.setName(name);
-        member.setEmail(email);
-        member.setPassword( passwordEncoder.encode(password));
-        this.memberRepository.save(member);
-        return  member;
+    public Long save(MemberForm memberForm){
+        return memberRepository.save(Member.builder()
+                .name(memberForm.getName())
+                .email(memberForm.getEmail())
+                .password(passwordEncoder.encode(memberForm.getPassword1()))
+                .build()).getMemberNo();
+    }
+
+    public Member findByMemberNo(Long memberNo){
+        return memberRepository.findById(memberNo)
+                .orElseThrow(()-> new IllegalArgumentException("알수 없는 사용자"));
     }
 
 //    public Member getMember(String name){

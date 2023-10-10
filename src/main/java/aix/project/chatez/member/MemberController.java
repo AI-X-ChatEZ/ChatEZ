@@ -1,8 +1,12 @@
 package aix.project.chatez.member;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,8 +40,7 @@ public String join(@Valid MemberForm memberForm, BindingResult bindingResult){
     }
 
     try{
-        memberService.save(memberForm.getName(),memberForm.getEmail(),
-                memberForm.getPassword1());
+        memberService.save(memberForm);
     }catch (DataIntegrityViolationException e){
         bindingResult.reject("joinFailed", "이미등록된 사용자 입니다.");
         return "/join";
@@ -60,6 +63,12 @@ public String success(Principal principal, Model model){
     String memberName = principal.getName();
     model.addAttribute("memberName", memberName);
     return "login_success";
+}
+
+@GetMapping("/logout")
+public String logout(HttpServletRequest request, HttpServletResponse response){
+    new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+    return "redirect:/";
 }
 
 
