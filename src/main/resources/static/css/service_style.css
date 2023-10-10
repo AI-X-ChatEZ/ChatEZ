@@ -80,11 +80,11 @@
 }
 
 .chatEZ_list table tr th:nth-child(1){
-    width: 25%;
+    width: 300px;
 }
 
 .chatEZ_list table tr th:nth-child(2){
-    width: 55%;
+    width: 700px;
 }
 
 .chatEZ_list tr td button{
@@ -376,7 +376,8 @@
     height: 54px;
 }
 
-#createAi{
+#createAi,
+#updateAi{
     width: 120px;
     height: 50px;
     background-color: #3366FF;
