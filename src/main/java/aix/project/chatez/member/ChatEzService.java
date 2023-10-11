@@ -23,7 +23,7 @@ public class ChatEzService {
     }
 
     public void userServiceDate(Model model) {
-        //로그인 페이지에서 아이디 연동 부분123
+        //로그인 페이지에서 아이디 연동 부분
         List<Member> loginUser = this.memberRepository.findAll();
         if(loginUser.get(0) != null) {
             String name = loginUser.get(0).getName();

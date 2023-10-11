@@ -349,8 +349,13 @@
     float: right;
 }
 
-#aiName,
-#updateName{
+#aiName{
+    margin-top: 30px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #151515;
+}
+
+.updateName{
     margin-top: 30px;
     padding-bottom: 5px;
     border-bottom: 2px solid #151515;
@@ -376,8 +381,16 @@
     height: 54px;
 }
 
-#createAi,
-#updateAi{
+#createAi{
+    width: 120px;
+    height: 50px;
+    background-color: #3366FF;
+    color: #fff;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.updateAi{
     width: 120px;
     height: 50px;
     background-color: #3366FF;
@@ -395,7 +408,7 @@
     margin-right: 10px;
 }
 
-#updateScreen.panel {
+.updateScreen.panel {
     top:180px;
     position: fixed;
     right: -100%;
@@ -410,15 +423,15 @@
     text-align: center;
 }
 
-#updateScreen.panel.active {
+.updateScreen.panel.active {
     right: 60px;
 }
 
-#updateScreen.panel h4{
+.updateScreen.panel h4{
     text-align: left;
 }
 
-#updateScreen.panel .edit_icon {
+.updateScreen.panel .edit_icon {
     vertical-align: middle;
     width: 54px;
     height: 54px;
@@ -426,9 +439,10 @@
 
 #updateButton{
     margin-top: 120px;
+    margin-left:10px;
 }
 
-#updateClose{
+.updateClose{
     width: 120px;
     height: 50px;
     background-color: #ddd;
@@ -437,7 +451,7 @@
     margin-right: 10px;
 }
 
-#chatScreen.panel {
+.chatScreen {
     top:180px;
     position: fixed;
     right: -100%;
@@ -448,31 +462,25 @@
     border: 2px solid #151515;
     border-radius: 20px;
     padding: 20px 0 20px 20px;
-    font-size: 22px;
+    font-size: 18px;
     text-align: center;
 }
 
-#chatScreen.panel.active {
+.chatScreen.active {
     right: 60px;
 }
 
-#chatScreen.panel .edit_icon {
+.chatScreen .edit_icon {
     vertical-align: middle;
     width: 54px;
     height: 54px;
 }
 
-#chatScreen.panel h4{
+.chatScreen h4{
     text-align: left;
 }
 
-#chatScreen.panel #chatClose{
-    border-radius: 50px;
-    background-color: #FFF;
-    float: right;
-}
-
-#chatScreen.panel #chatContent {
+.chatScreen #chatContent {
     padding: 20px;
 }
 
@@ -481,25 +489,25 @@
     border: none;
 }
 
-#chatScreen.panel .up_arrow_icon{
+.chatScreen .up_arrow_icon{
     width: 50px;
     height: 50px;
 }
 
-#chatScreen.panel p{
+.chatScreen p{
     width: 340px;
     border-radius: 50px;
     background-color: #D5DEF9;
     box-sizing: border-box;
 }
 
-#chatScreen.panel p button{
+.chatScreen p button{
     float: right;
     border-radius: 50px;
     background-color: #D5DEF9;
 }
 
-#chatScreen.panel #question{
+.chatScreen #question{
     width: 250px;
     font-size: 16px;
     background-color: #D5DEF9;
@@ -536,8 +544,42 @@
     clear: both;
 }
 
-#chatScreen.panel p textarea {
+.chatScreen p textarea {
     padding: 4px 0;
     overflow-y: hidden;
     resize: none;
+}
+
+.chatScreen .chat_button {
+    display:block;
+    float:right;
+    margin-top:8px;
+    display: flex;
+    align-items: center;
+}
+
+.chatScreen .chatClose{
+    width: 28px;
+    height: 28px;
+    background-color:#fff;
+    margin-bottom:2px;
+    margin-right:20px;
+    margin-left:10px;
+}
+
+.chatScreen .chatClose img{
+    width: 28px;
+    height: 28px;
+    margin-bottom:2px;
+}
+
+.chatScreen .chatReset{
+    width: 36px;
+    height: 36px;
+    background-color:#fff;
+}
+
+.chatScreen .chatReset img{
+    width: 36px;
+    height: 36px;
 }

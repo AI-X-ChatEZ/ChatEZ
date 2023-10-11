@@ -44,11 +44,12 @@
                 <tr th:each="myServices : ${myServices}">
                     <td><img th:src="${myServices.profilePic}" alt="chatbot_icon" class="chatbot_icon"><span th:text="${myServices.serviceName}"></span></td>
                     <td>http://chatez.com/<span th:text="${myServices.serviceName}"></span></td>
-                    <td><button type="button" class="btn btn-light" id="startChat">실행</button></td>
+                    <td><button type="button" class="btn btn-light startChat" th:attr="data-service-name=${myServices.serviceName}">실행</button></td>
 
-                    <div id="chatScreen" class="hide panel">
-                        <h4><img th:src="@{img/chatbot_icon.png}" alt="chatbot_icon" class="chatbot_icon">ChatEZ Assistant
-                            <button id="chatClose"><img th:src="@{img/option_icon.png}" alt="option_icon" class="option_icon"></button></h4>
+                    <div th:id="'chatScreen-'+${myServices.serviceName}" class="hide panel chatScreen">
+                        <h4><img th:src="@{img/chatbot_icon.png}" alt="chatbot_icon" class="chatbot_icon"><span th:text="${myServices.serviceName}"></span>
+                            <span class="chat_button"><button class="chatReset"><img th:src="@{img/reset_icon.png}" alt="reset_icon" class="reset_icon"></button>
+                            <button class="chatClose"><img th:src="@{img/close_icon.png}" alt="close_icon"></button></span></h4>
                         <div class="chat">
                             <ul id="chatContent">
                                 <!-- 대화내용 -->
@@ -58,18 +59,26 @@
                             <button id="sendMessage"><img th:src="@{img/up_arrow_icon.png}" alt="up_arrow_icon" class="up_arrow_icon"></button></p>
                     </div>
 
-                    <td><button type="button" class="btn btn-light" id="updatePanel">수정</button></td>
-                    <div id="updateScreen" class="hide panel">
+                    <td><button type="button" class="btn btn-light updatePanel"
+                                th:attr="data-service-name=${myServices.serviceName}">수정</button></td>
+
+                    <div th:id="'updateScreen-'+${myServices.serviceName}" class="hide panel updateScreen">
                         <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>수정하기</span></h4>
                         <p id="imageContainer">
-                            <img th:src="@{img/profile_icon.png}" alt="profile_icon" class="profile_icon" id="updateProfile">
-                        </p>
-                        <input type="file" id="imageUpdate" style="display: none;" accept="image/*">
-                        <p><input type="text" id="updateName" placeholder="대화형 AI 이름 입력"></p>
-                        <p id="updateButton"><button id="updateAi">확인</button><button id="updateClose">취소</button></p>
+                            <img th:src="${myServices.profilePic}" alt="profile_icon" class="profile_icon"
+                                 th:id="'updateProfile-' + ${myServices.serviceName}"></p>
+                        <input type="file" th:id="'imageUpdate-' + ${myServices.serviceName}"
+                               style="display: none;" accept="image/*" class="imageUpdate">
+                        <p><input type="text" th:id="'updateName-' + ${myServices.serviceName}" class="updateName"
+                                   th:value="${myServices.serviceName}" placeholder="대화형 AI 이름 입력"></p>
+                        <p id="updateButton">
+                            <span id="serviceNo" th:id="'serviceNo-' + ${myServices.serviceName}" th:text="${myServices.serviceNo}" style="display:none;"></span>
+                            <span class="serviceName" id="serviceName" th:text="${myServices.serviceName}" style="display:none;"></span>
+                            <button th:id="'updateAi-' + ${myServices.serviceName}" class="updateAi">확인</button>
+                            <button class="updateClose">취소</button></p>
                     </div>
 
-                    <td><button type="button" class="btn btn-light" id="deleteChat">삭제</button></td>
+                    <td><button type="button" class="btn btn-light deleteChat">삭제</button></td>
                 </tr>
             </tbody>
         </table>

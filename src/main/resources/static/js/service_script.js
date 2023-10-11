@@ -59,58 +59,67 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    var updateProfileButton = document.getElementById('updateProfile');
+    // 'profile_icon' 클래스를 가진 모든 요소 선택
+    var profileIcons = document.querySelectorAll('.profile_icon');
 
-    if (updateProfileButton) {
-        updateProfileButton.addEventListener('click', function() {
-            document.getElementById('imageUpdate').click();
+    profileIcons.forEach(function(icon) {
+        icon.addEventListener('click', function() {
+            var panel = icon.closest('.panel');
+            var serviceName = panel.querySelector('.serviceName').textContent;
+
+            panel.querySelector('.imageUpdate').click();
         });
-    }
-});
+    });
 
-document.addEventListener('DOMContentLoaded', function() {
-    var imageUpdateElement = document.getElementById('imageUpdate');
+    // 'imageUpdate' 클래스를 가진 모든 파일 입력 상자 선택
+    var imageUpdateElements = document.querySelectorAll('.imageUpdate');
 
-    // Check if the element exists
-    if (imageUpdateElement) {
-        imageUpdateElement.addEventListener('change', function(e) {
+    // 각 파일 입력 상자에 대한 이벤트 리스너 추가
+    imageUpdateElements.forEach(function(input) {
+        input.addEventListener('change', function(e) {
+            // Find the closest '.panel' element
+            var panel = input.closest('.panel');
+
+            var serviceName = panel.querySelector('.serviceName').textContent;
+            console.log(serviceName);
+
             if (e.target.files && e.target.files[0]) {
                 const reader = new FileReader();
 
                 reader.onload = function(e) {
-                    document.getElementById('updateProfile').src = e.target.result;
-                }
+                    panel.querySelector('.profile_icon').src = e.target.result;
+                };
 
                 reader.readAsDataURL(e.target.files[0]);
             }
         });
-    }
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    var updatePanelElement = document.getElementById('updatePanel');
+    // Update Panel
+    var updatePanelElements = document.querySelectorAll('.updatePanel');
 
-    if (updatePanelElement) {
+     updatePanelElements.forEach(function(updatePanelElement) {
         updatePanelElement.addEventListener('click', function() {
             closeAllPanels();
-            var newScreen = document.getElementById('updateScreen');
-            if (newScreen) {
-                newScreen.classList.remove('hide');
-                newScreen.classList.add('active');
+            var serviceName = updatePanelElement.getAttribute('data-service-name');
+            var updateScreen = document.getElementById('updateScreen-' + serviceName);
+            if (updateScreen) {
+                updateScreen.classList.remove('hide');
+                updateScreen.classList.add('active');
             }
         });
-    }
-});
+    });
 
-document.addEventListener('DOMContentLoaded', function() {
-    var updateCloseElement = document.getElementById('updateClose');
+    // Update Close
+    var updateCloseElements = document.querySelectorAll('.updateClose');
 
-    // Check if the element exists
-    if (updateCloseElement) {
+    updateCloseElements.forEach(function(updateCloseElement) {
         updateCloseElement.addEventListener('click', function() {
-            var newScreen = document.getElementById('updateScreen');
-            if (newScreen) {
-                newScreen.classList.remove('active');
+            var updateScreen = updateCloseElement.closest('.updateScreen');
+            if (updateScreen) {
+                updateScreen.classList.remove('active');
             }
 
             var aiName = document.getElementById('updateName');
@@ -128,35 +137,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateProfile.src = 'img/profile_icon.png';
             }
         });
-    }
-});
+    });
 
-document.addEventListener('DOMContentLoaded', function() {
-    var updatePanelElement = document.getElementById('startChat');
-
-    if (updatePanelElement) {
-        updatePanelElement.addEventListener('click', function() {
+   // Start Chat
+    var startChatElements = document.querySelectorAll('.startChat');
+    startChatElements.forEach(function(startChatElement) {
+        startChatElement.addEventListener('click', function() {
             closeAllPanels();
-            var newScreen = document.getElementById('chatScreen');
-            if (newScreen) {
-                newScreen.classList.remove('hide');
-                newScreen.classList.add('active');
+            var serviceName = startChatElement.getAttribute('data-service-name');
+            var chatScreen = document.getElementById('chatScreen-' + serviceName);
+            if (chatScreen) {
+                chatScreen.classList.remove('hide');
+                chatScreen.classList.add('active');
             }
         });
-    }
-});
+    });
 
-document.addEventListener('DOMContentLoaded', function() {
-    var chatCloseElement = document.getElementById('chatClose');
-
-    if (chatCloseElement) {
+    // Chat Close
+    var chatCloseElements = document.querySelectorAll('.chatClose');
+    chatCloseElements.forEach(function(chatCloseElement) {
         chatCloseElement.addEventListener('click', function() {
-            var newScreen = document.getElementById('chatScreen');
-            if (newScreen) {
-                newScreen.classList.remove('active');
+            // `chatClose` 버튼의 부모 `.panel` 요소를 찾습니다.
+            var chatPanel = chatCloseElement.closest('.panel');
+
+            if (chatPanel) {
+                chatPanel.classList.add('hide');
+                chatPanel.classList.remove('active');
             }
         });
-    }
+    });
 });
 
 document.getElementById('fileInput').addEventListener('change', function () {
@@ -180,27 +189,31 @@ function removeFile(element) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    var textarea = document.getElementById('question');
-    var chatContent = document.getElementById('chatContent');
-    var sendMessageButton = document.getElementById('sendMessage');
-    var chat = document.querySelector('.chat');
+    var chatAreas = document.querySelectorAll('.chatEZ_list .chatScreen');
 
-    if (textarea) {
-        textarea.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                addMessageToChat();
-            }
-        });
-    }
+    chatAreas.forEach(function(chatArea) {
+        var textarea = chatArea.querySelector('textarea');
+        var chatContent = chatArea.querySelector('#chatContent');
+        var sendMessageButton = chatArea.querySelector('#sendMessage');
+        var chat = chatArea.querySelector('.chat');
 
-    if (sendMessageButton) {
-        sendMessageButton.addEventListener('click', function() {
-            addMessageToChat();
-        });
-    }
+        if (textarea) {
+            textarea.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    addMessageToChat(textarea, chatContent, chat);
+                }
+            });
+        }
 
-    function addMessageToChat() {
+        if (sendMessageButton) {
+            sendMessageButton.addEventListener('click', function() {
+                addMessageToChat(textarea, chatContent, chat);
+            });
+        }
+    });
+
+    function addMessageToChat(textarea, chatContent, chat) {
         var message = textarea.value.trim();
         if (message) {
             var li = document.createElement('li');
@@ -208,17 +221,21 @@ document.addEventListener('DOMContentLoaded', function () {
             chatContent.appendChild(li);
             textarea.value = '';
             textarea.style.height = 'auto';
-            chat.style.height = '480px';
-            if(chat.scrollTop + chat.clientHeight === chat.scrollHeight) {
-                chat.scrollTop = chat.scrollHeight - chat.clientHeight;
-            }
+            chat.scrollTop = chat.scrollHeight;
         }
     }
+    var resetButtons = document.querySelectorAll('.chatReset');
+        resetButtons.forEach(function(resetButton) {
+            resetButton.addEventListener('click', function() {
+                var chatContent = this.closest('.chatScreen').querySelector('#chatContent');
+                chatContent.innerHTML = ''; // 대화 내용을 비움
+            });
+        });
 });
 
 document.addEventListener('input', function(e) {
-    if(e.target.tagName.toLowerCase() === 'textarea' && e.target.id === 'question') {
-        var chat = document.querySelector('.chat');
+    if(e.target.tagName.toLowerCase() === 'textarea' && e.target.closest('.chatScreen')) {
+        var chat = e.target.closest('.chatScreen').querySelector('.chat');
         var initialChatHeight = chat.offsetHeight;
         var initialTextareaHeight = e.target.offsetHeight;
 
@@ -259,194 +276,103 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(data => {
                 console.log(data);
-
+                window.location.reload();
+                setTimeout(function() {
                 var newScreen = document.getElementById("newScreen");
-                newScreen.classList.remove('active');
+                if(newScreen){
+                    newScreen.classList.remove('active');
+                }
 
                 var aiName = document.getElementById("aiName");
-                aiName.value = '';
+                if(aiName){
+                    aiName.value = '';
+                }
 
                 var imageInput = document.getElementById("imageInput");
-                imageInput.value = '';
+                if(imageInput){
+                    imageInput.value = '';
+                }
 
                 var uploadProfile = document.getElementById("uploadProfile");
-                uploadProfile.src = 'img/profile_icon.png';
+                if(uploadProfile){
+                    uploadProfile.src = 'img/profile_icon.png';
+                }
 
                 var fileInput = document.getElementById("fileInput");
-                fileInput.value = '';
+                if(fileInput){
+                    fileInput.value = '';
+                }
 
                 var fileList = document.getElementById("fileList");
-                while (fileList.firstChild) {
-                    fileList.removeChild(fileList.firstChild);
+                if(fileList){
+                    while (fileList.firstChild) {
+                        fileList.removeChild(fileList.firstChild);
+                    }
                 }
-
-                var container = document.getElementById('myServicesTable');
-
-                if (container) {
-                    fetch('/my_service')
-                    .then(response => response.text())
-                    .then(html => {
-                    var parser = new DOMParser();
-                    var doc = parser.parseFromString(html, 'text/html');
-
-                    var content = doc.querySelector('#myServicesTable').outerHTML;
-                    var container = document.getElementById('myServicesTable').parentNode;
-                    container.innerHTML = content;
-
-                    var chatScreenHtml =
-                        '<div id="chatScreen" class="hide panel">'+
-                            '<h4><img src="img/chatbot_icon.png" alt="chatbot_icon" class="chatbot_icon">ChatEZ Assistant'+
-                                '<button id="chatClose"><img src="img/option_icon.png" alt="option_icon" class="option_icon"></button></h4>'+
-                            '<div class="chat">'+
-                                '<ul id="chatContent">'+
-                                    '<!-- 대화내용 -->'+
-                                '</ul>'+
-                            '</div>'+
-                            '<p><textarea id="question" placeholder="이곳에 메세지를 입력하세요." maxlength="100" rows="1"></textarea>'+
-                                '<button id="sendMessage"><img src="img/up_arrow_icon.png" alt="up_arrow_icon" class="up_arrow_icon"></button></p>'+
-                        '</div>';
-
-                    // chatScreen 요소를 삽입하는 로직
-                    var trs = document.querySelectorAll('#myServicesTable tbody tr');
-                    trs.forEach(tr => {
-                        tr.insertAdjacentHTML('afterend', chatScreenHtml);
-                    });
-
-                    bindEventListeners();
-                })
-                    .catch(error => console.error('Error:', error));
-                } else {
-                    console.error("테이블 id 오류");
-                }
+                }, 500);  // 5000 밀리초 = 5초
             })
             .catch(error => console.error('Error:', error));
         } else {
-            console.error("메타 태그 오류");
+            console.error("CSRF 메타 태그가 존재하지 않습니다.");
         }
     });
 });
 
-function bindEventListeners() {
-    var startChatButtons = document.querySelectorAll("#startChat");
-    startChatButtons.forEach(button => {
-        button.addEventListener("click", function() {
-            console.log("시작버튼 클릭");
-            closeAllPanels();
-            var newScreen = document.getElementById('chatScreen');
-            if (newScreen) {
-                newScreen.classList.remove('hide');
-                newScreen.classList.add('active');
-            }
-        });
-    });
+document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('updateAi')) {
+            var serviceName = event.target.id.replace('updateAi-', '');
+            var serviceNo = document.getElementById('serviceNo-' + serviceName).textContent;
 
-    var updatePanelButtons = document.querySelectorAll("#chatClose");
-    updatePanelButtons.forEach(button => {
-        button.addEventListener("click", function() {
-            console.log("대화창 닫기");
-            var newScreen = document.getElementById('chatScreen');
-            if (newScreen) {
-                newScreen.classList.remove('active');
-            }
-        });
-    });
+            var updateAiButton = document.getElementById("updateAi-" + serviceName);
 
-    var textarea = document.getElementById('question');
-    var chatContent = document.getElementById('chatContent');
-    var sendMessageButton = document.getElementById('sendMessage');
-    var chat = document.querySelector('.chat');
+            if (updateAiButton) {
+                console.log("updateAiButton button clicked");
+                var aiNameInput = document.getElementById('updateName-' + serviceName).value;
+                var imageInput = document.getElementById('imageUpdate-' + serviceName).files[0];
+                var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
+                console.log(serviceNo);
+                if (csrfMetaTag) {
+                    var csrfToken = csrfMetaTag.content;
 
-    if (textarea) {
-        textarea.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                addMessageToChat();
-            }
-        });
-    }
+                    var formData = new FormData();
+                    formData.append("selectNo", serviceNo);
+                    formData.append("updateName", aiNameInput);
+                    formData.append("updateFile", imageInput);
 
-    if (sendMessageButton) {
-        sendMessageButton.addEventListener('click', function() {
-            addMessageToChat();
-        });
-    }
+                    fetch("/update", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": csrfToken,
+                        },
+                        body: formData,
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error("네트워크 오류");
+                            }
+                            return response.text();
+                        })
+                        .then(data => {
+                            console.log(data);
 
-    function addMessageToChat() {
-        var message = textarea.value.trim();
-        if (message) {
-            var li = document.createElement('li');
-            li.textContent = message;
-            chatContent.appendChild(li);
-            textarea.value = '';
-            textarea.style.height = 'auto';
-            chat.style.height = '480px';
-            if (chat.scrollTop + chat.clientHeight === chat.scrollHeight) {
-                chat.scrollTop = chat.scrollHeight - chat.clientHeight;
+                            var newScreen = document.getElementById("updateScreen-" + serviceName);
+                            newScreen.classList.remove('active');
+
+                            var aiName = document.getElementById("updateName-" + serviceName);
+                            aiName.value = '';
+
+                            var imageUpdate = document.getElementById("imageUpdate-" + serviceName);
+                            imageUpdate.value = '';
+
+                            var updateProfile = document.getElementById("updateProfile-" + serviceName);
+                            updateProfile.src = 'img/profile_icon.png';
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    console.error("CSRF 메타 태그 오류");
+                }
             }
         }
-    }
-
-    document.addEventListener('input', function(e) {
-        if (e.target.tagName.toLowerCase() === 'textarea' && e.target.id === 'question') {
-            var initialChatHeight = chat.offsetHeight;
-            var initialTextareaHeight = e.target.offsetHeight;
-
-            e.target.style.height = 'auto';
-            e.target.style.height = (e.target.scrollHeight) + 'px';
-
-            var deltaHeight = initialTextareaHeight - e.target.offsetHeight;
-            chat.style.height = (initialChatHeight + deltaHeight) + 'px';
-        }
     });
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-    var createAiButton = document.getElementById("updateAi");
-    if(createAiButton){
-        createAiButton.addEventListener("click", function() {
-            var updateNameValue = document.getElementById("updateName").value;
-            var imageUpdateValue = document.getElementById("imageUpdate");
-            var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
-
-            if (csrfMetaTag) {
-                var csrfToken = csrfMetaTag.content;
-
-                var formData = new FormData();
-                formData.append("updateName", updateNameValue);
-                formData.append("imageUpdate", imageUpdateValue.files[0]);
-
-                fetch("/upload", {
-                    method: "POST",
-                    headers: {
-                        "X-CSRF-TOKEN": csrfToken,
-                    },
-                    body: formData,
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("네트워크 오류");
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    console.log(data);
-
-                     var newScreen = document.getElementById("updateScreen");
-                     newScreen.classList.remove('active');
-
-                     var aiName = document.getElementById("updateName");
-                     aiName.value = '';
-
-                     var imageUpdate = document.getElementById("imageUpdate");
-                     imageUpdate.value = '';
-
-                     var updateProfile = document.getElementById("updateProfile");
-                     updateProfile.src = 'img/profile_icon.png';
-                })
-                .catch(error => console.error('Error:', error));
-            } else {
-                console.error("CSRF 메타 태그 오류");
-            }
-        });
-    }
 });

@@ -43,6 +43,15 @@ public class MainController {
         return "redirect:"+url;
     }
 
+    @ResponseBody
+    @PostMapping("/update")
+    public String handleFileUpdate(@RequestParam("updateName") String updateName,
+                                   @RequestParam("updateFile") MultipartFile updateFile,
+                                   @RequestParam("selectNo") String selectNo) {
+
+        return "redirect:my_service";
+    }
+
     @GetMapping("/file_manager")
     public String file_manager(){
         return "service/file_manager";
