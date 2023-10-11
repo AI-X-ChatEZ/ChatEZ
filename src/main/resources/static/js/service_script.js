@@ -275,40 +275,39 @@ document.addEventListener("DOMContentLoaded", function() {
                 return response.text();
             })
             .then(data => {
-                console.log(data);
                 window.location.reload();
                 setTimeout(function() {
-                var newScreen = document.getElementById("newScreen");
-                if(newScreen){
-                    newScreen.classList.remove('active');
-                }
-
-                var aiName = document.getElementById("aiName");
-                if(aiName){
-                    aiName.value = '';
-                }
-
-                var imageInput = document.getElementById("imageInput");
-                if(imageInput){
-                    imageInput.value = '';
-                }
-
-                var uploadProfile = document.getElementById("uploadProfile");
-                if(uploadProfile){
-                    uploadProfile.src = 'img/profile_icon.png';
-                }
-
-                var fileInput = document.getElementById("fileInput");
-                if(fileInput){
-                    fileInput.value = '';
-                }
-
-                var fileList = document.getElementById("fileList");
-                if(fileList){
-                    while (fileList.firstChild) {
-                        fileList.removeChild(fileList.firstChild);
+                    var newScreen = document.getElementById("newScreen");
+                    if(newScreen){
+                        newScreen.classList.remove('active');
                     }
-                }
+
+                    var aiName = document.getElementById("aiName");
+                    if(aiName){
+                        aiName.value = '';
+                    }
+
+                    var imageInput = document.getElementById("imageInput");
+                    if(imageInput){
+                        imageInput.value = '';
+                    }
+
+                    var uploadProfile = document.getElementById("uploadProfile");
+                    if(uploadProfile){
+                        uploadProfile.src = 'img/profile_icon.png';
+                    }
+
+                    var fileInput = document.getElementById("fileInput");
+                    if(fileInput){
+                        fileInput.value = '';
+                    }
+
+                    var fileList = document.getElementById("fileList");
+                    if(fileList){
+                        while (fileList.firstChild) {
+                            fileList.removeChild(fileList.firstChild);
+                        }
+                    }
                 }, 500);  // 5000 밀리초 = 5초
             })
             .catch(error => console.error('Error:', error));
@@ -323,11 +322,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (event.target.classList.contains('updateAi')) {
             var serviceName = event.target.id.replace('updateAi-', '');
             var serviceNo = document.getElementById('serviceNo-' + serviceName).textContent;
-
             var updateAiButton = document.getElementById("updateAi-" + serviceName);
 
             if (updateAiButton) {
-                console.log("updateAiButton button clicked");
                 var aiNameInput = document.getElementById('updateName-' + serviceName).value;
                 var imageInput = document.getElementById('imageUpdate-' + serviceName).files[0];
                 var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
@@ -354,19 +351,20 @@ document.addEventListener("DOMContentLoaded", function () {
                             return response.text();
                         })
                         .then(data => {
-                            console.log(data);
+                            window.location.reload();
+                            setTimeout(function() {
+                                var newScreen = document.getElementById("updateScreen-" + serviceName);
+                                newScreen.classList.remove('active');
 
-                            var newScreen = document.getElementById("updateScreen-" + serviceName);
-                            newScreen.classList.remove('active');
+                                var aiName = document.getElementById("updateName-" + serviceName);
+                                aiName.value = '';
 
-                            var aiName = document.getElementById("updateName-" + serviceName);
-                            aiName.value = '';
+                                var imageUpdate = document.getElementById("imageUpdate-" + serviceName);
+                                imageUpdate.value = '';
 
-                            var imageUpdate = document.getElementById("imageUpdate-" + serviceName);
-                            imageUpdate.value = '';
-
-                            var updateProfile = document.getElementById("updateProfile-" + serviceName);
-                            updateProfile.src = 'img/profile_icon.png';
+                                var updateProfile = document.getElementById("updateProfile-" + serviceName);
+                                updateProfile.src = 'img/profile_icon.png';
+                            }, 500);  // 5000 밀리초 = 5초
                         })
                         .catch(error => console.error('Error:', error));
                 } else {
@@ -374,5 +372,41 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             }
         }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    var deleteButtons = document.querySelectorAll(".deleteChat");
+
+    deleteButtons.forEach(function (deleteAiButton) {
+        deleteAiButton.addEventListener("click", function () {
+            var serviceNo = deleteAiButton.getAttribute('data-service-no');
+            var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
+
+            if (csrfMetaTag) {
+                var csrfToken = csrfMetaTag.content;
+
+                var formData = new FormData();
+                formData.append("serviceNo", serviceNo);
+
+                fetch("/delete", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+                    body: formData,
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("에러가 발생하였습니다.");
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    window.location.reload();
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
     });
 });

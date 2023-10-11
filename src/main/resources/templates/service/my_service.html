@@ -78,7 +78,8 @@
                             <button class="updateClose">취소</button></p>
                     </div>
 
-                    <td><button type="button" class="btn btn-light deleteChat">삭제</button></td>
+                    <td><button type="button" th:attr="data-service-no=${myServices.serviceNo}"
+                                class="btn btn-light deleteChat" id="deleteAi">삭제</button></td>
                 </tr>
             </tbody>
         </table>

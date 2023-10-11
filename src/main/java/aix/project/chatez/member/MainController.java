@@ -2,27 +2,19 @@ package aix.project.chatez.member;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-
 @Controller
 public class MainController {
-    private final MemberRepository memberRepository;
+    private final MyServiceRepository myServiceRepository;
     private final ChatEzService chatEzService;
 
-    public MainController(MemberRepository memberRepository, ChatEzService chatEzService) {
-        this.memberRepository = memberRepository;
+    public MainController(MemberRepository memberRepository, MyServiceRepository myServiceRepository, ChatEzService chatEzService) {
+        this.myServiceRepository = myServiceRepository;
         this.chatEzService = chatEzService;
     }
 
@@ -48,8 +40,15 @@ public class MainController {
     public String handleFileUpdate(@RequestParam("updateName") String updateName,
                                    @RequestParam("updateFile") MultipartFile updateFile,
                                    @RequestParam("selectNo") String selectNo) {
+        String url = chatEzService.handleFileUpdate(updateName, updateFile, selectNo);
+        return "redirect:"+url;
+    }
 
-        return "redirect:my_service";
+    @ResponseBody
+    @PostMapping("/delete")
+    public String delete_service(@RequestParam("serviceNo") String serviceNo) {
+        String url = chatEzService.handleDeleteService(serviceNo);
+        return "redirect:"+url;
     }
 
     @GetMapping("/file_manager")
