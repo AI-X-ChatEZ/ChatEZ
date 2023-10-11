@@ -4,7 +4,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class MemberController {
@@ -58,11 +63,16 @@ public String login(){
     return "login";
 }
 
+
+@PreAuthorize("isAuthenticated()")
 @GetMapping("/success")
-public String success(Principal principal, Model model){
-    String memberName = principal.getName();
-    model.addAttribute("memberName", memberName);
-    return "login_success";
+public String success(@AuthenticationPrincipal Member member, Model model){
+    log.info("member>{}",member.getMemberNo());
+    log.info("membername>{}",member.getName());
+    Member loginedmember = memberService.findByEmail(member.getEmail());
+    model.addAttribute("member", loginedmember);
+
+    return "service/myService";
 }
 
 @GetMapping("/logout")

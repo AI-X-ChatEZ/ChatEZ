@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate = "~{fragments/index_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div>로그인성공</div>
+<!--    <div th:text="${member.name}|">user name</div>-->
+</div>
+<script layout:fragment="script">
+const token = searchParam('token')
+console.log(token)
+if(token){
+    localStorage.setItem("access_token", token);
+}
+
+function searchParam(key){
+    return new URLSearchParams(location.search).get(key);
+}
+
+
+</script>
+</body>
+</html>

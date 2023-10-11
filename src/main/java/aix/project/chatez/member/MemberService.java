@@ -1,6 +1,7 @@
 package aix.project.chatez.member;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import aix.project.chatez.DataNotFoundException;
@@ -12,9 +13,14 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public Long save(MemberForm memberForm){
+    public Long save(MemberForm memberForm)
+//            throws Exception
+    {
+//        if(memberRepository.findByEmail(memberForm.getEmail()).isPresent()) {
+//            throw new Exception("이미 존재하는 이메일입니다.");
+//        }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return memberRepository.save(Member.builder()
                 .name(memberForm.getName())
                 .email(memberForm.getEmail())
@@ -32,13 +38,13 @@ public class MemberService {
                 .orElseThrow(()->new IllegalArgumentException("알 수 없는 사용자"));
     }
 
-//    public Member getMember(String name){
-//        Optional<Member> member = this.memberRepository.findByName(name);
-//        if(member.isPresent()){
-//            return member.get();
-//        }else {
-//            throw new DataNotFoundException("siteUser not found");
-//        }
-//    }
+    public Member findByName(String name){
+        Optional<Member> member = this.memberRepository.findByName(name);
+        if(member.isPresent()){
+            return member.get();
+        }else {
+            throw new DataNotFoundException("알 수 없는 사용자");
+        }
+    }
 
 }
