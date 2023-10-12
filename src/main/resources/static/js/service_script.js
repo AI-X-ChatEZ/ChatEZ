@@ -60,7 +60,7 @@ document.getElementById('imageInput').addEventListener('change', function(e) {
 
 document.addEventListener('DOMContentLoaded', function() {
     // 'profile_icon' 클래스를 가진 모든 요소 선택
-    var profileIcons = document.querySelectorAll('.profile_icon');
+    var profileIcons = document.querySelectorAll('.update_profile_icon');
 
     profileIcons.forEach(function(icon) {
         icon.addEventListener('click', function() {
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const reader = new FileReader();
 
                 reader.onload = function(e) {
-                    panel.querySelector('.profile_icon').src = e.target.result;
+                    panel.querySelector('.update_profile_icon').src = e.target.result;
                 };
 
                 reader.readAsDataURL(e.target.files[0]);
@@ -168,26 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-document.getElementById('fileInput').addEventListener('change', function () {
-    var fileList = document.getElementById('fileList');
-    var files = this.files;
-
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-        var listItem = document.createElement('li');
-        listItem.innerHTML = '<img src="/img/txt-file.png" alt="txt-file" class="txt-file">' + file.name +
-        '<span><img src="/img/close_icon.png" alt="close-icon" class="close-icon" onclick="removeFile(this)"></span>';
-        fileList.appendChild(listItem);
-    }
-});
-
-function removeFile(element) {
-    var listItem = element.closest('li');
-    if (listItem) {
-        listItem.parentNode.removeChild(listItem);
-    }
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     var chatAreas = document.querySelectorAll('.chatEZ_list .chatScreen');
 
@@ -216,6 +196,26 @@ document.addEventListener('DOMContentLoaded', function () {
     function addMessageToChat(textarea, chatContent, chat) {
         var message = textarea.value.trim();
         if (message) {
+        textarea.disabled = true; // textarea를 비활성화
+        textarea.placeholder = "답변을 기다리는 중...";
+        fetch('http://localhost:8000/handle_query', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({query: message}) // 쿼리를 JSON 형식으로 변환
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+                addServerResponseToChat(data, chatContent, chat);
+                textarea.disabled = false; // textarea를 다시 활성화
+                textarea.placeholder = "이곳에 메세지를 입력하세요."; // placeholder 값을 원래대로 복구
+            }).catch(error => {
+                console.error('Error:', error); // 오류를 콘솔에 출력
+                textarea.disabled = false; // 오류 발생 시 textarea를 다시 활성화
+                textarea.placeholder = "이곳에 메세지를 입력하세요.";
+            });
+
             var li = document.createElement('li');
             li.textContent = message;
             chatContent.appendChild(li);
@@ -224,6 +224,15 @@ document.addEventListener('DOMContentLoaded', function () {
             chat.scrollTop = chat.scrollHeight;
         }
     }
+
+    function addServerResponseToChat(data, chatContent, chat) {
+        var li = document.createElement('li');
+        li.textContent = data;  //서버로부터 받은 메시지
+        li.classList.add('server-response'); // 답변 CSS 클래스 적용
+        chatContent.appendChild(li);
+        chat.scrollTop = chat.scrollHeight;
+    }
+
     var resetButtons = document.querySelectorAll('.chatReset');
         resetButtons.forEach(function(resetButton) {
             resetButton.addEventListener('click', function() {
@@ -247,19 +256,81 @@ document.addEventListener('input', function(e) {
     }
 });
 
+var selectedFiles = [];  // 현재 선택된 파일을 저장하는 배열
+
+document.getElementById('fileInput').addEventListener('change', function () {
+    var fileList = document.getElementById('fileList');
+    var files = this.files;
+
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        selectedFiles.push(file);  // 파일을 selectedFiles 배열에 추가
+
+        var listItem = document.createElement('li');
+        listItem.setAttribute('data-fileindex', selectedFiles.length - 1);  // 파일 인덱스 저장
+        listItem.innerHTML = '<img src="/img/txt-file.png" alt="txt-file" class="txt-file">' + file.name +
+        '<span><img src="/img/close_icon.png" alt="close-icon" class="close-icon" onclick="removeFile(this)"></span>';
+        fileList.appendChild(listItem);
+    }
+});
+
+function removeFile(element) {
+    var listItem = element.closest('li');
+    if (listItem) {
+        var fileIndex = listItem.getAttribute('data-fileindex');  // 파일 인덱스 가져오기
+        selectedFiles[fileIndex] = null;  // 해당 인덱스의 파일 제거
+        listItem.parentNode.removeChild(listItem);
+    }
+    document.getElementById('fileInput').value = '';
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     var createAiButton = document.getElementById("createAi");
     createAiButton.addEventListener("click", function() {
         var aiNameValue = document.getElementById("aiName").value;
-        var fileInput = document.getElementById("imageInput");
+        var imageInput = document.getElementById("imageInput");
+        var fileInput = document.getElementById("fileInput").files;
         var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
+
+        var validFilesCount = selectedFiles.filter(file => file !== null).length;
+
+        if (aiNameValue === "" || imageInput.length === 0 || validFilesCount === 0) {
+            alert("AI 이름, 프로필 이미지와 파일을 모두 선택해주세요.");
+            return;
+        }
+
+        // FastAPI 서버로 fileInput의 파일 전송
+        var fileFormData = new FormData();
+        fileFormData.append('index', aiNameValue);
+        var validFiles = selectedFiles.filter(file => file !== null);
+
+        for (var i = 0; i < validFiles.length; i++) {
+            fileFormData.append("files", validFiles[i]);
+        }
+
+        fetch("http://localhost:8000/upload_files", {
+            method: "POST",
+            body: fileFormData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("네트워크 오류가 발생했습니다.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('파일이 성공적으로 업로드되었습니다:', data);
+            window.location.reload();
+        })
+        .catch(error => console.error('에러:', error));
 
         if (csrfMetaTag) {
             var csrfToken = csrfMetaTag.content;
 
+            // 기존 엔드포인트로 나머지 데이터 전송
             var formData = new FormData();
             formData.append("aiName", aiNameValue);
-            formData.append("imageFile", fileInput.files[0]);
+            formData.append("imageFile", imageInput.files[0]);
 
             fetch("/upload", {
                 method: "POST",
@@ -275,7 +346,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 return response.text();
             })
             .then(data => {
-                window.location.reload();
                 setTimeout(function() {
                     var newScreen = document.getElementById("newScreen");
                     if(newScreen){
@@ -328,15 +398,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 var aiNameInput = document.getElementById('updateName-' + serviceName).value;
                 var imageInput = document.getElementById('imageUpdate-' + serviceName).files[0];
                 var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
-                console.log(serviceNo);
+
+                if (aiNameInput === "") {
+                    alert("수정할 AI 이름을 작성해 주세요.");
+                    return;
+                }
+
                 if (csrfMetaTag) {
                     var csrfToken = csrfMetaTag.content;
 
                     var formData = new FormData();
                     formData.append("selectNo", serviceNo);
                     formData.append("updateName", aiNameInput);
-                    formData.append("updateFile", imageInput);
-
+                    if (imageInput) {
+                        formData.append("updateFile", imageInput);
+                    }
                     fetch("/update", {
                         method: "POST",
                         headers: {

@@ -65,7 +65,7 @@
                     <div th:id="'updateScreen-'+${myServices.serviceName}" class="hide panel updateScreen">
                         <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>수정하기</span></h4>
                         <p id="imageContainer">
-                            <img th:src="${myServices.profilePic}" alt="profile_icon" class="profile_icon"
+                            <img th:src="${myServices.profilePic}" alt="profile_icon" class="update_profile_icon"
                                  th:id="'updateProfile-' + ${myServices.serviceName}"></p>
                         <input type="file" th:id="'imageUpdate-' + ${myServices.serviceName}"
                                style="display: none;" accept="image/*" class="imageUpdate">

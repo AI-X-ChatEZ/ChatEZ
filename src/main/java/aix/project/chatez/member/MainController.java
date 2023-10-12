@@ -32,15 +32,17 @@ public class MainController {
     public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
                                    @RequestParam("aiName") String aiName) {
         String url = chatEzService.userFileUplaod(imageFile, aiName);
+
         return "redirect:"+url;
     }
 
     @ResponseBody
     @PostMapping("/update")
     public String handleFileUpdate(@RequestParam("updateName") String updateName,
-                                   @RequestParam("updateFile") MultipartFile updateFile,
+                                   @RequestParam(value="updateFile", required=false) MultipartFile updateFile,
                                    @RequestParam("selectNo") String selectNo) {
         String url = chatEzService.handleFileUpdate(updateName, updateFile, selectNo);
+
         return "redirect:"+url;
     }
 
@@ -55,4 +57,5 @@ public class MainController {
     public String file_manager(){
         return "service/file_manager";
     }
+
 }

@@ -361,7 +361,8 @@
     border-bottom: 2px solid #151515;
 }
 
-.profile_icon{
+.profile_icon,
+.update_profile_icon{
     width: 200px;
     height: 200px;
 }
@@ -370,6 +371,7 @@
     vertical-align: middle;
     width: 54px;
     height: 54px;
+    margin-right:10px;
 }
 
 #imageContainer{
@@ -536,12 +538,18 @@
     width: fit-content;
     padding: 5px 10px;
     border-radius: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     max-width: 80%;
     word-wrap: break-word;
     text-align: left;
     float: right;
     clear: both;
+}
+
+#chatContent li.server-response{
+    float: left;
+    background-color: #FF6633;
+    color: #FFF;
 }
 
 .chatScreen p textarea {
@@ -582,4 +590,9 @@
 .chatScreen .chatReset img{
     width: 36px;
     height: 36px;
+}
+
+.close-icon{
+    width:22px;
+    height:22px;
 }

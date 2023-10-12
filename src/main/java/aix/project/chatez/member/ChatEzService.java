@@ -88,8 +88,9 @@ public class ChatEzService {
 
     public String handleFileUpdate(String updateName, MultipartFile updateFile, String selectNo) {
         Long no = Long.parseLong(selectNo);
-        if (updateFile.isEmpty() || StringUtils.isEmpty(updateName)) {
-            return "파일 또는 업데이트할 이름이 없습니다.";
+
+        if (StringUtils.isEmpty(updateName)) {
+            return "업데이트할 이름이 없습니다.";
         }
 
         try {
@@ -97,21 +98,22 @@ public class ChatEzService {
 
             if (optionalMyService.isPresent()) {
                 MyService myService = optionalMyService.get();
-
-                if (!myService.getProfilePic().isEmpty()) {
-                    Path oldFilePath = Paths.get("C:/github/uploaded-images/" + myService.getProfilePic().substring(8)).toAbsolutePath();
-                    Files.delete(oldFilePath);
-                }
-
                 myService.setServiceName(updateName);
 
-                if (!updateFile.isEmpty()) {
+                // 파일이 있는 경우에만 파일 처리
+                if (updateFile != null && !updateFile.isEmpty()) {
+                    if (!myService.getProfilePic().isEmpty()) {
+                        Path oldFilePath = Paths.get("C:/github/uploaded-images/" + myService.getProfilePic().substring(8)).toAbsolutePath();
+                        Files.delete(oldFilePath);
+                    }
+
                     String fileName = updateFile.getOriginalFilename();
                     String fileUploadDirectory = "C:/github/uploaded-images/" + fileName;
                     Path path = Paths.get(fileUploadDirectory).toAbsolutePath();
                     updateFile.transferTo(path.toFile());
                     myService.setProfilePic("/images/" + fileName);
                 }
+
                 myServiceRepository.save(myService);
 
                 return "my_service";
