@@ -2,12 +2,16 @@
 <html lang="en" layout:decorate = "~{fragments/index_layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>로그인성공</title>
+    <link rel="icon" th:href="@{/img/favicon-32x32.png}" type="image/x-icon" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
 </head>
 <body>
 <div layout:fragment="content">
     <div>로그인성공</div>
-<!--    <div th:text="${member.name}|">user name</div>-->
+    <div th:text="${member.name}|">user name</div>
+    <a href="/logout">로그아웃</a>
 </div>
 <script layout:fragment="script">
 const token = searchParam('token')
@@ -20,6 +24,23 @@ function searchParam(key){
     return new URLSearchParams(location.search).get(key);
 }
 
+    // 쿠키를 가져오는 함수
+function getCookie(key) {
+    var result = null;
+    var cookie = document.cookie.split(';');
+    cookie.some(function (item) {
+        item = item.replace(' ', '');
+
+        var dic = item.split('=');
+
+        if (key === dic[0]) {
+            result = dic[1];
+            return true;
+        }
+    });
+
+    return result;
+}
 
 </script>
 </body>

@@ -9,6 +9,7 @@ import aix.project.chatez.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -18,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.time.Duration;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -25,7 +27,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
-    public static final String REDIRECT_PATH = "/success";
+    public static final String REDIRECT_PATH = "/service/success";
 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -47,6 +49,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         clearAuthenticationAttributes(request, response);
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        String email = (String) ((OAuth2User) authentication.getPrincipal()).getAttributes().get("email");
+        log.info("구글로그인성공>>{}",email);
+        Member foundMember = memberService.findByEmail(email);
+        log.info("이름 찾기>>{}",foundMember.getName());
     }
 
     private void saveRefreshToken(Long memberNo, String newRefreshToken) {

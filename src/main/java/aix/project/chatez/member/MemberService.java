@@ -14,7 +14,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Long save(MemberForm memberForm)
+    public Member save(MemberForm memberForm)
 //            throws Exception
     {
 //        if(memberRepository.findByEmail(memberForm.getEmail()).isPresent()) {
@@ -25,7 +25,7 @@ public class MemberService {
                 .name(memberForm.getName())
                 .email(memberForm.getEmail())
                 .password(passwordEncoder.encode(memberForm.getPassword1()))
-                .build()).getMemberNo();
+                .build());
     }
 
     public Member findByMemberNo(Long memberNo){

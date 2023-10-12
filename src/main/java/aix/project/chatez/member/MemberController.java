@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,12 +67,20 @@ public String login(){
 
 
 @PreAuthorize("isAuthenticated()")
-@GetMapping("/success")
-public String success(@AuthenticationPrincipal Member member, Model model){
-    log.info("member>{}",member.getMemberNo());
-    log.info("membername>{}",member.getName());
-    Member loginedmember = memberService.findByEmail(member.getEmail());
-    model.addAttribute("member", loginedmember);
+@GetMapping("/service/success")
+public String success(
+//        @AuthenticationPrincipal OAuth2User oAuth2User,
+                      Model model
+                        ){
+    Authentication authentication =SecurityContextHolder.getContext().getAuthentication();
+    log.info("principal값>>{}",authentication.getPrincipal());
+    String email = (String) ((OAuth2User) authentication.getPrincipal()).getAttributes().get("email");
+//    log.info("member>{}",member.getName());
+//    String email = (String) oAuth2User.getAttributes().get("email");
+////    Member loginedmember = memberService.findByEmail(member.getEmail());
+    Member member = memberService.findByEmail(email);
+    model.addAttribute("member", member);
+
 
     return "service/myService";
 }

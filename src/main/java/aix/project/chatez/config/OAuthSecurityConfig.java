@@ -4,7 +4,6 @@ import aix.project.chatez.config.jwt.TokenProvider;
 import aix.project.chatez.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import aix.project.chatez.config.oauth.OAuth2MemberCustomerService;
 import aix.project.chatez.config.oauth.OAuth2SuccessHandler;
-import aix.project.chatez.member.Member;
 import aix.project.chatez.member.MemberService;
 import aix.project.chatez.token.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -45,8 +43,8 @@ public class OAuthSecurityConfig {
                 .formLogin().disable()
                 .logout().disable();
 
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        http.sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
