@@ -1,5 +1,6 @@
 package aix.project.chatez.member;
 
+import aix.project.chatez.config.jwt.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -18,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 
@@ -27,6 +29,7 @@ import java.security.Principal;
 public class MemberController {
 
     private final MemberService memberService;
+    private final TokenProvider tokenProvider;
 
 @GetMapping("/join")
 public String join(MemberForm memberForm){
@@ -67,19 +70,45 @@ public String login(){
 
 
 @PreAuthorize("isAuthenticated()")
-@GetMapping("/service/success")
-public String success(
+@PostMapping("/service/success")
+public String success(Principal principal,
 //        @AuthenticationPrincipal OAuth2User oAuth2User,
                       Model model
                         ){
-    Authentication authentication =SecurityContextHolder.getContext().getAuthentication();
-    log.info("principal값>>{}",authentication.getPrincipal());
-    String email = (String) ((OAuth2User) authentication.getPrincipal()).getAttributes().get("email");
-//    log.info("member>{}",member.getName());
-//    String email = (String) oAuth2User.getAttributes().get("email");
-////    Member loginedmember = memberService.findByEmail(member.getEmail());
-    Member member = memberService.findByEmail(email);
-    model.addAttribute("member", member);
+//    Authentication authentication =SecurityContextHolder.getContext().getAuthentication();
+//    log.info("principal값>>{}",authentication.getPrincipal());
+//    String email = (String) ((OAuth2User) authentication.getPrincipal()).getAttributes().get("email");
+//
+//    Member member = memberService.findByEmail(email);
+//    model.addAttribute("member", member);
+
+//    Authentication authentication = tokenProvider.getAuthentication(token);
+//    String email = (String) ((OAuth2User) authentication.getPrincipal()).getAttributes().get("email");
+//    Member member= memberService.findByEmail(email);
+//    model.addAttribute(email);
+
+
+    String email = principal.getName();
+    log.info("principal.getName()>>{}",email);
+    Member member= memberService.findByEmail(email);
+    model.addAttribute("member",member);
+
+
+    return "redirect:/service/success";
+}
+@GetMapping("/service/success")
+public String successPost(
+//        @AuthenticationPrincipal OAuth2User oAuth2User,
+//                      Model model
+                        ){
+//    Authentication authentication =SecurityContextHolder.getContext().getAuthentication();
+//    log.info("principal값>>{}",authentication.getPrincipal());
+//    String email = (String) ((OAuth2User) authentication.getPrincipal()).getAttributes().get("email");
+////    log.info("member>{}",member.getName());
+////    String email = (String) oAuth2User.getAttributes().get("email");
+//////    Member loginedmember = memberService.findByEmail(member.getEmail());
+//    Member member = memberService.findByEmail(email);
+//    model.addAttribute("member", member);
 
 
     return "service/myService";
