@@ -81,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
             var panel = input.closest('.panel');
 
             var serviceName = panel.querySelector('.serviceName').textContent;
-            console.log(serviceName);
 
             if (e.target.files && e.target.files[0]) {
                 const reader = new FileReader();
@@ -212,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 textarea.placeholder = "이곳에 메세지를 입력하세요."; // placeholder 값을 원래대로 복구
             }).catch(error => {
                 console.error('Error:', error); // 오류를 콘솔에 출력
+                alert("질문 검색 중 오류 발생 관리자에게 문의해 주세요.");
                 textarea.disabled = false; // 오류 발생 시 textarea를 다시 활성화
                 textarea.placeholder = "이곳에 메세지를 입력하세요.";
             });
@@ -308,22 +308,25 @@ document.addEventListener("DOMContentLoaded", function() {
             fileFormData.append("files", validFiles[i]);
         }
 
-        fetch("http://localhost:8000/upload_files", {
+        var fetchUploadFiles = fetch("http://localhost:8000/upload_files", {
             method: "POST",
             body: fileFormData,
         })
         .then(response => {
             if (!response.ok) {
+                alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
                 throw new Error("네트워크 오류가 발생했습니다.");
             }
             return response.json();
         })
         .then(data => {
             console.log('파일이 성공적으로 업로드되었습니다:', data);
-            window.location.reload();
         })
-        .catch(error => console.error('에러:', error));
-
+        .catch(error => {
+            console.error('Error:', error);
+            alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
+        });
+        var fetchUpload = null;
         if (csrfMetaTag) {
             var csrfToken = csrfMetaTag.content;
 
@@ -332,7 +335,7 @@ document.addEventListener("DOMContentLoaded", function() {
             formData.append("aiName", aiNameValue);
             formData.append("imageFile", imageInput.files[0]);
 
-            fetch("/upload", {
+            var fetchUpload = fetch("/upload", {
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": csrfToken,
@@ -341,6 +344,7 @@ document.addEventListener("DOMContentLoaded", function() {
             })
             .then(response => {
                 if (!response.ok) {
+                    alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
                     throw new Error("에러가 발생하였습니다.");
                 }
                 return response.text();
@@ -380,10 +384,22 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 }, 500);  // 5000 밀리초 = 5초
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
+            });
         } else {
+            alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
             console.error("CSRF 메타 태그가 존재하지 않습니다.");
         }
+
+        if(fetchUpload) {
+            Promise.all([fetchUploadFiles, fetchUpload])
+                .then(() => {
+                    window.location.reload();
+                });
+        }
+
     });
 });
 
@@ -422,6 +438,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                         .then(response => {
                             if (!response.ok) {
+                                alert("파일 업데이트 중 오류 발생 관리자에게 문의해 주세요.");
                                 throw new Error("네트워크 오류");
                             }
                             return response.text();
@@ -442,8 +459,12 @@ document.addEventListener("DOMContentLoaded", function () {
                                 updateProfile.src = 'img/profile_icon.png';
                             }, 500);  // 5000 밀리초 = 5초
                         })
-                        .catch(error => console.error('Error:', error));
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert("파일 업데이트 중 오류 발생 관리자에게 문의해 주세요.");
+                        });
                 } else {
+                    alert("파일 업데이트 중 오류 발생 관리자에게 문의해 주세요.");
                     console.error("CSRF 메타 태그 오류");
                 }
             }
@@ -474,6 +495,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(response => {
                     if (!response.ok) {
+                        alert("파일 삭제 중 오류 발생 관리자에게 문의해 주세요.");
                         throw new Error("에러가 발생하였습니다.");
                     }
                     return response.text();
@@ -481,7 +503,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(data => {
                     window.location.reload();
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("파일 삭제 중 오류 발생 관리자에게 문의해 주세요.");
+                });
             }
         });
     });

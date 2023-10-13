@@ -80,11 +80,16 @@
 }
 
 .chatEZ_list table tr th:nth-child(1){
-    width: 300px;
+    width: 150px;
 }
 
 .chatEZ_list table tr th:nth-child(2){
-    width: 700px;
+    padding-right:20px;
+    width: 280px;
+}
+
+.chatEZ_list table tr th:nth-child(3){
+    width: 520px;
 }
 
 .chatEZ_list tr td button{
@@ -524,6 +529,7 @@
     display: flex;
     flex-direction: column-reverse;
     overflow-y: auto;
+    margin-right:10px;
 }
 
 #chatContent {
@@ -595,4 +601,21 @@
 .close-icon{
     width:22px;
     height:22px;
+}
+
+/* 스크롤바의 폭 너비 */
+#fileList::-webkit-scrollbar,
+.chat::-webkit-scrollbar{
+    width: 10px;
+}
+
+#fileList::-webkit-scrollbar-thumb,
+.chat::-webkit-scrollbar-thumb{
+    background: #6289FF; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 둥근 테두리 */
+}
+
+#fileList::-webkit-scrollbar-track,
+.chat::-webkit-scrollbar-track{
+    background: #ddd;  /*스크롤바 뒷 배경 색상*/
 }
