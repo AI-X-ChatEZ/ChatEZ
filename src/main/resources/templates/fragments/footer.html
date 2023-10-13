@@ -9,16 +9,18 @@
     <div class="center">
         <div class="top d-flex justify-content-between">
             <div class="btmlogo">
-                <a href="/"
-                ><img src="img/ChatEZ_logo_btm.svg" alt="ChatEZ" /><span>ChatEz</span></a
+                <a th:href="${member != null && !#strings.isEmpty(member.name)} ? 'my_service' : '/'"
+                ><img src="/img/ChatEZ_logo_btm.svg" alt="ChatEZ" /><span>ChatEz</span></a
                 >
             </div>
             <nav>
                 <ul class="d-flex justify-content-between">
                     <li><a href="/join">시작하기</a></li>
-                    <li><a href="/login">로그인</a></li>
-                    <li><a href="/myservice">마이서비스</a></li>
-                    <li><a href="/filemanagement">파일관리</a></li>
+                    <li><a th:href="${member != null && !#strings.isEmpty(member.name)} ? '/logout' : '/login'"
+                           th:text="${member != null && !#strings.isEmpty(member.name)} ? '로그아웃' : '로그인'"></a>
+                    </li>
+                    <li><a href="/my_service">마이서비스</a></li>
+                    <li><a href="/file_manager">파일관리</a></li>
                 </ul>
             </nav>
         </div>

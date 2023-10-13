@@ -10,17 +10,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class MemberDetailService implements UserDetailsService {
-
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     @Override
-    public Member loadUserByUsername(String email) {
+    public UserDetails loadUserByUsername(String email) {
 
-        return memberRepository.findByEmail(email)
+        Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException((email)));
-
+        return createUserDetails(member);
     }
-
     private UserDetails createUserDetails(Member member){
         return User.builder()
                 .username(member.getEmail())

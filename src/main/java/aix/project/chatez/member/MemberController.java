@@ -20,8 +20,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -68,52 +70,49 @@ public String login(){
     return "login";
 }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/my_service")
+    public ModelAndView success(@AuthenticationPrincipal(expression="username") String email){
+        log.info("name>>{}",email);
+        Member member= memberService.findByName(email);
 
-@PreAuthorize("isAuthenticated()")
-@PostMapping("/service/success")
-public String success(Principal principal,
-//        @AuthenticationPrincipal OAuth2User oAuth2User,
-                      Model model
-                        ){
-//    Authentication authentication =SecurityContextHolder.getContext().getAuthentication();
-//    log.info("principal값>>{}",authentication.getPrincipal());
-//    String email = (String) ((OAuth2User) authentication.getPrincipal()).getAttributes().get("email");
-//
-//    Member member = memberService.findByEmail(email);
-//    model.addAttribute("member", member);
+        ModelAndView modelAndView = new ModelAndView("service/myService");
+        modelAndView.addObject("member", member );
 
-//    Authentication authentication = tokenProvider.getAuthentication(token);
-//    String email = (String) ((OAuth2User) authentication.getPrincipal()).getAttributes().get("email");
-//    Member member= memberService.findByEmail(email);
-//    model.addAttribute(email);
+        return modelAndView;
+    }
 
+    @GetMapping("/token")
+    public ModelAndView successWithToken(@RequestParam String token){
+        Authentication authentication = tokenProvider.getAuthentication(token);
 
-    String email = principal.getName();
-    log.info("principal.getName()>>{}",email);
-    Member member= memberService.findByEmail(email);
-    model.addAttribute("member",member);
+        String email = authentication.getName();
+        Member member= memberService.findByEmail(email);
 
+        ModelAndView modelAndView = new ModelAndView("service/myService");
+        modelAndView.addObject("member", member );
 
-    return "redirect:/service/success";
-}
-@GetMapping("/service/success")
-public String successPost(
-//        @AuthenticationPrincipal OAuth2User oAuth2User,
-//                      Model model
-                        ){
-//    Authentication authentication =SecurityContextHolder.getContext().getAuthentication();
-//    log.info("principal값>>{}",authentication.getPrincipal());
-//    String email = (String) ((OAuth2User) authentication.getPrincipal()).getAttributes().get("email");
-////    log.info("member>{}",member.getName());
-////    String email = (String) oAuth2User.getAttributes().get("email");
-//////    Member loginedmember = memberService.findByEmail(member.getEmail());
-//    Member member = memberService.findByEmail(email);
-//    model.addAttribute("member", member);
+        return modelAndView;
+    }
 
 
-    return "service/myService";
-}
 
+
+    //    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/my_service")
+//    public ModelAndView success(@RequestParam(required = false) String token){
+//        Authentication authentication;
+//        if (token != null) {
+//            authentication = tokenProvider.getAuthentication(token);
+//        } else {
+//            authentication = SecurityContextHolder.getContext().getAuthentication();
+//        }
+//        String email = authentication.getName();
+//        Member member= memberService.findByEmail(email);
+//        ModelAndView modelAndView = new ModelAndView("service/myService");
+//        modelAndView.addObject("member", member );
+//        return modelAndView;
+//    }
 @GetMapping("/logout")
 public String logout(HttpServletRequest request, HttpServletResponse response){
     new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());

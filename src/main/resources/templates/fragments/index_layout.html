@@ -12,12 +12,14 @@
     <header>
       <div class="d-flex justify-content-between center">
         <h1>
-          <a href="/"
+          <a th:href="${member != null && !#strings.isEmpty(member.name)} ? '/my_service' : '/'"
           ><img src="/img/ChatEZ_logo.svg" alt="ChatEz" /><span>ChatEZ</span></a
           >
         </h1>
-        <div><a th:href="@{/login}" class="btn login_btn" sec:authorize="isAnonymous()">로그인</a>
-        <a th:href="@{/logout}" class="btn login_btn" sec:authorize="isAuthenticated()">로그아웃</a>
+        <div>
+          <a th:href="${member != null && !#strings.isEmpty(member.name)} ? '/logout' : '/login'"
+             th:text="${member != null && !#strings.isEmpty(member.name)} ? '로그아웃' : '로그인'"
+             class="btn login_btn"></a>
         </div>
       </div>
     </header>
