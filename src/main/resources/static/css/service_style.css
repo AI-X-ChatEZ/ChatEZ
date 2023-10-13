@@ -271,7 +271,7 @@
 #newScreen.panel {
     top:180px;
     position: fixed;
-    right: -100%;
+    right: -160%;
     width: 800px;
     height: 650px;
     background: #fff;
