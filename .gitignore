@@ -39,3 +39,5 @@ out/
 ### information###
 application.yml
 mk.yml
+appspec.yml
+deploy.sh
