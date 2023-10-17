@@ -22,7 +22,11 @@ h1 span {
   display: block;
   margin-top: 25px;
 }
-.login_btn {
+header div.login_btn{
+    position: sticky;
+    right : 50px;
+}
+button.login_btn {
   background-color: #3366ff;
   color: #fff;
   margin-top: 34px;
@@ -138,25 +142,25 @@ footer .info p {
   color: #5d5d5d;
   font-size: 18px;
   line-height: 1.5;
-  margin-bottom: 110px;
+  margin-bottom: 60px;
 }
 [class$='box'] {
   background-color: #eaf0fe;
 }
 div.login_container div.login_box {
   width: 800px;
-  height: 430px;
+  height: 500px;
   border-radius: 10px;
   margin-bottom: 370px;
 }
 
 div.login_container div.login_box form {
-  padding-top: 100px;
-  width: 715px;
+  padding-top: 80px;
+  width: 600px;
   font-size: 22px;
 }
 div.login_container div.login_box form .input_box {
-  width: 535px;
+  width: 400px;
 }
 div.login_container div.login_box form label {
   line-height: 67px;
@@ -285,6 +289,5 @@ div.button>button.btn:first-child{
 }
 
 /* welcome: END */
-
 
 
