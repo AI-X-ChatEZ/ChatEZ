@@ -19,10 +19,11 @@
             <img src="/img/ChatEZ_logo.svg" alt="ChatEz" /><span>ChatEZ</span>
           </a>
         </h1>
-        <div><a th:href="@{/login}" class="btn login_btn" sec:authorize="isAnonymous()">로그인</a>
-        <a th:href="@{/logout}" class="btn login_btn"sec:authorize="isAuthenticated()">로그아웃</a>
-      </div>
-      </div>
+        <div>
+          <a th:href="@{/login}" class="btn login_btn" sec:authorize="isAnonymous()">로그인</a>
+          <a th:href="@{/logout}" class="btn login_btn"sec:authorize="isAuthenticated()">로그아웃</a>
+        </div>
+        </div>
     </header>
 <!--    <header th:replace="~{header :: headerFragment}"></header>-->
     <!-- 각 페이지의 container내용-->
