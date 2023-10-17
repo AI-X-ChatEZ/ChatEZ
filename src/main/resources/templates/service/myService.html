@@ -10,8 +10,10 @@
 <body>
 <div layout:fragment="content">
     <div>로그인성공</div>
-    <div th:text="${member.name}|"></div>
+    <div th:text="${member.name}" id="name"></div>
+    <button id="myService">버튼클릭</button>
 </div>
+
 <script layout:fragment="script">
     const token = searchParam('token')
 
@@ -23,18 +25,30 @@
         return new URLSearchParams(location.search).get(key);
     }
 
-    fetch('/my_service', {
-      headers: {
-        'Authorization': 'Bearer ' + token
-      },
-      credentials: 'include' // 자격 증명 포함
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+    const modifyButton = document.getElementById('myService');
 
+    if (modifyButton != null) {
+        modifyButton.addEventListener('click', event => {
+            let params = new URLSearchParams(location.search);
+            let id = params.get('id');
+
+            // body = JSON.stringify({
+            //     title: document.getElementById('name').value,
+            //     content: document.getElementById('content').value
+            // })
+
+            function success() {
+                alert('수정 완료되었습니다.');
+                // location.replace('/m);
+            }
+
+            function fail() {
+                alert('수정 실패했습니다.');
+                location.replace('/');
+            }
+
+            httpRequest('GET','/api/my-service/', null, success, fail);
+        });
     }
 
         // 쿠키를 가져오는 함수
@@ -72,7 +86,7 @@
             }
             const refresh_token = getCookie('refresh_token');
             if (response.status === 401 && refresh_token) {
-                fetch('/api/token', {
+                fetch('/token', {
                     method: 'POST',
                     headers: {
                         Authorization: 'Bearer ' + localStorage.getItem('access_token'),

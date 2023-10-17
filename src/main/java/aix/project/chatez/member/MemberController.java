@@ -1,6 +1,5 @@
 package aix.project.chatez.member;
 
-import aix.project.chatez.config.jwt.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -9,9 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -31,7 +32,7 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-    private final TokenProvider tokenProvider;
+
 
 @GetMapping("/join")
 public String join(MemberForm memberForm){
@@ -70,54 +71,47 @@ public String login(){
     return "login";
 }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/my_service")
-    public ModelAndView success(@AuthenticationPrincipal(expression="username") String email){
-        log.info("name>>{}",email);
-        Member member= memberService.findByName(email);
+@GetMapping("/my-service")
+@PreAuthorize("isAuthenticated()")
+public ModelAndView success(Principal principal){
+    String email = extractEmail(principal);
+    Member member = memberService.findByEmail(email);
 
-        ModelAndView modelAndView = new ModelAndView("service/myService");
-        modelAndView.addObject("member", member );
+    ModelAndView modelAndView = new ModelAndView("service/myService");
+    modelAndView.addObject("member", member);
 
-        return modelAndView;
-    }
-
-    @GetMapping("/token")
-    public ModelAndView successWithToken(@RequestParam String token){
-        Authentication authentication = tokenProvider.getAuthentication(token);
-
-        String email = authentication.getName();
-        Member member= memberService.findByEmail(email);
-
-        ModelAndView modelAndView = new ModelAndView("service/myService");
-        modelAndView.addObject("member", member );
-
-        return modelAndView;
-    }
-
-
-
-
-    //    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/my_service")
-//    public ModelAndView success(@RequestParam(required = false) String token){
-//        Authentication authentication;
-//        if (token != null) {
-//            authentication = tokenProvider.getAuthentication(token);
-//        } else {
-//            authentication = SecurityContextHolder.getContext().getAuthentication();
-//        }
-//        String email = authentication.getName();
-//        Member member= memberService.findByEmail(email);
-//        ModelAndView modelAndView = new ModelAndView("service/myService");
-//        modelAndView.addObject("member", member );
-//        return modelAndView;
-//    }
-@GetMapping("/logout")
-public String logout(HttpServletRequest request, HttpServletResponse response){
-    new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-    return "redirect:/";
+    return modelAndView;
 }
+
+private String extractEmail(Principal principal) {
+    if (principal instanceof OAuth2AuthenticationToken) {
+        OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
+        OAuth2User oauthUser = token.getPrincipal();
+        return (String) oauthUser.getAttributes().get("email");
+
+    } else if(principal instanceof UsernamePasswordAuthenticationToken){
+        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) principal;
+        Object userDetails = token.getPrincipal();
+
+        if(userDetails instanceof MemberDetails memberDetails){
+            return memberDetails.getUsername();
+
+        } else {
+            throw new IllegalArgumentException("Unexpected type of UserDetails");
+        }
+
+    } else{
+        throw new IllegalArgumentException("Unexpected type of Principal");
+    }
+}
+
+
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response){
+        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+        return "redirect:/";
+    }
 
 
 }

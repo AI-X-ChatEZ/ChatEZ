@@ -1,79 +1,54 @@
 package aix.project.chatez.member;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
-@Setter
-@Entity
 @NoArgsConstructor
-public class Member implements UserDetails {
+@Entity
+@AllArgsConstructor
+public class Member{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_no")
     private Long memberNo;
 
-    @Column(name = "name", nullable = false)
+    private String oauth2Id;
+
+    @Column(name = "name",columnDefinition = "VARCHAR(255)")
     private String name;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email",columnDefinition = "VARCHAR(255)", nullable = false, unique = true)
     private String email;
+
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
+
+    private String socialId;
+
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
 
     @Column(name = "password", nullable = false)
     private String password;
 
+
     @Builder
-    public Member(
-            String name,
-            String email,
-            String password){
+    public Member(String oauth2Id, String name, String password, String email, MemberRole role, SocialType socialType, String socialId) {
+        this.oauth2Id=oauth2Id;
         this.name = name;
-        this.email = email;
         this.password = password;
-    }
-
-    public Member updateName(String name){
-        this.name = name;
-        return this;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
+        this.email = email;
+        this.role = role;
+        this.socialType = socialType;
+        this.socialId = socialId;
     }
 }

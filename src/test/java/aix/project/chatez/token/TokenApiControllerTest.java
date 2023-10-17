@@ -53,7 +53,7 @@ public class TokenApiControllerTest {
     @Test
     public void createNewAccessToken() throws Exception{
         //given
-        final String url = "/api/token";
+        final String url = "/token";
 
         Member testMember = memberRepository.save(Member.builder().email("test1@test.com").name("테스트").password("test").build());
 
