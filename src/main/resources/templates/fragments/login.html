@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--    Modal      -->
+<div th:fragment="loginModalFragment"  class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-4" id="loginModalLabel">로그인</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <p class="text-center">
+                ChatEZ로<br />
+                빠르고 간편하게 서비스 맞춤 대화형 AI를 만들어보세요.
+            </p>
+            <div class="modal-body">
+                <form th:action="@{/login}" method="post" class="center d-flex flex-column">
+                    <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+
+                    <div class="row mb-3">
+                        <label for="email" class="blind">이메일</label>
+                        <input type="email" name="email" id="email" class="form-control col" placeholder="이메일" />
+                    </div>
+                    <div class="row mb-4">
+                        <label for="password" class="blind">비밀번호</label>
+                        <input type="password" name="password" id="password" class="form-control col" placeholder="비밀번호">
+                    </div>
+
+                    <button type="submit" class="d-block submit_btn center">로그인</button>
+                </form>
+                <div class="join_link center d-flex justify-content-around mb-5">
+                    <p class="d-inline-block">아직 회원이 아니신가요?</p>
+                    <a href="/join" class="d-block custom_btn join_btn d-block text-center">회원가입</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <h3 class="text-center p-3">간편 로그인</h3>
+                <div class="social_login d-flex justify-content-around center">
+                    <a href="/oauth2/authorization/google" class="d-block google"><span class="blind">구글 로그인</span></a>
+                    <a href="/oauth2/authorization/kakao" class="d-block kakao"><span class="blind">카카오로그인</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div th:fragment="loginModalFragment" >-->
+<!--<div class="modal-header">-->
+<!--    <h2 class="modal-title fs-4" id="loginModalLabel">로그인</h2>-->
+<!--    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--</div>-->
+<!--<p class="text-center">-->
+<!--    ChatEZ로<br />-->
+<!--    빠르고 간편하게 서비스 맞춤 대화형 AI를 만들어보세요.-->
+<!--</p>-->
+<!--<div class="modal-body">-->
+<!--    <form th:action="@{/login}" method="post" class="center d-flex flex-column">-->
+<!--        <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />-->
+
+<!--        <div class="row mb-3">-->
+<!--            <label for="email" class="blind">이메일</label>-->
+<!--            <input type="email" name="email" id="email" class="form-control col" placeholder="이메일" />-->
+<!--        </div>-->
+<!--        <div class="row mb-4">-->
+<!--            <label for="password" class="blind">비밀번호</label>-->
+<!--            <input type="password" name="password" id="password" class="form-control col" placeholder="비밀번호">-->
+<!--        </div>-->
+
+<!--        <button type="submit" class="d-block submit_btn center">로그인</button>-->
+<!--    </form>-->
+<!--    <div class="join_link center d-flex justify-content-around mb-5">-->
+<!--        <p class="d-inline-block">아직 회원이 아니신가요?</p>-->
+<!--        <a href="/join" class="d-block custom_btn join_btn d-block text-center">회원가입</a>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="modal-footer">-->
+<!--    <h3 class="text-center p-3">간편 로그인</h3>-->
+<!--    <div class="social_login d-flex justify-content-around center">-->
+<!--        <a href="/oauth2/authorization/google" class="d-block google"><span class="blind">구글 로그인</span></a>-->
+<!--        <a href="/oauth2/authorization/kakao" class="d-block kakao"><span class="blind">카카오로그인</span></a>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</div>-->
+</body>
+</html>

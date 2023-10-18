@@ -40,7 +40,6 @@ div#loginModal h2{
   margin-left: 210px;
 }
 div#loginModal div.modal-header~p{
-  /*padding-top: 50px;*/
   color: #5d5d5d;
   font-size: 15px;
   line-height: 1.5;
@@ -69,8 +68,8 @@ div#loginModal div.modal-body .join_link{
   width: 250px;
 }
 div#loginModal div.modal-body .join_link p{
-  font-size: 13px;
-  vertical-align: baseline;
+  font-size: 14px;
+  line-height: 45px;
 
 }
 div#loginModal div.modal-body a.join_btn{
@@ -81,6 +80,43 @@ div#loginModal div.modal-body a.join_btn{
   background-color: #6c757d;
   color : #fff;
 }
+div#loginModal div.modal-footer{
+    height: 200px;
+    position: relative;
+}
+div#loginModal div.modal-footer h3{
+    position: absolute;
+    top: -30px;
+    left : calc(50% - 65px);
+    background-color : #fff;
+    color: #5d5d5d;
+
+}
+div#loginModal div.modal-footer div.social_login{
+    width : 400px
+}
+div#loginModal div.modal-footer div.social_login a{
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    box-shadow: 5px 5px 10px 10px rgba(0, 0, 0, 0.05);
+    background-position: center;
+    background-repeat: no-repeat;
+
+}
+div#loginModal div.modal-footer div.social_login a.google{
+    background-image: url( "/img/g-logo.png" );
+    background-size: 60%;
+
+
+}
+div#loginModal div.modal-footer div.social_login a.kakao{
+    background-color: 	#FEE500 ;
+    background-image: url( "/img/kakao.png" );
+    background-size: 55%;
+
+}
+
 /* loginModal : END*/
 /* header :END */
 /* index-container : START */
@@ -173,8 +209,13 @@ footer .top nav > ul {
   width: 440px;
   margin-top: 30px;
 }
-footer nav > ul > li{
-  cursor: pointer;
+footer .top nav > ul > li{
+    cursor : pointer;
+}
+footer nav > ul > li button{
+    border: none;
+    background: none;
+    color: inherit;
 }
 footer .info {
   margin-left: 215px;

@@ -16,7 +16,11 @@
                 <ul class="d-flex justify-content-between">
                     <li><a href="/join">시작하기</a></li>
                     <li sec:authorize="isAnonymous()">
-                    <a herf="/login" >로그인</a>
+                        <!-- Button trigger modal -->
+                        <button type="button" sec:authorize="isAnonymous()"  data-bs-toggle="modal" data-bs-target="#loginModal">
+                            로그인
+                        </button>
+
                     </li>
                     <li sec:authorize="isAuthenticated()">
                     <a herf="/logout" >로그아웃</a>
