@@ -77,6 +77,10 @@ body {
 .center{
   margin: 0 auto;
 }
+.custom_btn{
+  border-radius: 10px;
+  border: none;
+}
 address {
   font-style: normal;
 }
