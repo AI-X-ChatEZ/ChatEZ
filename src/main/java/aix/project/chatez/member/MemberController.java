@@ -27,7 +27,7 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberService memberService;
-
+    //로그인
     @GetMapping("/")
     public String Index(){return "index";}
 
