@@ -32,10 +32,8 @@ public class MainController {
     @ResponseBody
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
-                                   @RequestParam("aiName") String aiName,
-                                   @RequestParam("uploadFile") List<MultipartFile> uploadFile) {
-//        String url = chatEzService.userFileUplaod(imageFile, aiName);
-        String url = chatEzService.openSearchFileUpload(uploadFile, aiName);
+                                   @RequestParam("aiName") String aiName) {
+        String url = chatEzService.userFileUplaod(imageFile, aiName);
         return "redirect:"+url;
     }
 
@@ -45,7 +43,6 @@ public class MainController {
                                    @RequestParam(value="updateFile", required=false) MultipartFile updateFile,
                                    @RequestParam("selectNo") String selectNo) {
         String url = chatEzService.handleFileUpdate(updateName, updateFile, selectNo);
-
         return "redirect:"+url;
     }
 
