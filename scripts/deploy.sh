@@ -16,7 +16,7 @@ else
   sleep 5
 fi
 
-echo "> $WAR_PATH 배포" #3
+echo "> $WAR_PATH 배포"
 nohup java -jar \
         -Dspring.profiles.active=dev \
         build/libs/$WAR_NAME > $REPOSITORY/nohup.out 2>&1 &
