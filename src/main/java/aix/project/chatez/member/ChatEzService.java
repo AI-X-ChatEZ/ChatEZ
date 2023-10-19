@@ -7,10 +7,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -150,5 +153,12 @@ public class ChatEzService {
             e.printStackTrace();
             return "my_service";
         }
+    }
+
+    public String openSearchFileUpload(List<MultipartFile> uploadFile, String aiName) {
+        for (MultipartFile file : uploadFile){
+            System.out.print(file.getOriginalFilename());
+        }
+        return "my_service";
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Controller
 public class MainController {
     private final MyServiceRepository myServiceRepository;
@@ -30,9 +32,10 @@ public class MainController {
     @ResponseBody
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
-                                   @RequestParam("aiName") String aiName) {
-        String url = chatEzService.userFileUplaod(imageFile, aiName);
-
+                                   @RequestParam("aiName") String aiName,
+                                   @RequestParam("uploadFile") List<MultipartFile> uploadFile) {
+//        String url = chatEzService.userFileUplaod(imageFile, aiName);
+        String url = chatEzService.openSearchFileUpload(uploadFile, aiName);
         return "redirect:"+url;
     }
 
