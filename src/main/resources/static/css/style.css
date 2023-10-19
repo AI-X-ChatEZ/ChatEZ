@@ -28,8 +28,9 @@ header .login_btn {
     background-color: #3366ff;
     color: #fff;
     margin-top: 25px;
-    width: 80px;
-    height: 40px;
+    width: 100px;
+    height: 50px;
+    line-height: 2;
 }
 
 /* loginModal : START*/
@@ -225,7 +226,7 @@ footer .info p {
 }
 /* footer : END */
 
-/* login_container : START */
+/* common container  : START */
 [class$='container'] {
   padding-top: 100px;
 }
@@ -242,49 +243,7 @@ footer .info p {
 [class$='box'] {
   background-color: #eaf0fe;
 }
-div.login_container div.login_box {
-  width: 800px;
-  height: 500px;
-  border-radius: 10px;
-  margin-bottom: 370px;
-}
-
-div.login_container div.login_box form {
-  padding-top: 80px;
-  width: 600px;
-  font-size: 22px;
-}
-div.login_container div.login_box form .input_box {
-  width: 400px;
-}
-div.login_container div.login_box form label {
-  line-height: 67px;
-}
-div.login_container div.login_box form input {
-  height: 67px;
-  margin-bottom: 20px;
-}
-div.login_container div.login_box form button.submit_btn {
-  width: 150px;
-  height: 150px;
-  color: #fff;
-  font-size: inherit;
-  background-color: #3366ff;
-}
-div.login_container .join_link {
-  width: 350px;
-  margin-top: 50px;
-  font-size: 18px;
-  line-height: 2.5;
-}
-div.login_container .join_link > a {
-  width: 110px;
-  height: 55px;
-  font-size: inherit;
-  line-height: inherit;
-}
-
-/* login_container : END */
+/* common container : END*/
 /* join : START */
 form.join {
   font-size: 20px;

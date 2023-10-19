@@ -66,10 +66,6 @@ public String myService(){
     return "welcome";
 }
 
-@GetMapping("/login")
-public String login(){
-    return "login";
-}
 
 @GetMapping("/my-service")
 @PreAuthorize("isAuthenticated()")
@@ -84,17 +80,35 @@ public ModelAndView success(Principal principal){
 }
 
 private String extractEmail(Principal principal) {
+    log.info("Principal type: {}", principal.getClass().getName());
+    log.info("Principal name: {}", principal.getName());
+
     if (principal instanceof OAuth2AuthenticationToken) {
         OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) principal;
         OAuth2User oauthUser = token.getPrincipal();
-        return (String) oauthUser.getAttributes().get("email");
+
+        Map<String, Object> attributes = oauthUser.getAttributes();
+
+        String email = null;
+        if (token.getAuthorizedClientRegistrationId().equals("google")) {
+            email = (String) attributes.get("email");
+        } else if (token.getAuthorizedClientRegistrationId().equals("kakao")) {
+            Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+            email = (String) kakaoAccount.get("email");
+        }
+
+        log.info("Extracted email: {}", email);
+        return email;
 
     } else if(principal instanceof UsernamePasswordAuthenticationToken){
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) principal;
         Object userDetails = token.getPrincipal();
 
         if(userDetails instanceof MemberDetails memberDetails){
-            return memberDetails.getUsername();
+            String username = memberDetails.getUsername();
+            log.info("Extracted username from UserDetails: {}", username);
+            return username;
+
 
         } else {
             throw new IllegalArgumentException("Unexpected type of UserDetails");

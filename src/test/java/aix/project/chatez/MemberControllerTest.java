@@ -25,18 +25,18 @@ class MemberControllerTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Test
-    void signUpTest(){
-
-        Member member = new Member();
-        member.setName("테스트");
-        member.setEmail("test@test.com");
-        member.setPassword("abc12345");
-
-
-
-
-
-    }
+//    @Test
+//    void signUpTest(){
+//
+//        Member member = new Member();
+//        member.setName("테스트");
+//        member.setEmail("test@test.com");
+//        member.setPassword("abc12345");
+//
+//
+//
+//
+//
+//    }
 
 }

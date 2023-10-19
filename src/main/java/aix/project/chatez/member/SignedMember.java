@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Getter
 public class SignedMember extends MemberDetails {
-    private Member member;
+    private final Member member;
     private Map<String, Object> attributes;
     public SignedMember(Member member) {
         super(member);

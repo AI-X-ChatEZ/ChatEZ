@@ -1,6 +1,7 @@
 package aix.project.chatez.member;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,6 +9,7 @@ import aix.project.chatez.DataNotFoundException;
 
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberService {
@@ -34,6 +36,8 @@ public class MemberService {
     }
 
     public Member findByEmail(String email){
+        log.info("member 정체>>{}",email);
+
         return memberRepository.findByEmail(email)
                 .orElseThrow(()->new IllegalArgumentException("알 수 없는 사용자"));
     }

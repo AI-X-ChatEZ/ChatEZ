@@ -32,7 +32,7 @@
         <!-- Modal -->
         <div th:replace="~{fragments/login :: loginModalFragment}"></div>
 
-        <div class="btn login_btn" sec:authorize="isAuthenticated()">
+        <div class="custom_btn btn login_btn" sec:authorize="isAuthenticated()">
           <a th:href="@{/logout}" >로그아웃</a>
         </div>
         </div>

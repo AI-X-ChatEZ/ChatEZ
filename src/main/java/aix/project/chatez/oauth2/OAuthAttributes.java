@@ -41,7 +41,7 @@ public class OAuthAttributes {
     }
 
     private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
-        log.info("socialID 찾기 {}>>attributes",attributes);
+        log.info("socialID 찾기 {}",attributes);
         return OAuthAttributes.builder()
                 .nameAttributeKey(userNameAttributeName)
                 .OAuth2Info(new KakaoOAuth2Info(attributes))
