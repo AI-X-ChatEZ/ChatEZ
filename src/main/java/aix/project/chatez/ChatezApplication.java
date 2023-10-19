@@ -9,5 +9,5 @@ public class ChatezApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ChatezApplication.class, args);
 	}
-
+//테스트
 }

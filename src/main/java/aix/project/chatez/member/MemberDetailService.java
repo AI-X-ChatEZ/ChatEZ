@@ -24,7 +24,7 @@ public class MemberDetailService implements UserDetailsService {
 
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-        return new SignedMember(member, null);
+        return new MemberDetails(member, null);
     }
 //    private MemberDetails createUserDetails(Member member){
 //        return Member.builder()

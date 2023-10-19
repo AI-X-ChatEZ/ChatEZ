@@ -1,0 +1,622 @@
+@charset "utf-8";
+
+/*컨텐츠 영역*/
+.btn-outline-light.active,
+.show > .btn-outline-light.dropdown-toggle {
+    background-color: #E6ECFF !important;
+}
+
+.btn.btn-outline-light.active .category_logo_off,
+.btn.btn-outline-light.active .category_logo_on {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.btn.btn-outline-light.active .category_logo_on {
+    opacity: 1;
+}
+
+.btn.btn-outline-light.active .category_text {
+    color: #3366FF !important;
+    transition: color 0.3s ease-in-out;
+}
+
+.service_content {
+    background-color: #FFF;
+    width: 100%;
+    min-width: 1400px;
+    height: 85vh;
+    border-radius: 20px;
+    padding: 20px 30px 20px 30px;
+}
+
+.service{
+    border-bottom:2px solid #ddd;
+    height: 90px;
+}
+
+.service h3{
+    padding-top: 14px;
+    padding-left: 20px;
+    font-size: 26px;
+    float: left;
+}
+
+.service h3 img{
+    vertical-align: middle;
+}
+
+.service .btn-primary{
+    width: 210px;
+    height: 70px;
+    float: right;
+    background-color: #3366FF;
+    font-size: 22px;
+    border-radius: 20px;
+}
+
+.service .btn-primary:hover{
+    background-color: #3366FF;
+}
+
+.service .btn-primary img{
+    margin-top: -5px;
+}
+
+.plus_icon{
+    width: 30px !important;
+    height: 38px !important;
+}
+
+
+.chatEZ_list tr td{
+    padding: 5px 0 5px 0;
+    background-color: #ddd;
+}
+
+.chatEZ_list table tr th{
+    padding: 10px 0 10px 0;
+    text-align: center;
+    font-size: 22px;
+}
+
+.chatEZ_list table tr th:nth-child(1){
+    width: 150px;
+}
+
+.chatEZ_list table tr th:nth-child(2){
+    padding-right:20px;
+    width: 280px;
+}
+
+.chatEZ_list table tr th:nth-child(3){
+    width: 520px;
+}
+
+.chatEZ_list tr td button{
+    width: 150px;
+}
+
+.chatEZ_list table tr td{
+    padding-right: 20px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.chatEZ_list .btn-light{
+    background-color: #FFF;
+    border: 2px solid #151515;
+    color: #151515;
+    border-radius: 10px;
+}
+
+.btn-light:active {
+    background-color: #E6ECFF !important;
+    color: #151515 !important;
+    border-color: #151515 !important;
+}
+
+/**/
+.btn-outline-light.active,
+.show > .btn-outline-light.dropdown-toggle {
+    background-color: #E6ECFF !important;
+}
+
+.btn.btn-outline-light.active .category_logo_off,
+.btn.btn-outline-light.active .category_logo_on {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.btn.btn-outline-light.active .category_logo_on {
+    opacity: 1;
+}
+
+.chat_list{
+    min-width: 350px; /* 추가된 부분 */
+    float: left;
+    width: 23%;
+    height: 85vh;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 30px 20px 30px 20px;
+    margin-right: 20px;
+}
+
+.file_manager_content {
+    display: flex;
+    flex-wrap: nowrap; /* 항목들이 줄바꿈되지 않게 설정 */
+}
+
+.chat_list h2{
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.chat_list h2 img{
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+.chat_list ul{
+    margin-top: 20px;
+}
+
+.chat_list ul li{
+    height: 80px;
+    border-radius: 20px;
+    background-color: #ddd;
+    font-size: 22px;
+    padding: 10px;
+}
+
+.chat_list ul li img{
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+.file_manager h3{
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.file_manager h3 img {
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+.file_manager{
+    min-width: 1030px;
+    font-size: 22px;
+    float: right;
+    width: 75%;
+    height: 85vh;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 30px 20px 30px 20px;
+}
+
+.file_list input{
+    width: 20px;
+    height: 20px;
+    margin-left: 30px;
+}
+
+.file_list .chatbot_icon{
+    margin-left: 20px;
+    width: 44px;
+    height: 44px;
+}
+
+#file_index{
+    height: 70px;
+    border-radius: 20px;
+    background-color: #ddd;
+}
+
+#file_title ul li{
+    vertical-align: middle;
+    padding: 10px 0 10px 0;
+    display: inline-block;
+    text-align: center;
+}
+
+#file_title ul li:nth-child(2){
+    width: 520px;
+}
+
+#file_title ul li:nth-child(n+3):nth-child(-n+5){
+    width: 150px;
+}
+
+#file_index ul li{
+    vertical-align: middle;
+    padding-top: 15px;
+    display: inline-block;
+}
+
+#file_index ul li img{
+    vertical-align: middle;
+}
+
+#file_index ul li:nth-child(2){
+    margin-left: 20px;
+    width: 500px;
+}
+
+#file_index ul li:nth-child(n+3):nth-child(-n+5){
+    text-align: center;
+    width: 150px;
+}
+
+.layout {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.layout_left,
+.layout_right {
+    min-width: 0;
+}
+
+.layout_left {
+    width: 320px;
+    flex-shrink: 0;
+}
+
+.layout_right {
+    width: 1600px;
+    flex-grow: 1;
+}
+
+#newScreen.panel {
+    top:180px;
+    position: fixed;
+    right: -160%;
+    width: 800px;
+    height: 650px;
+    background: #fff;
+    transition: right 0.5s ease-in-out;
+    border: 2px solid #151515;
+    border-radius: 20px;
+    padding: 20px 0 20px 20px;
+    font-size: 22px;
+}
+
+#fileUpload{
+    width: 230px;
+    height: 80px;
+    background-color: #3366FF;
+    border-radius: 20px;
+    color: #FFF;
+}
+
+#newScreen.panel img{
+    vertical-align: middle;
+}
+
+#newScreen.panel.active {
+    right: 60px;
+}
+
+.panel_left{
+    text-align: center;
+    width: 377px;
+    height: 608px;
+    float: left;
+    border-right: 2px solid #A0D3FF;
+}
+
+.panel_left h4{
+    text-align: left;
+}
+
+.txt-file{
+    margin-right: 10px;;
+}
+
+.panel_right ul li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 340px;
+    height: 70px;
+    background-color: #ddd;
+    border-radius: 20px;
+    padding: 0 20px 0px 20px;
+    margin-bottom: 10px;
+}
+
+.close-icon{
+    position: absolute;
+    top:25px;
+    right: 20px;
+}
+
+.panel_right ul{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 370px;
+    height: 430px;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: auto;  /* 스크롤바 추가 */
+}
+
+
+.plus_icon {
+    margin-right: 20px;
+}
+
+.panel_right{
+    text-align: center;
+    height: 628px;
+    width: 377px;
+    float: right;
+}
+
+#aiName{
+    margin-top: 30px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #151515;
+}
+
+.updateName{
+    margin-top: 30px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #151515;
+}
+
+.profile_icon,
+.update_profile_icon{
+    width: 200px;
+    height: 200px;
+}
+
+.chatbot_icon{
+    vertical-align: middle;
+    width: 54px;
+    height: 54px;
+    margin-right:10px;
+}
+
+#imageContainer{
+    margin-top: 100px;
+}
+
+.edit_icon{
+    width: 54px;
+    height: 54px;
+}
+
+#createAi{
+    width: 120px;
+    height: 50px;
+    background-color: #3366FF;
+    color: #fff;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.updateAi{
+    width: 120px;
+    height: 50px;
+    background-color: #3366FF;
+    color: #fff;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+#createClose{
+    width: 120px;
+    height: 50px;
+    background-color: #ddd;
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.updateScreen.panel {
+    top:180px;
+    position: fixed;
+    right: -100%;
+    width: 380px;
+    height: 650px;
+    background: #fff;
+    transition: right 0.5s ease-in-out;
+    border: 2px solid #151515;
+    border-radius: 20px;
+    padding: 20px 0 20px 20px;
+    font-size: 22px;
+    text-align: center;
+}
+
+.updateScreen.panel.active {
+    right: 60px;
+}
+
+.updateScreen.panel h4{
+    text-align: left;
+}
+
+.updateScreen.panel .edit_icon {
+    vertical-align: middle;
+    width: 54px;
+    height: 54px;
+}
+
+#updateButton{
+    margin-top: 120px;
+    margin-left:10px;
+}
+
+.updateClose{
+    width: 120px;
+    height: 50px;
+    background-color: #ddd;
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.chatScreen {
+    top:180px;
+    position: fixed;
+    right: -100%;
+    width: 380px;
+    height: 650px;
+    background: #fff;
+    transition: right 0.5s ease-in-out;
+    border: 2px solid #151515;
+    border-radius: 20px;
+    padding: 20px 0 20px 20px;
+    font-size: 18px;
+    text-align: center;
+}
+
+.chatScreen.active {
+    right: 60px;
+}
+
+.chatScreen .edit_icon {
+    vertical-align: middle;
+    width: 54px;
+    height: 54px;
+}
+
+.chatScreen h4{
+    text-align: left;
+}
+
+.chatScreen #chatContent {
+    padding: 20px;
+}
+
+#question:focus {
+    outline: none;
+    border: none;
+}
+
+.chatScreen .up_arrow_icon{
+    width: 50px;
+    height: 50px;
+}
+
+.chatScreen p{
+    width: 340px;
+    border-radius: 50px;
+    background-color: #D5DEF9;
+    box-sizing: border-box;
+}
+
+.chatScreen p button{
+    float: right;
+    border-radius: 50px;
+    background-color: #D5DEF9;
+}
+
+.chatScreen #question{
+    width: 250px;
+    font-size: 16px;
+    background-color: #D5DEF9;
+    margin-top: 10px;
+    overflow-y: auto;
+    max-height: 115px;
+    resize: none;
+}
+
+.chat {
+    height: 480px;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+    margin-right:10px;
+}
+
+#chatContent {
+    text-align: right;
+    width: 100%;
+}
+
+#chatContent li{
+    background-color: #3366FF;
+    color: #FFF;
+    display: block;
+    width: fit-content;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+    text-align: left;
+    float: right;
+    clear: both;
+}
+
+#chatContent li.server-response{
+    float: left;
+    background-color: #FF6633;
+    color: #FFF;
+}
+
+.chatScreen p textarea {
+    padding: 4px 0;
+    overflow-y: hidden;
+    resize: none;
+}
+
+.chatScreen .chat_button {
+    display:block;
+    float:right;
+    margin-top:8px;
+    display: flex;
+    align-items: center;
+}
+
+.chatScreen .chatClose{
+    width: 28px;
+    height: 28px;
+    background-color:#fff;
+    margin-bottom:2px;
+    margin-right:20px;
+    margin-left:10px;
+}
+
+.chatScreen .chatClose img{
+    width: 28px;
+    height: 28px;
+    margin-bottom:2px;
+}
+
+.chatScreen .chatReset{
+    width: 36px;
+    height: 36px;
+    background-color:#fff;
+}
+
+.chatScreen .chatReset img{
+    width: 36px;
+    height: 36px;
+}
+
+.close-icon{
+    width:22px;
+    height:22px;
+}
+
+/* 스크롤바의 폭 너비 */
+#fileList::-webkit-scrollbar,
+.chat::-webkit-scrollbar{
+    width: 10px;
+}
+
+#fileList::-webkit-scrollbar-thumb,
+.chat::-webkit-scrollbar-thumb{
+    background: #6289FF; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 둥근 테두리 */
+}
+
+#fileList::-webkit-scrollbar-track,
+.chat::-webkit-scrollbar-track{
+    background: #ddd;  /*스크롤바 뒷 배경 색상*/
+}
