@@ -1,5 +1,6 @@
-package aix.project.chatez.member;
+package aix.project.chatez.myservice;
 
+import aix.project.chatez.member.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ public class MyService {
     @Column(name = "profile_pic", nullable = false)
     private String profilePic;
 
-    @ManyToOne
-    @JoinColumn(name = "member_no")
+    @ManyToOne(fetch=FetchType.LAZY, optional=false)
+    @JoinColumn(name="member_no", referencedColumnName="member_no")
     private Member member;
 }

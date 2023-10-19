@@ -396,7 +396,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if(fetchUpload) {
             Promise.all([fetchUploadFiles, fetchUpload])
                 .then(() => {
-//                    window.location.reload();
+                    window.location.reload();
                 });
         }
 

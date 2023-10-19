@@ -1,56 +1,31 @@
-package aix.project.chatez.member;
+package aix.project.chatez.myservice;
 
+import aix.project.chatez.member.Member;
+import aix.project.chatez.member.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+
 @Service
-public class ChatEzService {
+@RequiredArgsConstructor
+public class MyServiceService {
     private final MyServiceRepository myServiceRepository;
     private final MemberRepository memberRepository;
 
-    @Autowired
-    public ChatEzService(MyServiceRepository myServiceRepository, MemberRepository memberRepository) {
-        this.myServiceRepository = myServiceRepository;
-        this.memberRepository = memberRepository;
-    }
 
-    public void userServiceDate(Model model) {
-        //로그인 페이지에서 아이디 연동 부분
-        List<Member> loginUser = this.memberRepository.findAll();
-        if(loginUser.get(0) != null) {
-            String name = loginUser.get(0).getName();
-            System.out.println("로그인 유저 : " + name);
 
-            Member member = memberRepository.findByName(name);
-            Long memberNo = null;
-            if (member != null) {
-                memberNo = member.getMemberNo();
-                System.out.println("id : hhh7441 no : " + memberNo);
-            } else {
-                System.out.println("hhh7441 회원의 번호를 찾을 수 없습니다.");
-            }
-            List<MyService> myServices = myServiceRepository.findByMemberMemberNo(memberNo);
-            if(!myServices.isEmpty()) {
-                System.out.println("no : " + myServices.get(0).getServiceNo());
-                System.out.println("name : " + myServices.get(0).getServiceName());
-                System.out.println("profilePic : " + myServices.get(0).getProfilePic());
-            }
-            model.addAttribute("myServices", myServices);
-            model.addAttribute("name", name);
-        }
+    public List<MyService> findByMember_MemberNo(Long memberNo){
+        return myServiceRepository.findByMember_MemberNo(memberNo);
     }
 
 
