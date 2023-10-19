@@ -51,10 +51,8 @@ public class MyServiceController {
     @ResponseBody
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
-                                   @RequestParam("aiName") String aiName,
-                                   @RequestParam("uploadFile") List<MultipartFile> uploadFile) {
-//        String url = chatEzService.userFileUplaod(imageFile, aiName);
-        String url = myServiceService.openSearchFileUpload(uploadFile, aiName);
+                                   @RequestParam("aiName") String aiName) {
+        String url = myServiceService.userFileUplaod(imageFile, aiName);
         return "redirect:"+url;
     }
 
