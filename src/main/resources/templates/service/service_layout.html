@@ -5,10 +5,11 @@
     <link rel="icon" href="img/favicon-32x32.png" type="image/x-icon" />
     <!-- 반응형 meta 태그 -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{css/style.css}">
     <link rel="stylesheet" th:href="@{css/service_style.css}">
-    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf" th:content="${_csrf?.token}">
+    <meta name="_csrf_header" th:content="${_csrf?.headerName}">
     <title>ChatEz - 새벽배송보다 빠른 대화형 AI생성 서비스</title>
 </head>
 <body>
@@ -28,15 +29,16 @@
                 <span class="category_text">파일 관리</span>
             </button></li>
         </ul>
-        <p><a href="#"><img th:src="@{img/logout.png}" alt="logout"><span id="logout_text">로그아웃</span></a></p>
+        <p><a href="/logout"><img th:src="@{img/logout.png}" alt="logout"><span id="logout_text">로그아웃</span></a></p>
     </div>
 
     <!-- 두 번째 컬럼 -->
     <div class="layout_right">
-        <div id="user"><img th:src="@{img/user_icon.png}" alt="user_icon"><span th:text="${name}"></span></div>
+        <div id="user"><img th:src="@{img/user_icon.png}" alt="user_icon"><span th:text="${member.name}"></span></div>
         <div><th:block layout:fragment="content"></th:block></div>
     </div>
 </div>
+<footer  th:replace="~{fragments/footer :: footerFragment}"></footer>
 <script src="/js/service_script.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
