@@ -57,9 +57,9 @@ class MemoryManagementWithOpenAI:
         with get_openai_callback() as cb:
             try:
                 result = self.memory.run(input_query)
-                print('A total number of tokens: ', cb.total_tokens)
-                print('A number of prompt tokens: ', cb.prompt_tokens)
-                print('A number of completion tokens: ', cb.completion_tokens)
+                print('The total number of tokens: ', cb.total_tokens)
+                print('The number of prompt tokens: ', cb.prompt_tokens)
+                print('The number of completion tokens: ', cb.completion_tokens)
             except Exception:
                 print('AN ERROR TAKES PLACE:', Exception)
 
