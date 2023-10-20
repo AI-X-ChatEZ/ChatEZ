@@ -47,9 +47,9 @@ class Upload:
         if self.verbose:
             print(response)
 
-    def add_documents(self, id: list, metadata: list, tokens: list, vectors: list,
-                      verbose: bool):
-        if len(id) == len(metadata) == len(tokens) == len(vectors):
+    def add_documents(self, metadata: list, tokens: list, vectors: list,
+                          verbose: bool):
+        if len(metadata) == len(tokens) == len(vectors):
             for i in range(len(metadata)):
                 doc = {
                     'text': metadata[i],
@@ -59,8 +59,8 @@ class Upload:
 
                 response = self.client.index(
                     index=self.index_name,
+                    id=self.index_name + '_' + str(i),
                     body=doc,
-                    id=id[i],
                     refresh=True
                 )
                 if verbose:
@@ -71,16 +71,17 @@ class Upload:
 
 if __name__ == '__main__':
 
-    index_id = list(range(3))
+    chatbot_name = "test"
     metadata = ['test_1', 'test_2', 'test_3']
-    tokens = [11, 22, 33]
-    vectors = [1.1e-02, 2.2e-01, 3.3e+00]
+    tokens = [[11, 22, 33], [44, 55, 66], [77, 88, 99]]
+    vectors = [[1.1e-02, 2.2e-01, 3.3e+00],
+               [4.4e-02, 5.5e-01, 6.6e+00],
+               [7.7e-02, 8.8e-01, 9.9e+00]]
 
     local_uploader = Upload("local",
                             "https://localhost:9200",
                             ('admin', 'admin'),
-                            "test",
+                            chatbot_name=chatbot_name,
                             verbose=True)
 
-    local_uploader.add_documents(index_id, metadata,
-                                 tokens, vectors, True)
+    local_uploader.add_documents(metadata, tokens, vectors, True)
