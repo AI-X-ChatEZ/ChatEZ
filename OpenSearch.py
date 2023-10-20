@@ -1,46 +1,50 @@
-from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
-import boto3
+from opensearchpy import OpenSearch
 from typing import Any
+from key import AWS
 
 
 class Upload:
-    url_type: str
-    url = ""
+    env_type: str
+    host = ""
+    port: int
     auth = Any
     verbose: bool = True
     index_name: str = ""
     index_body = {'settings': {'index': {}}}
     client: Any
 
-    def __init__(self, url_type: str, url: str, auth: Any,
+    def __init__(self, env_type: str, host: str, port: int, auth: Any,
                  chatbot_name: str, verbose: bool):
-        self.url_type = url_type
-        self.url = url
+        self.env_type = env_type
+        self.host = host
+        self.port = port
         self.auth = auth
         self.index_name = chatbot_name
-        # self.index_body = body
         self.verbose = verbose
         self.index_creation()
 
     def index_creation(self):
-        if self.url_type == "local":
+        if self.env_type == "local":
             self.client = OpenSearch(
-                opensearch_url=self.url,
+                hosts=[{'host': self.host, 'port': self.port}],
                 http_auth=self.auth,
                 use_ssl=True,
                 verify_certs=False
             )
-        elif self.url_type == "web":
+        elif self.env_type == "web":
             self.client = OpenSearch(
-                opensearch_url=self.url,
+                hosts=[{'host': self.host,
+                        'port': self.port}],
+                http_compress=True,
                 http_auth=self.auth,
                 timeout=300,
                 use_ssl=True,
                 verify_certs=True,
-                connection_class=RequestsHttpConnection,
+                ssl_assert_hostname=False,
+                ssl_show_warn=False,
             )
         else:
-            print("Check the url_type parameter.")
+            print("Check the env_type parameter.")
 
         response = self.client.indices.create(self.index_name,
                                               body=self.index_body)
@@ -71,17 +75,32 @@ class Upload:
 
 if __name__ == '__main__':
 
+    env_type = input("In which env will you use OpenSearch, 'local' or 'web'?")
+
     chatbot_name = "test"
-    metadata = ['test_1', 'test_2', 'test_3']
+    metadata = ['test_doc_1', 'test_doc_2', 'test_doc_3']
     tokens = [[11, 22, 33], [44, 55, 66], [77, 88, 99]]
     vectors = [[1.1e-02, 2.2e-01, 3.3e+00],
                [4.4e-02, 5.5e-01, 6.6e+00],
                [7.7e-02, 8.8e-01, 9.9e+00]]
 
-    local_uploader = Upload("local",
-                            "https://localhost:9200",
-                            ('admin', 'admin'),
-                            chatbot_name=chatbot_name,
-                            verbose=True)
+    if env_type == 'local':
+        local_uploader = Upload("local",
+                                "localhost",
+                                9200,
+                                ('admin', 'admin'),
+                                chatbot_name=chatbot_name,
+                                verbose=True)
 
-    local_uploader.add_documents(metadata, tokens, vectors, True)
+        local_uploader.add_documents(metadata, tokens, vectors, True)
+    elif env_type == 'web':
+        web_uploader = Upload("web",
+                              AWS.host,
+                              AWS.port,
+                              AWS.auth,
+                              chatbot_name=chatbot_name,
+                              verbose=True)
+
+        web_uploader.add_documents(metadata, tokens, vectors, True)
+    else:
+        print("Environment Type Error")
