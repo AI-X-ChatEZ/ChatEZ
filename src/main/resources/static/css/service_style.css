@@ -162,12 +162,13 @@
     margin-top: 20px;
 }
 
-.chat_list ul li{
+.chat_list ul li button{
     height: 80px;
     border-radius: 20px;
     background-color: #ddd;
     font-size: 22px;
     padding: 10px;
+    border: none;
 }
 
 .chat_list ul li img{

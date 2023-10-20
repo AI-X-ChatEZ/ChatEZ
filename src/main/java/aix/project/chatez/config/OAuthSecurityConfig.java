@@ -48,7 +48,7 @@ public class OAuthSecurityConfig {
 
         http.authorizeHttpRequests((authorizeRequest) ->
                         authorizeRequest
-                                .requestMatchers("/","/join","/login").permitAll()
+                                .requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated());
         http.exceptionHandling((exception)->
                         exception.authenticationEntryPoint(new ChatEZAuthenticationEntryPoint()));
