@@ -407,6 +407,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
     });
 });
+const downloadButton = document.getElementById('download');
+downloadButton.addEventListener('click', async () => {
+    try {
+        const response = await fetch('/example_download');
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        const blob = await response.blob();  // 파일 데이터를 Blob 형태로 받아옵니다.
+        const url = window.URL.createObjectURL(blob);  // Blob 데이터로부터 URL을 생성합니다.
+        const a = document.createElement('a');  // 새로운 <a> 태그를 생성합니다.
+        a.style.display = 'none';  // <a> 태그를 화면에 표시하지 않습니다.
+        a.href = url;  // <a> 태그의 href 속성에 Blob URL을 설정합니다.
+        a.download = 'example.xlsx';  // 다운로드되는 파일의 이름을 지정합니다.
+        document.body.appendChild(a);  // <a> 태그를 DOM에 추가합니다.
+        a.click();  // <a> 태그를 클릭하여 파일 다운로드를 수행합니다.
+        window.URL.revokeObjectURL(url);  // Blob URL을 해제하여 메모리를 절약합니다.
+    } catch (error) {
+        console.error('Error during file download:', error);
+    }
+
+})
 
 document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener('click', function (event) {
@@ -482,6 +504,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     deleteButtons.forEach(function (deleteAiButton) {
         deleteAiButton.addEventListener("click", function () {
+            if (!confirm("정말로 삭제하시겠습니까?")) {
+                return;  // "취소(Cancel)" 버튼을 클릭했다면 여기서 이벤트 처리 종료
+            }
+
             var serviceNo = deleteAiButton.getAttribute('data-service-no');
             var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
 

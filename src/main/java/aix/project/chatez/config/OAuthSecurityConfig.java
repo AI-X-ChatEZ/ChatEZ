@@ -1,6 +1,10 @@
 package aix.project.chatez.config;
 
 import aix.project.chatez.oauth2.OAuth2MemberService;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,6 +37,7 @@ public class OAuthSecurityConfig {
 
     private final OAuth2MemberService oAuth2MemberService;
 
+    private final S3Properties s3Properties;
 
 
     @Bean
@@ -48,7 +53,7 @@ public class OAuthSecurityConfig {
 
         http.authorizeHttpRequests((authorizeRequest) ->
                         authorizeRequest
-                                .requestMatchers("/","/join","/login").permitAll()
+                                .requestMatchers("/","/join","/login","/welcome").permitAll()
                                 .anyRequest().authenticated());
         http.exceptionHandling((exception)->
                         exception.authenticationEntryPoint(new ChatEZAuthenticationEntryPoint()));
@@ -133,6 +138,17 @@ public class OAuthSecurityConfig {
                 out.flush();
             }
         };
+    }
+
+    @Bean
+    public AmazonS3Client amazonS3Client(){
+        BasicAWSCredentials credentials = new BasicAWSCredentials(s3Properties.getCredentialsAccessKey(), s3Properties.getCredentialsSecreteKey());
+
+        return (AmazonS3Client) AmazonS3ClientBuilder
+                .standard()
+                .withRegion(s3Properties.getRegionStatic())
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .build();
     }
 
 

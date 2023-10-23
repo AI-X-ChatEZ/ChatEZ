@@ -2,11 +2,10 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>ChatEz - 새벽배송보다 빠른 대화형 AI생성 서비스</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="img/favicon-32x32.png" type="image/x-icon" />
   <link rel="stylesheet" type="text/css" th:href="@{css/bootstrap.min.css}" />
-  <link rel="stylesheet" type="text/css" th:href="@{css/style.css}" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" th:href="@{css/login_style.css}" />
   <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -17,13 +16,10 @@
       <a th:href="@{/}" sec:authorize="isAnonymous()">
         <img src="/img/ChatEZ_logo.svg" alt="ChatEz" /><span>ChatEZ</span>
       </a>
-      <a th:href="@{/my-service}" sec:authorize="isAuthenticated()">
+      <a th:href="@{/my_service}" sec:authorize="isAuthenticated()">
         <img src="/img/ChatEZ_logo.svg" alt="ChatEz" /><span>ChatEZ</span>
       </a>
     </h1>
-    <!--        <div class="btn login_btn" sec:authorize="isAnonymous()">-->
-    <!--          <a th:href="@{/login}" >로그인</a>-->
-    <!--        </div>-->
     <!-- Button trigger modal -->
     <button type="button" sec:authorize="isAnonymous()" class="custom_btn login_btn" data-bs-toggle="modal" data-bs-target="#loginModal">
       로그인

@@ -5,6 +5,8 @@ import aix.project.chatez.member.MemberService;
 import aix.project.chatez.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +54,14 @@ public class MyServiceController {
     @ResponseBody
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
-                                   @RequestParam("aiName") String aiName) {
-        String url = myServiceService.userFileUplaod(imageFile, aiName);
-        return "redirect:"+url;
+                                   @RequestParam("aiName") String aiName,
+                                   Principal principal) throws IOException {
+
+        String email = extractEmail(principal);
+        Member member = memberService.findByEmail(email);
+
+        myServiceService.userFileUplaod(imageFile, aiName, member.getEmail());
+        return "redirect:/my_service";
     }
 
     @ResponseBody
@@ -71,6 +79,11 @@ public class MyServiceController {
     public String delete_service(@RequestParam("serviceNo") String serviceNo) {
         String url = myServiceService.handleDeleteService(serviceNo);
         return "redirect:"+url;
+    }
+
+    @GetMapping("/example_download")
+    public ResponseEntity<UrlResource> downloadExample(){
+        return myServiceService.downloadFile("example.xlsx");
     }
 
     @GetMapping("/file_manager")
