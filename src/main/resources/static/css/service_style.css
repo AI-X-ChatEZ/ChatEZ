@@ -474,8 +474,10 @@
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
-    line-height: 37px;
     text-align: left;
+}
+.chatScreen h4 span:first-child img{
+    margin: 0 10px 0 0;
 }
 
 .chatScreen #chatContent {
