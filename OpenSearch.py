@@ -3,7 +3,7 @@ from typing import Any
 from key import AWS
 
 
-class Upload:
+class Upsert:
     env_type: str
     host = ""
     port: int
