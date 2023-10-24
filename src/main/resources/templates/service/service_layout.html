@@ -16,7 +16,7 @@
 <div class="layout">
     <!-- 첫 번째 컬럼 col-md-6는 중간(MD: medium)에서 6개의 컬럼을 차지한다는 의미 -->
     <div class="layout_left">
-        <h2><a href="#"><img th:src="@{img/ChatEZ_logo.svg}" alt="ChatEZ_logo" class="ChatEZ_logo">ChatEZ</a></h2>
+        <h2><a href="/my_service"><img th:src="@{img/ChatEZ_logo.svg}" alt="ChatEZ_logo" class="ChatEZ_logo">ChatEZ</a></h2>
         <ul>
             <li><button type="button" class="btn btn-outline-light" onclick="navigateToChatEZMyService()">
                 <img th:src="@{img/service_logo_off.png}" alt="service_logo_off" class="category_logo_off">
@@ -40,9 +40,10 @@
 </div>
 <footer  th:replace="~{fragments/footer :: footerFragment}"></footer>
 <script src="/js/service_script.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const buttons = document.querySelectorAll('.btn.btn-outline-light');

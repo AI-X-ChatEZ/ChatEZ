@@ -4,6 +4,7 @@ import aix.project.chatez.member.Member;
 import aix.project.chatez.member.MemberRepository;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,8 +24,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Slf4j
@@ -46,20 +49,26 @@ public class MyServiceService {
     }
 
 
-    public MyService userFileUplaod(MultipartFile imageFile, String aiName, String email) throws IOException {
+    public MyService userFileUplaod(MultipartFile imageFile, String aiName, String serviceId, String email) throws IOException {
 
         String newFileName = s3FileUpload(imageFile);
 
         Member member = memberRepository.findByEmail(email).get();
 
-        MyService myService = new MyService();
-        myService.setServiceName(aiName);
-        log.info("aiName:{}",aiName);
-        myService.setProfilePic(newFileName);
-        myService.setMember(member);  //엔티티와 엔티티 간의 연결 설정
+//        MyService myService = new MyService();
+//        myService.setServiceName(aiName);
+//        log.info("aiName:{}",aiName);
+//        myService.setProfilePic(newFileName);
+//        myService.setMember(member);  //엔티티와 엔티티 간의 연결 설정
 
-        return myServiceRepository.save(myService);
-
+        String urlValue = aiName+System.currentTimeMillis();
+        return myServiceRepository.save(MyService.builder()
+                .serviceName(aiName)
+                .serviceId(serviceId)
+                .profilePic(newFileName)
+                .url(UUID.nameUUIDFromBytes(urlValue.getBytes()).toString().replace("-",""))
+                .member(member)
+                .build());
     }
 
 
@@ -75,7 +84,8 @@ public class MyServiceService {
 
             if (optionalMyService.isPresent()) {
                 MyService myService = optionalMyService.get();
-                myService.setServiceName(updateName);
+                myService.updateServiceName(updateName);
+                log.info("new name:{}",myService.getServiceName());
 
                 // 파일이 있는 경우에만 파일 처리
                 if (updateFile != null && !updateFile.isEmpty()) {
@@ -85,7 +95,8 @@ public class MyServiceService {
                         amazonS3.deleteObject(imagePath, myService.getProfilePic());
                     }
                     String newFileName = s3FileUpload(updateFile);
-                    myService.setProfilePic(newFileName);
+                    myService.updateProfilePic(newFileName);
+                    log.info("new pic:{}",myService.getProfilePic());
                 }
 
                 myServiceRepository.save(myService);

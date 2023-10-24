@@ -55,12 +55,13 @@ public class MyServiceController {
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
                                    @RequestParam("aiName") String aiName,
+                                   @RequestParam("aiId") String aiId,
                                    Principal principal) throws IOException {
 
         String email = extractEmail(principal);
         Member member = memberService.findByEmail(email);
 
-        myServiceService.userFileUplaod(imageFile, aiName, member.getEmail());
+        myServiceService.userFileUplaod(imageFile, aiName, aiId, member.getEmail());
         return "redirect:/my_service";
     }
 
@@ -83,7 +84,7 @@ public class MyServiceController {
 
     @GetMapping("/example_download")
     public ResponseEntity<UrlResource> downloadExample(){
-        return myServiceService.downloadFile("example.xlsx");
+        return myServiceService.downloadFile("sample.xlsx");
     }
 
     @GetMapping("/file_manager")

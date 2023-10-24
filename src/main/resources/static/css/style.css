@@ -66,9 +66,9 @@
 /*}*/
 
 .layout_right #user{
-    min-width: 1000px;
+    min-width: 1100px;
     display: block;
-    padding:10px 60px 10px 0;
+    padding:10px 20px;
     font-size: 22px;
     text-align: right;
 }

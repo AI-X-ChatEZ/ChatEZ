@@ -24,7 +24,7 @@
 .service_content {
     background-color: #fff;
     /*width: 100%;*/
-    min-width: 1000px;
+    min-width: 1100px;
     height: 85vh;
     border-radius: 20px;
     padding: 20px 30px;
@@ -90,10 +90,18 @@
 }
 
 .chatEZ_list table tr td{
-    padding: 5px 20px;
+    padding: 5px 10px;
     text-align: center;
     font-size: 18px;
     background-color: #ddd;
+}
+.chatEZ_list table tr td:nth-child(2){
+    width: 220px;
+}
+.chatEZ_list table tr td a{
+    width: 300px;
+    display: block;
+    overflow-wrap: break-word;
 }
 
 .chatEZ_list tr td button{
