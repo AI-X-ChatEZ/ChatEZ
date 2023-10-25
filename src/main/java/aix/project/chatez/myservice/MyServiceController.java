@@ -84,7 +84,7 @@ public class MyServiceController {
 
     @GetMapping("/example_download")
     public ResponseEntity<UrlResource> downloadExample(){
-        return myServiceService.downloadFile("sample.xlsx");
+        return myServiceService.downloadFile("example.zip");
     }
 
     @GetMapping("/file_manager")
