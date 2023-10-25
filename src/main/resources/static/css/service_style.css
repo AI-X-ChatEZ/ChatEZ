@@ -280,15 +280,9 @@
 
 #file_index ul li:nth-child(n+3):nth-child(-n+5){
     text-align: center;
-<<<<<<< HEAD
-    width: 150px;
+    width: 15%;
 }
 
-
-=======
-     width: 15%;
-}
->>>>>>> ce9cec1b7c371f32381fef2e5a1ceefa8ae4d119
 
 #newScreen.panel {
     bottom:60px;

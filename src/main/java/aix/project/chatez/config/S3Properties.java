@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties("cloud.aws")
 public class S3Properties {
+    private String s3Bucket;
+    private String s3UploadPath;
     private String credentialsAccessKey;
     private String credentialsSecreteKey;
     private String regionStatic;
