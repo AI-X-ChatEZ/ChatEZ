@@ -50,5 +50,4 @@ public class MemberService {
             throw new DataNotFoundException("알 수 없는 사용자");
         }
     }
-
 }

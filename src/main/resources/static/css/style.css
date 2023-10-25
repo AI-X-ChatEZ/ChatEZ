@@ -7,12 +7,15 @@ html, body, .layout {
     height: 100%;
 }
 
+.layout {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
 .layout_left{
-    min-height: 920px;
-    width: 300px;
+    min-width: 320px;
     padding: 20px;
-    position:relative;
-    float: left;
+    flex-shrink: 0;
 }
 
 .layout_left .ChatEZ_logo{

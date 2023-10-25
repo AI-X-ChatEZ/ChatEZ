@@ -4,17 +4,20 @@ import aix.project.chatez.member.Member;
 import aix.project.chatez.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.opensearch.action.search.SearchRequest;
+import org.opensearch.action.search.SearchResponse;
+import org.opensearch.client.RequestOptions;
+import org.opensearch.client.RestHighLevelClient;
+import org.opensearch.search.SearchHit;
+import org.opensearch.search.builder.SearchSourceBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
-
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -135,5 +138,66 @@ public class MyServiceService {
             System.out.print(file.getOriginalFilename());
         }
         return "my_service";
+    }
+
+    public Map<String, List<Map<String, Object>>> awsFileData(String email) {
+        if (email == null) {
+            throw new IllegalArgumentException("알 수 없는 사용자");
+        }
+
+        RestHighLevelClient client = OpenSearchClient.createClient();
+        Optional<Member> loginUser = this.memberRepository.findByEmail(email);
+
+        if (!loginUser.isPresent()) {
+            throw new IllegalArgumentException("회원의 Email 값을 찾지 못했습니다.");
+        }
+
+        String name = loginUser.get().getName();
+        Optional<Member> member = memberRepository.findByName(name);
+
+        Long memberNo;
+        if (member.isPresent()) {
+            memberNo = member.get().getMemberNo();
+            System.out.println("no : " + memberNo);
+        } else {
+            System.out.println("회원의 번호를 찾을 수 없습니다.");
+            return Collections.emptyMap();
+        }
+
+        List<MyService> myServices = myServiceRepository.findByMember_MemberNo(memberNo);
+        Map<String, List<Map<String, Object>>> servicesFilesMap = new HashMap<>();
+
+        for (MyService myService : myServices) {
+            List<Map<String, Object>> files = new ArrayList<>();
+            System.out.println("name : " + myService.getServiceName());
+            try {
+                SearchRequest searchRequest = new SearchRequest(myService.getServiceName()); // 서비스 이름을 인덱스로 사용
+                SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+                // Only fetch the "size", "name", and "contentType" fields
+                String[] includeFields = new String[]{"size", "name", "contentType", "uploadTime"};
+                String[] excludeFields = new String[]{};
+                searchSourceBuilder.fetchSource(includeFields, excludeFields);
+
+                searchRequest.source(searchSourceBuilder);
+
+                SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+                for (SearchHit hit : searchResponse.getHits().getHits()) {
+                    Map<String, Object> source = hit.getSourceAsMap();
+                    files.add(source);  // 각 hit의 정보를 리스트에 추가합니다.
+                    System.out.println(source);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            servicesFilesMap.put(myService.getServiceName(), files);
+        }
+        try {
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return servicesFilesMap;
     }
 }

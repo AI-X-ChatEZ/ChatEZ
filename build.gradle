@@ -40,7 +40,7 @@ dependencies {
 	testImplementation 'org.projectlombok:lombok:1.18.28'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-
+	implementation group: 'org.opensearch.client', name: 'opensearch-rest-high-level-client', version: '2.9.0'
 }
 
 tasks.named('test') {
