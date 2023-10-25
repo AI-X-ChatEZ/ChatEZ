@@ -35,9 +35,9 @@ public class MyServiceService {
     private final MyServiceRepository myServiceRepository;
     private final MemberRepository memberRepository;
     private final AmazonS3 amazonS3;
-    @Value("${cloud.aws.s3.bucket}")
+    @Value("${cloud.aws.s3-bucket}")
     private String bucket;
-    @Value("${cloud.aws.s3.upload-path}")
+    @Value("${cloud.aws.s3-upload-path}")
     private String uploadPath;
 
 
@@ -203,9 +203,9 @@ public class MyServiceService {
 
         for (MyService myService : myServices) {
             List<Map<String, Object>> files = new ArrayList<>();
-            System.out.println("name : " + myService.getServiceName());
+            System.out.println("ServiceId : " + myService.getServiceId());
             try {
-                SearchRequest searchRequest = new SearchRequest(myService.getServiceName()); // 서비스 이름을 인덱스로 사용
+                SearchRequest searchRequest = new SearchRequest(myService.getServiceId()); // 서비스 이름을 인덱스로 사용
                 SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
                 // Only fetch the "size", "name", and "contentType" fields

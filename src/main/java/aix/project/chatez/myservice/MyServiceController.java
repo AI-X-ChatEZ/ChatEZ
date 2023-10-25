@@ -95,10 +95,14 @@ public class MyServiceController {
     public ModelAndView file_manager(Principal principal){
         String email = extractEmail(principal);
         Member member = memberService.findByEmail(email);
+        List<MyService> myServices = myServiceService.findByMember_MemberNo(member.getMemberNo());
         Map<String, List<Map<String, Object>>> servicesFiles = myServiceService.awsFileData(email);
         ModelAndView modelAndView = new ModelAndView("service/file_manager");
         modelAndView.addObject("member",member);
+        modelAndView.addObject("myServices",myServices);
         modelAndView.addObject("servicesFiles",servicesFiles);
+        modelAndView.addObject("bucket", s3Properties.getS3Bucket());
+        modelAndView.addObject("folder",s3Properties.getS3UploadPath());
         return modelAndView;
     }
 
