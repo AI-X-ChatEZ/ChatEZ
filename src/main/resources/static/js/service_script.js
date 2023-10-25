@@ -334,11 +334,6 @@ document.addEventListener("DOMContentLoaded", function() {
             var formData = new FormData();
             formData.append("aiName", aiNameValue);
             formData.append("imageFile", imageInput.files[0]);
-            formData.append("uploadFile", fileFormData);
-            var fileInput = document.getElementById("fileInput").files;
-            for (var i = 0; i < fileInput.length; i++) {
-                formData.append("uploadFile", fileInput[i]);
-            }
 
             var fetchUpload = fetch("/upload", {
                 method: "POST",

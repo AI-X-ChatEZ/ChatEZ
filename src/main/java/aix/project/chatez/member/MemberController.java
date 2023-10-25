@@ -25,9 +25,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Controller
 public class MemberController {
-
+    //메인화면
     private final MemberService memberService;
-
     @GetMapping("/")
     public String Index(){return "index";}
 

@@ -51,10 +51,8 @@ public class MyServiceController {
     @ResponseBody
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
-                                   @RequestParam("aiName") String aiName,
-                                   @RequestParam("uploadFile") List<MultipartFile> uploadFile) {
-//        String url = chatEzService.userFileUplaod(imageFile, aiName);
-        String url = myServiceService.openSearchFileUpload(uploadFile, aiName);
+                                   @RequestParam("aiName") String aiName) {
+        String url = myServiceService.userFileUplaod(imageFile, aiName);
         return "redirect:"+url;
     }
 
@@ -79,10 +77,10 @@ public class MyServiceController {
     public ModelAndView file_manager(Principal principal){
         String email = extractEmail(principal);
         Member member = memberService.findByEmail(email);
-
+        Map<String, List<Map<String, Object>>> servicesFiles = myServiceService.awsFileData(email);
         ModelAndView modelAndView = new ModelAndView("service/file_manager");
         modelAndView.addObject("member",member);
-
+        modelAndView.addObject("servicesFiles",servicesFiles);
         return modelAndView;
     }
 
@@ -126,8 +124,4 @@ public class MyServiceController {
             throw new IllegalArgumentException("Unexpected type of Principal");
         }
     }
-
-
-
-
 }
