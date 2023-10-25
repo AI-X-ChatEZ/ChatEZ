@@ -135,8 +135,8 @@ public class MyServiceService {
     }
 
     //s3파일 업로드
-    private String s3FileUpload(MultipartFile file) throws IOException {
 
+    private String s3FileUpload(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         log.info("fileName:{}",fileName);
         //업로드 날짜 설정

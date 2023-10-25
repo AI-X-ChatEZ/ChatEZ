@@ -1,16 +1,18 @@
 package aix.project.chatez.myservice;
 
+import aix.project.chatez.config.S3Properties;
 import aix.project.chatez.member.MemberDetails;
 import aix.project.chatez.member.MemberService;
 import aix.project.chatez.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +32,7 @@ public class MyServiceController {
 
     private final MyServiceService myServiceService;
     private final MemberService memberService;
+    private final S3Properties s3Properties;
 
 
     @GetMapping("/service_layout")
@@ -45,6 +48,8 @@ public class MyServiceController {
         ModelAndView modelAndView = new ModelAndView("service/my_service");
         modelAndView.addObject("myServices",myServices);
         modelAndView.addObject("member",member);
+        modelAndView.addObject("bucket", s3Properties.getS3Bucket());
+        modelAndView.addObject("folder",s3Properties.getS3UploadPath());
 
         return modelAndView;
     }
@@ -79,6 +84,11 @@ public class MyServiceController {
     public String delete_service(@RequestParam("serviceNo") String serviceNo) {
         String url = myServiceService.handleDeleteService(serviceNo);
         return "redirect:"+url;
+    }
+
+    @GetMapping("/example_download")
+    public ResponseEntity<UrlResource> downloadExample(){
+        return myServiceService.downloadFile("example.zip");
     }
 
     @GetMapping("/file_manager")

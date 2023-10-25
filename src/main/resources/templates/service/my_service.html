@@ -8,7 +8,7 @@
             <img th:src="@{img/plus_icon.png}" alt="plus_icon" class="plus_icon">생성하기
         </button>
     </div>
-    <div id="newScreen" class="panel">
+    <div id="newScreen" class="hide panel">
         <div class="panel_left">
             <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>생성하기</span></h4>
             <p id="imageContainer">
@@ -51,14 +51,14 @@
             </thead>
             <tbody>
             <tr th:each="myServices : ${myServices}">
-                <td><img th:src="|https://chat-profile.s3.ap-northeast-2.amazonaws.com/profile-image/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"></td>
+                <td><img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"></td>
                 <td><span th:text="${myServices.serviceName}"></span></td>
                 <td><a th:href="@{|/${myServices.url}|}" th:text="|http://chatez.com/${myServices.url}|"></a></td>
                 <td><button type="button" class="btn btn-light startChat" th:attr="data-service-name=${myServices.serviceName}">실행</button></td>
 
-                <div th:id="'chatScreen-'+${myServices.serviceName}" class="panel chatScreen">
+                <div th:id="'chatScreen-'+${myServices.serviceName}" class="hide panel chatScreen">
                     <h4>
-                        <span><img th:src="|https://chat-profile.s3.ap-northeast-2.amazonaws.com/profile-image/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"><span th:text="${myServices.serviceName}"></span></span>
+                        <span><img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"><span th:text="${myServices.serviceName}"></span></span>
                         <span class="chat_button"><button class="chatReset"><img th:src="@{img/reset_icon.png}" alt="reset_icon" class="reset_icon"></button>
                             <button class="chatClose"><img th:src="@{img/close_icon.png}" alt="close_icon"></button></span></h4>
                     <div class="chat">
@@ -73,10 +73,10 @@
                 <td><button type="button" class="btn btn-light updatePanel"
                             th:attr="data-service-name=${myServices.serviceName}">수정</button></td>
 
-                <div th:id="'updateScreen-'+${myServices.serviceName}" class="panel updateScreen">
+                <div th:id="'updateScreen-'+${myServices.serviceName}" class="hide panel updateScreen">
                     <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>수정하기</span></h4>
                     <p id="imageContainer">
-                        <img th:src="|https://chat-profile.s3.ap-northeast-2.amazonaws.com/profile-image/${myServices.profilePic}|" alt="profile_icon" class="update_profile_icon"
+                        <img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="profile_icon" class="update_profile_icon"
                              th:id="'updateProfile-' + ${myServices.serviceName}"></p>
                     <input type="file" th:id="'imageUpdate-' + ${myServices.serviceName}"
                            style="display: none;" accept="image/*" class="imageUpdate">

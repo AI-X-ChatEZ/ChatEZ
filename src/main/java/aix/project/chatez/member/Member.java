@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
-@AllArgsConstructor
 public class Member{
 
     @Id

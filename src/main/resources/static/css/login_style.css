@@ -8,7 +8,7 @@ header {
   padding: 20px 30px;
 }
 header > div {
-  min-width: 1300px;
+  min-width: 1420px;
 }
 header h1 img {
   width: 86px;
@@ -123,7 +123,7 @@ div#loginModal div.modal-footer div.social_login a.kakao{
 /* index-container : START */
 [class$='container'] {
   border-top: 1px solid #3366ff;
-  min-width: 1400px;
+  min-width: 1520px;
 }
 div.index_container {
 
@@ -183,11 +183,11 @@ div.index_container .join {
   margin: 0 auto;
   border-radius: 25px;
 }
-/* index-container : END */
+/* index-container : END
 /* footer : START */
 footer {
   color: #fff;
-  min-width: 1400px;
+  min-width: 1520px;
   background-color: #373737;
   padding: 0 30px 80px;
 }
@@ -315,11 +315,18 @@ div.button>button.btn:first-child{
   line-height: 2em;
   margin: 0 auto;
 }
+.welcome_container div.welcome_background{
+    width: 800px;
+    height: 800px;
+    border-radius: 50%;
+    background-color: #3366ff;
+}
 .welcome_container div.welcome{
   position: relative;
   margin: 50px auto;
-  width: 700px;
-  height: 700px;
+  padding-top: 100px;
+  width: 600px;
+  height: 600px;
   border-radius: 50%;
   background-color: #3366ff;
 }
