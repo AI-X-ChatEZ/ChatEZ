@@ -6,8 +6,10 @@
     display: flex;
     flex-wrap: nowrap;
 }
+
 /*layout left : START*/
-.layout_left {
+
+.layout_left{
     min-width: 320px;
     padding: 20px;
     flex-shrink: 0;

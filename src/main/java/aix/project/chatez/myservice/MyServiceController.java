@@ -63,6 +63,7 @@ public class MyServiceController {
 
         myServiceService.userFileUplaod(imageFile, aiName, aiId, member.getEmail());
         return "redirect:/my_service";
+
     }
 
     @ResponseBody
@@ -91,10 +92,10 @@ public class MyServiceController {
     public ModelAndView file_manager(Principal principal){
         String email = extractEmail(principal);
         Member member = memberService.findByEmail(email);
-
+        Map<String, List<Map<String, Object>>> servicesFiles = myServiceService.awsFileData(email);
         ModelAndView modelAndView = new ModelAndView("service/file_manager");
         modelAndView.addObject("member",member);
-
+        modelAndView.addObject("servicesFiles",servicesFiles);
         return modelAndView;
     }
 
@@ -138,8 +139,4 @@ public class MyServiceController {
             throw new IllegalArgumentException("Unexpected type of Principal");
         }
     }
-
-
-
-
 }

@@ -49,14 +49,15 @@ public class OAuthSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(crsf -> crsf.disable());
+                .csrf(crsf -> crsf.disable());
 
         http.authorizeHttpRequests((authorizeRequest) ->
                         authorizeRequest
                                 .requestMatchers("/","/join","/login","/welcome").permitAll()
                                 .anyRequest().authenticated());
+
         http.exceptionHandling((exception)->
-                        exception.authenticationEntryPoint(new ChatEZAuthenticationEntryPoint()));
+                exception.authenticationEntryPoint(new ChatEZAuthenticationEntryPoint()));
 //        login & out
         http.formLogin((formLogin) -> formLogin
                         .loginPage("/login")
@@ -72,11 +73,11 @@ public class OAuthSecurityConfig {
                 );
 
         http.oauth2Login((oauth2Login)->oauth2Login
-                        .loginPage("/login")
-                        .successHandler(loginSuccessHandler())
-                        .failureHandler(loginFailureHandler())
-                        .userInfoEndpoint()
-                        .userService(oAuth2MemberService));
+                .loginPage("/login")
+                .successHandler(loginSuccessHandler())
+                .failureHandler(loginFailureHandler())
+                .userInfoEndpoint()
+                .userService(oAuth2MemberService));
 
 
         return http.build();
@@ -153,5 +154,3 @@ public class OAuthSecurityConfig {
 
 
 }
-
-

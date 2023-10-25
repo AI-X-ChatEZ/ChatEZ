@@ -343,11 +343,6 @@ document.addEventListener("DOMContentLoaded", function() {
             formData.append("aiName", aiNameValue);
             formData.append("aiId", aiIdValue);
             formData.append("imageFile", imageInput.files[0]);
-            formData.append("uploadFile", fileFormData);
-            var fileInput = document.getElementById("fileInput").files;
-            for (var i = 0; i < fileInput.length; i++) {
-                formData.append("uploadFile", fileInput[i]);
-            }
 
             var fetchUpload = fetch("/upload", {
                 method: "POST",

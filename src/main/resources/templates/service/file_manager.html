@@ -3,7 +3,14 @@
     <div class="chat_list">
         <h2><img th:src="@{img/list_icon.png}" alt="list_icon" class="list_icon">생성 목록</h2>
         <ul>
-            <li><img th:src="@{img/chatapp_icon.png}" alt="chatapp_icon" class="chatapp_icon"><span>EastTunn ChatBot</span></li>
+            <li th:each="myServices : ${myServices}">
+                <button class="chatez_get_file"
+                        th:data-service-name="${myServices.serviceName}"
+                        onclick="showFilesForService(this)">
+                    <img th:src="${myServices.profilePic}" alt="chatbot_icon" class="chatbot_icon">
+                    <span><span th:text="${myServices.serviceName}"></span></span>
+                </button>
+            </li>
         </ul>
     </div>
     <div class="file_manager">
@@ -18,13 +25,20 @@
                     <li>업로드일</li>
                 </ul>
             </div>
-            <div id="file_index">
-                <ul>
+            <div id="file_index"
+                 th:each="serviceEntry : ${servicesFiles}"
+                 th:data-service-name="${serviceEntry.key}"
+                 style="display: none;">
+                <h2 th:text="${serviceEntry.key}" style="display: none;">Service Name</h2>
+                <ul th:each="file : ${serviceEntry.value}">
                     <li><input type="checkbox"></li>
-                    <li><img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file"><span>ChatEZ Assistant</span></li>
-                    <li>8GB</li>
-                    <li>TXT</li>
-                    <li>2023-10-03</li>
+                    <li>
+                        <img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">
+                        <span th:text="${file.name}"></span>
+                    </li>
+                    <li><span th:text="${file.size}"></span></li>
+                    <li><span th:text="${file.contentType}"></span></li>
+                    <li><span th:text="${file.uploadTime}"></span></li>
                 </ul>
             </div>
         </div>

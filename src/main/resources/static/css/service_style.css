@@ -109,6 +109,21 @@
 }
 
 
+.chatEZ_list table tr td:nth-child(2){
+    width: 220px;
+}
+
+.chatEZ_list table tr td a{
+    width: 300px;
+    display: block;
+    overflow-wrap: break-word;
+}
+
+.chatEZ_list tr td button{
+    width: 100px;
+}
+
+
 .chatEZ_list .btn-light{
     background-color: #FFF;
     border: 2px solid #151515;
@@ -157,6 +172,7 @@
 .chat_list h2{
     padding-bottom: 10px;
     border-bottom: 2px solid #ddd;
+    font-size: 22px;
 }
 
 .chat_list h2 img{
@@ -168,12 +184,23 @@
     margin-top: 20px;
 }
 
-.chat_list ul li{
+.chatez_get_file {
+    width: 310px;
     height: 80px;
     border-radius: 20px;
-    background-color: #ddd;
     font-size: 22px;
     padding: 10px;
+    background-color: #fff;
+    margin-bottom:10px;
+    text-align:left;
+}
+
+.chatez_get_file:hover{
+    background-color: #ddd;
+}
+
+.clicked {
+    background-color: #ddd;
 }
 
 .chat_list ul li img{
@@ -214,10 +241,11 @@
     height: 44px;
 }
 
-#file_index{
+#file_index ul{
     height: 70px;
     border-radius: 20px;
     background-color: #ddd;
+    margin-bottom:10px;
 }
 
 #file_title ul li{
@@ -228,11 +256,11 @@
 }
 
 #file_title ul li:nth-child(2){
-    width: 520px;
+    width: 46.5%;
 }
 
 #file_title ul li:nth-child(n+3):nth-child(-n+5){
-    width: 150px;
+    width: 15%;
 }
 
 #file_index ul li{
@@ -247,20 +275,25 @@
 
 #file_index ul li:nth-child(2){
     margin-left: 20px;
-    width: 500px;
+    width: 45%;
 }
 
 #file_index ul li:nth-child(n+3):nth-child(-n+5){
     text-align: center;
+<<<<<<< HEAD
     width: 150px;
 }
 
 
+=======
+     width: 15%;
+}
+>>>>>>> ce9cec1b7c371f32381fef2e5a1ceefa8ae4d119
 
 #newScreen.panel {
     bottom:60px;
     position: fixed;
-    right: -160%;
+    right: -170%;
     width: 800px;
     height: 650px;
     background: #fff;
