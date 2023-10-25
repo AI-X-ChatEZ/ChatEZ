@@ -103,9 +103,6 @@ public class OAuthSecurityConfig {
         };
     }
 
-
-
-
     @Bean
     public AuthenticationFailureHandler loginFailureHandler() {
         return new SimpleUrlAuthenticationFailureHandler() {

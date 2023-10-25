@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +52,16 @@ public class MyServiceController {
     @ResponseBody
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
-                                   @RequestParam("aiName") String aiName) {
-        String url = myServiceService.userFileUplaod(imageFile, aiName);
-        return "redirect:"+url;
+                                   @RequestParam("aiName") String aiName,
+                                   @RequestParam("aiId") String aiId,
+                                   Principal principal) throws IOException {
+
+        String email = extractEmail(principal);
+        Member member = memberService.findByEmail(email);
+
+        myServiceService.userFileUplaod(imageFile, aiName, aiId, member.getEmail());
+        return "redirect:/my_service";
+
     }
 
     @ResponseBody
