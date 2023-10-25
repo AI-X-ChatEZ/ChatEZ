@@ -95,6 +95,19 @@
     font-size: 18px;
     background-color: #ddd;
 }
+.chatEZ_list table tr td:nth-child(2){
+    width: 220px;
+}
+.chatEZ_list table tr td a{
+    width: 300px;
+    display: block;
+    overflow-wrap: break-word;
+}
+
+.chatEZ_list tr td button{
+    width: 100px;
+}
+
 
 .chatEZ_list table tr td:nth-child(2){
     width: 220px;
@@ -267,8 +280,9 @@
 
 #file_index ul li:nth-child(n+3):nth-child(-n+5){
     text-align: center;
-     width: 15%;
+    width: 15%;
 }
+
 
 #newScreen.panel {
     bottom:60px;

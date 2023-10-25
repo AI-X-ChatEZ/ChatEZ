@@ -1,16 +1,18 @@
 package aix.project.chatez.myservice;
 
+import aix.project.chatez.config.S3Properties;
 import aix.project.chatez.member.MemberDetails;
 import aix.project.chatez.member.MemberService;
 import aix.project.chatez.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +32,7 @@ public class MyServiceController {
 
     private final MyServiceService myServiceService;
     private final MemberService memberService;
+    private final S3Properties s3Properties;
 
 
     @GetMapping("/service_layout")
@@ -44,6 +48,8 @@ public class MyServiceController {
         ModelAndView modelAndView = new ModelAndView("service/my_service");
         modelAndView.addObject("myServices",myServices);
         modelAndView.addObject("member",member);
+        modelAndView.addObject("bucket", s3Properties.getS3Bucket());
+        modelAndView.addObject("folder",s3Properties.getS3UploadPath());
 
         return modelAndView;
     }
@@ -51,9 +57,16 @@ public class MyServiceController {
     @ResponseBody
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
-                                   @RequestParam("aiName") String aiName) {
-        String url = myServiceService.userFileUplaod(imageFile, aiName);
-        return "redirect:"+url;
+                                   @RequestParam("aiName") String aiName,
+                                   @RequestParam("aiId") String aiId,
+                                   Principal principal) throws IOException {
+
+        String email = extractEmail(principal);
+        Member member = memberService.findByEmail(email);
+
+        myServiceService.userFileUplaod(imageFile, aiName, aiId, member.getEmail());
+        return "redirect:/my_service";
+
     }
 
     @ResponseBody
@@ -71,6 +84,11 @@ public class MyServiceController {
     public String delete_service(@RequestParam("serviceNo") String serviceNo) {
         String url = myServiceService.handleDeleteService(serviceNo);
         return "redirect:"+url;
+    }
+
+    @GetMapping("/example_download")
+    public ResponseEntity<UrlResource> downloadExample(){
+        return myServiceService.downloadFile("example.zip");
     }
 
     @GetMapping("/file_manager")

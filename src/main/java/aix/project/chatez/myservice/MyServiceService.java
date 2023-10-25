@@ -2,7 +2,14 @@ package aix.project.chatez.myservice;
 
 import aix.project.chatez.member.Member;
 import aix.project.chatez.member.MemberRepository;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,17 +21,24 @@ import org.opensearch.search.SearchHit;
 import org.opensearch.search.builder.SearchSourceBuilder;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MyServiceService {
+
     private final MyServiceRepository myServiceRepository;
     private final MemberRepository memberRepository;
-
+    private final AmazonS3 amazonS3;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+    @Value("${cloud.aws.s3.upload-path}")
+    private String uploadPath;
 
 
     public List<MyService> findByMember_MemberNo(Long memberNo){
@@ -32,40 +46,28 @@ public class MyServiceService {
     }
 
 
-    public String userFileUplaod(MultipartFile imageFile, String aiName) {
-        if (imageFile.isEmpty() || StringUtils.isEmpty(aiName)) {
-            return "파일 또는 AI의 이름이 없습니다.";
-        }
+    public MyService userFileUplaod(MultipartFile imageFile, String aiName, String serviceId, String email) throws IOException {
 
-        try {
-            //파일 이름을 얻어옴
-            String fileName = imageFile.getOriginalFilename();
-            String fileUploadDirectory = "C:/github/uploaded-images/" + fileName;
-            Path path = Paths.get(fileUploadDirectory).toAbsolutePath();
-            imageFile.transferTo(path.toFile());
-            System.out.println("파일 명 : " + fileName);
-            System.out.println("AI 이름 : " + aiName);
+        String newFileName = s3FileUpload(imageFile);
 
-            List<Member> loginUser = this.memberRepository.findAll();
-            if (!loginUser.isEmpty()) {
-                Member member = loginUser.get(0);
+        Member member = memberRepository.findByEmail(email).get();
 
-                MyService myService = new MyService();
-                myService.setServiceName(aiName);
-                myService.setProfilePic("/images/" + fileName);
-                myService.setMember(member);  //엔티티와 엔티티 간의 연결 설정
+//        MyService myService = new MyService();
+//        myService.setServiceName(aiName);
+//        log.info("aiName:{}",aiName);
+//        myService.setProfilePic(newFileName);
+//        myService.setMember(member);  //엔티티와 엔티티 간의 연결 설정
 
-                myServiceRepository.save(myService);
-
-                return "my_service";
-            } else {
-                return "로그인한 사용자 정보를 찾을 수 없습니다.";
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "my_service";
-        }
+        String urlValue = aiName+System.currentTimeMillis();
+        return myServiceRepository.save(MyService.builder()
+                .serviceName(aiName)
+                .serviceId(serviceId)
+                .profilePic(newFileName)
+                .url(UUID.nameUUIDFromBytes(urlValue.getBytes()).toString().replace("-",""))
+                .member(member)
+                .build());
     }
+
 
     public String handleFileUpdate(String updateName, MultipartFile updateFile, String selectNo) {
         Long no = Long.parseLong(selectNo);
@@ -79,20 +81,19 @@ public class MyServiceService {
 
             if (optionalMyService.isPresent()) {
                 MyService myService = optionalMyService.get();
-                myService.setServiceName(updateName);
+                myService.updateServiceName(updateName);
+                log.info("new name:{}",myService.getServiceName());
 
                 // 파일이 있는 경우에만 파일 처리
                 if (updateFile != null && !updateFile.isEmpty()) {
                     if (!myService.getProfilePic().isEmpty()) {
-                        Path oldFilePath = Paths.get("C:/github/uploaded-images/" + myService.getProfilePic().substring(8)).toAbsolutePath();
-                        Files.delete(oldFilePath);
+                        //s3에 있는 기존 파일 delete
+                        String imagePath = String.format("%s/%s",bucket, uploadPath);
+                        amazonS3.deleteObject(imagePath, myService.getProfilePic());
                     }
-
-                    String fileName = updateFile.getOriginalFilename();
-                    String fileUploadDirectory = "C:/github/uploaded-images/" + fileName;
-                    Path path = Paths.get(fileUploadDirectory).toAbsolutePath();
-                    updateFile.transferTo(path.toFile());
-                    myService.setProfilePic("/images/" + fileName);
+                    String newFileName = s3FileUpload(updateFile);
+                    myService.updateProfilePic(newFileName);
+                    log.info("new pic:{}",myService.getProfilePic());
                 }
 
                 myServiceRepository.save(myService);
@@ -116,9 +117,9 @@ public class MyServiceService {
                 MyService myService = optionalMyService.get();
 
                 if (!myService.getProfilePic().isEmpty()) {
-                    // 연관된 이미지 파일 삭제
-                    Path oldFilePath = Paths.get("C:/github/uploaded-images/" + myService.getProfilePic().substring(8)).toAbsolutePath();
-                    Files.deleteIfExists(oldFilePath);
+                    //s3에 있는 연결된 파일 delete
+                    String imagePath = String.format("%s/%s",bucket, uploadPath);
+                    amazonS3.deleteObject(imagePath, myService.getProfilePic());
                 }
 
                 myServiceRepository.deleteById(no);
@@ -132,6 +133,39 @@ public class MyServiceService {
             return "my_service";
         }
     }
+
+    //s3파일 업로드
+     private String s3FileUpload(MultipartFile file) throws IOException {
+
+        String fileName = file.getOriginalFilename();
+        log.info("fileName:{}",fileName);
+        //업로드 날짜 설정
+        String uploadTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String onlyFileName = fileName.substring(0,fileName.lastIndexOf("."));
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        String newFileName = String.format("%s_%s%s",onlyFileName, uploadTime, extension);
+        //s3 파일 업로드
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        metadata.setContentType(file.getContentType());
+        String imagePath = String.format("%s/%s",bucket, uploadPath);
+        log.info("buket path:{}",imagePath);
+        amazonS3.putObject(imagePath, newFileName, file.getInputStream(),metadata);
+        log.info("new Filename: {}",newFileName);
+
+        return newFileName;
+    }
+
+    //s3 파일 다운로드
+    public ResponseEntity<UrlResource> downloadFile(String fileName){
+        UrlResource urlResource = new UrlResource(amazonS3.getUrl(String.format("%s/example",bucket), fileName));
+        String contentDisposition = String.format("attachment; filename=\\%s\\", URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(urlResource);
+    }
+
 
     public String openSearchFileUpload(List<MultipartFile> uploadFile, String aiName) {
         for (MultipartFile file : uploadFile){
