@@ -11,6 +11,8 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.opensearch.action.search.SearchRequest;
@@ -19,6 +21,8 @@ import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.search.SearchHit;
 import org.opensearch.search.builder.SearchSourceBuilder;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -35,6 +39,7 @@ public class MyServiceService {
     private final MyServiceRepository myServiceRepository;
     private final MemberRepository memberRepository;
     private final AmazonS3 amazonS3;
+    private final SimpMessagingTemplate messagingTemplate;
     @Value("${cloud.aws.s3-bucket}")
     private String bucket;
     @Value("${cloud.aws.s3-upload-path}")
@@ -134,6 +139,18 @@ public class MyServiceService {
         }
     }
 
+    @Transactional
+    public void activateServiceById(String serviceId) {
+        MyService myService = myServiceRepository.findByServiceId(serviceId);
+
+        if (myService != null) {
+            myService.activate();
+            messagingTemplate.convertAndSend("/topic/notifications", serviceId);
+        } else {
+            System.out.println("Service with ID: " + serviceId + " not found.");
+        }
+    }
+
     //s3파일 업로드
      private String s3FileUpload(MultipartFile file) throws IOException {
 
@@ -166,13 +183,29 @@ public class MyServiceService {
                 .body(urlResource);
     }
 
+    public List<MyService> userServiceDate(String email) {
 
-    public String openSearchFileUpload(List<MultipartFile> uploadFile, String aiName) {
-        for (MultipartFile file : uploadFile){
-            System.out.print(file.getOriginalFilename());
-        }
-        return "my_service";
+
+            Member member = memberRepository.findByEmail(email).get();
+
+            List<MyService> myServices = myServiceRepository.findByMember_MemberNo(member.getMemberNo());
+            if(!myServices.isEmpty()) {
+                System.out.println("no : " + myServices.get(0).getServiceNo());
+                System.out.println("name : " + myServices.get(0).getServiceName());
+                System.out.println("profilePic : " + myServices.get(0).getProfilePic());
+            }
+            return myServices;
+
     }
+
+
+
+//    public String openSearchFileUpload(List<MultipartFile> uploadFile, String aiName) {
+//        for (MultipartFile file : uploadFile){
+//            System.out.print(file.getOriginalFilename());
+//        }
+//        return "my_service";
+//    }
 
     public Map<String, List<Map<String, Object>>> awsFileData(String email) {
         if (email == null) {
@@ -180,14 +213,14 @@ public class MyServiceService {
         }
 
         RestHighLevelClient client = OpenSearchClient.createClient();
-        Optional<Member> loginUser = this.memberRepository.findByEmail(email);
+        Optional<Member> loginUser = memberRepository.findByEmail(email);
 
         if (!loginUser.isPresent()) {
             throw new IllegalArgumentException("회원의 Email 값을 찾지 못했습니다.");
         }
 
-        String name = loginUser.get().getName();
-        Optional<Member> member = memberRepository.findByName(name);
+//        String name = loginUser.get().getName();
+        Optional<Member> member = memberRepository.findByEmail(email);
 
         Long memberNo;
         if (member.isPresent()) {
@@ -205,7 +238,7 @@ public class MyServiceService {
             List<Map<String, Object>> files = new ArrayList<>();
             System.out.println("name : " + myService.getServiceName());
             try {
-                SearchRequest searchRequest = new SearchRequest(myService.getServiceName()); // 서비스 이름을 인덱스로 사용
+                SearchRequest searchRequest = new SearchRequest(myService.getServiceId()); // 서비스 이름을 인덱스로 사용
                 SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
                 // Only fetch the "size", "name", and "contentType" fields

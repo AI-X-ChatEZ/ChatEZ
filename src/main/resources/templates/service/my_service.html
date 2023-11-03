@@ -14,7 +14,7 @@
             <p id="imageContainer">
                 <img th:src="@{img/profile_icon.png}" alt="profile_icon" class="profile_icon" id="uploadProfile">
             </p>
-            <input type="file" id="imageInput" style="display: none;" accept="image/*">
+            <input type="file" id="imageInput" style="display: none;" accept="image/*" required>
             <p><label for="aiName" class="blind">대화형 AI 이름</label>
                 <input type="text" id="aiName" placeholder="대화형 AI 이름 입력" maxlength="24"></p>
             <label for="aiId" class="blind">대화형 AI ID</label>
@@ -23,10 +23,9 @@
                 <br>
                 <button class="custom_btn my-4" id="download">예제 다운로드</button></p>
 
-
         </div>
         <div class="panel_right">
-            <input type="file" id="fileInput" style="display: none;" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple >
+            <input type="file" id="fileInput" style="display: none;" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple required>
             <button id="fileUpload">
                 <img th:src="@{img/upload_icon.png}" alt="upload_icon" class="upload_icon">파일 선택
             </button>

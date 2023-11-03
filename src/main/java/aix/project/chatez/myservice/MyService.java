@@ -26,6 +26,9 @@ public class MyService {
     @Column(name = "profile_pic", nullable = false)
     private String profilePic;
 
+    @Column(name = "service_active", nullable = false)
+    private boolean serviceActive;
+
     @ManyToOne(fetch=FetchType.LAZY, optional=false)
     @JoinColumn(name="member_no", referencedColumnName="member_no")
     private Member member;
@@ -38,7 +41,9 @@ public class MyService {
         this.profilePic = profilePic;
         this.member = member;
     }
-
+    public void activate() {
+        this.serviceActive = true;
+    }
     public void updateServiceName(String newServiceName){
         this.serviceName = newServiceName;
     }

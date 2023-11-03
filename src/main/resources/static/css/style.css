@@ -58,7 +58,7 @@
     height: 100%;
     min-width: 1200px;
     flex-grow: 1;
-    padding : 20px 80px 80px;
+    padding : 20px 80px 80px 40px;
 }
 
 /*컨텐츠 레이아웃 영역*/

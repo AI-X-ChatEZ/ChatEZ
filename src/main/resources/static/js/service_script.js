@@ -5,6 +5,30 @@ function closeAllPanels() {
     });
 }
 
+//file list 생성
+function showFilesForService(button) {
+    var serviceName = button.getAttribute('data-service-name');
+    console.log(serviceName);
+
+    var serviceElements = document.querySelectorAll('#file_index');
+    serviceElements.forEach(function(element) {
+        if (element.getAttribute('data-service-name') === serviceName) {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    });
+
+    var buttons = document.querySelectorAll('.chatez_get_file');
+    buttons.forEach(function(btn) {
+        btn.classList.remove('clicked');
+    });
+
+    button.classList.add('clicked');
+    document.getElementById('file_select').removeAttribute('disabled');
+    document.getElementById('file_delete_button').removeAttribute('disabled');
+}
+
 // uuid 값 생성
 function generateUuid(){
     const newUUID = uuid.v4().replace(/-/g, '');
@@ -42,7 +66,12 @@ document.getElementById("createClose").addEventListener("click", function() {
 });
 
 document.getElementById("fileUpload").addEventListener("click", function() {
-    document.getElementById("fileInput").click();
+    var fileInputElement = document.getElementById("fileInput");
+    if (fileInputElement) {
+        fileInputElement.click();
+    } else {
+        console.error('Element with ID "fileInput" not found.');
+    }
 });
 
 document.getElementById("uploadProfile").addEventListener("click", function() {
@@ -290,131 +319,143 @@ function removeFile(element) {
     }
     document.getElementById('fileInput').value = '';
 }
+let csrfTokenElem = document.querySelector('meta[name="_csrf"]');
+let csrfHeaderElem = document.querySelector('meta[name="_csrf_header"]');
+
+if (!csrfTokenElem || !csrfHeaderElem) {
+    console.error('CSRF elements not found in the DOM.');
+}
+
+let csrfToken = csrfTokenElem ? csrfTokenElem.getAttribute('content') : '';
+let csrfHeader = csrfHeaderElem ? csrfHeaderElem.getAttribute('content') : '';
+
+let socket = new SockJS('/ws');
+let stompClient = Stomp.over(socket);
+
+let headers = {};
+headers[csrfHeader] = csrfToken;
+
+stompClient.connect(headers, function(frame) {
+    stompClient.subscribe('/topic/notifications', function(notification) {
+        try {
+            let receivedAiId = notification.body;
+            if (receivedAiId) {
+                onFileUploadComplete(receivedAiId);
+            } else {
+                console.warn('Received notification does not contain aiId.', notification.body);
+            }
+        } catch (e) {
+            console.error('Error parsing notification JSON:', e.message);
+        }
+    });
+});
+
+function onFileUploadComplete(aiId) {
+    const serviceElements = document.querySelectorAll('[data-ai-id]');
+    serviceElements.forEach(element => {
+        if (element.getAttribute('data-ai-id') === aiId) {
+            element.classList.remove('disabled');
+        }
+    });
+}
 
 document.addEventListener("DOMContentLoaded", function() {
     var createAiButton = document.getElementById("createAi");
-    createAiButton.addEventListener("click", function() {
-        var aiNameValue = document.getElementById("aiName").value;
-        var aiIdValue = document.getElementById("aiId").value;
-        var imageInput = document.getElementById("imageInput");
-        var fileInput = document.getElementById("fileInput").files;
-        var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
+    if (createAiButton) {
+        createAiButton.addEventListener("click", function() {
+            var aiNameValue = document.getElementById("aiName").value;
+            var aiIdValue = document.getElementById("aiId").value;
+            var imageInput = document.getElementById("imageInput");
+            var fileInput = document.getElementById("fileInput").files;
+            var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
 
-        var validFilesCount = selectedFiles.filter(file => file !== null).length;
+            var validFilesCount = selectedFiles.filter(file => file !== null).length;
 
-        if (aiNameValue === "" || imageInput.length === 0 || validFilesCount === 0) {
-            alert("AI 이름, 프로필 이미지와 파일을 모두 선택해주세요.");
-            return;
-        }
-
-        // FastAPI 서버로 fileInput의 파일 전송
-        var fileFormData = new FormData();
-        fileFormData.append('index', aiIdValue);
-        var validFiles = selectedFiles.filter(file => file !== null);
-
-        for (var i = 0; i < validFiles.length; i++) {
-            fileFormData.append("files", validFiles[i]);
-        }
-
-        var fetchUploadFiles = fetch("http://localhost:8000/upload_files", {
-            method: "POST",
-            body: fileFormData,
-        })
-        .then(response => {
-            if (!response.ok) {
-                alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
-                throw new Error("네트워크 오류가 발생했습니다.");
+            if (aiNameValue === "" || imageInput.length === 0 || validFilesCount === 0) {
+                alert("AI 이름, 프로필 이미지와 파일을 모두 선택해주세요.");
+                return;
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('파일이 성공적으로 업로드되었습니다:', data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
-        });
-        var fetchUpload = null;
-        if (csrfMetaTag) {
-            var csrfToken = csrfMetaTag.content;
 
-            // 기존 엔드포인트로 나머지 데이터 전송
-            var formData = new FormData();
-            formData.append("aiName", aiNameValue);
-            formData.append("aiId", aiIdValue);
-            formData.append("imageFile", imageInput.files[0]);
+            var fetchUpload = null;
+            if (csrfMetaTag) {
+                var csrfToken = csrfMetaTag.content;
 
-            var fetchUpload = fetch("/upload", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": csrfToken,
-                },
-                body: formData,
-            })
-            .then(response => {
-                if (!response.ok) {
-                    alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
-                    throw new Error("에러가 발생하였습니다.");
+                // 기존 엔드포인트로 나머지 데이터 전송
+                var formData = new FormData();
+                formData.append("aiName", aiNameValue);
+                formData.append("aiId", aiIdValue);
+                formData.append("imageFile", imageInput.files[0]);
+                var validFiles = selectedFiles.filter(file => file !== null);
+
+                for (var i = 0; i < validFiles.length; i++) {
+                    formData.append("files", validFiles[i]);
                 }
-                return response.text();
-            })
-            .then(data => {
-                setTimeout(function() {
-                    var newScreen = document.getElementById("newScreen");
-                    if(newScreen){
-                        newScreen.classList.remove('active');
-                    }
 
-                    var aiName = document.getElementById("aiName");
-                    if(aiName){
-                        aiName.value = '';
-                    }
-                    var aiId = document.getElementById("aiId");
-                    if(aiId){
-                        aiId.value = '';
-                    }
-
-                    var imageInput = document.getElementById("imageInput");
-                    if(imageInput){
-                        imageInput.value = '';
-                    }
-
-                    var uploadProfile = document.getElementById("uploadProfile");
-                    if(uploadProfile){
-                        uploadProfile.src = 'img/profile_icon.png';
-                    }
-
-                    var fileInput = document.getElementById("fileInput");
-                    if(fileInput){
-                        fileInput.value = '';
-                    }
-
-                    var fileList = document.getElementById("fileList");
-                    if(fileList){
-                        while (fileList.firstChild) {
-                            fileList.removeChild(fileList.firstChild);
+                var fetchUpload = fetch("/upload", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+                    body: formData,
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
+                            throw new Error("에러가 발생하였습니다.");
                         }
-                    }
-                }, 500);  // 5000 밀리초 = 5초
-            })
-            .catch(error => {
-                console.error('Error:', error);
+                        return response.text();
+                    })
+                    .then(data => {
+                        setTimeout(function() {
+                            var newScreen = document.getElementById("newScreen");
+                            if(newScreen){
+                                newScreen.classList.remove('active');
+                            }
+
+                            var aiName = document.getElementById("aiName");
+                            if(aiName){
+                                aiName.value = '';
+                            }
+                            var aiId = document.getElementById("aiId");
+                            if(aiId){
+                                aiId.value = '';
+                            }
+
+                            var imageInput = document.getElementById("imageInput");
+                            if(imageInput){
+                                imageInput.value = '';
+                            }
+
+                            var uploadProfile = document.getElementById("uploadProfile");
+                            if(uploadProfile){
+                                uploadProfile.src = 'img/profile_icon.png';
+                            }
+
+                            var fileInput = document.getElementById("fileInput");
+                            if(fileInput){
+                                fileInput.value = '';
+                            }
+
+                            var fileList = document.getElementById("fileList");
+                            if(fileList){
+                                while (fileList.firstChild) {
+                                    fileList.removeChild(fileList.firstChild);
+                                }
+                            }
+                        }, 500);  // 5000 밀리초 = 5초
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
+                    });
+            } else {
                 alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
-            });
-        } else {
-            alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
-            console.error("CSRF 메타 태그가 존재하지 않습니다.");
-        }
+                console.error("CSRF 메타 태그가 존재하지 않습니다.");
+            }
+        });
+    }});
 
-        if(fetchUpload) {
-            Promise.all([fetchUploadFiles, fetchUpload])
-                .then(() => {
-                    window.location.reload();
-                });
-        }
-
-    });
-});
 const downloadButton = document.getElementById('download');
 downloadButton.addEventListener('click', async () => {
     try {

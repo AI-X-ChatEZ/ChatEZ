@@ -67,7 +67,10 @@
     width: 30px !important;
     height: 38px !important;
 }
-
+.chatEZ_list table {
+    width: 100%;
+    table-layout: fixed;
+}
 
 .chatEZ_list table tr th{
     width: 100px;
@@ -77,16 +80,19 @@
 }
 
 .chatEZ_list table tr th:nth-child(1){
-    width: 150px;
+    width: 8%;
 }
 
 .chatEZ_list table tr th:nth-child(2){
     /*padding-right:20px;*/
-    width: 180px;
+    width: 25%;
 }
 
 .chatEZ_list table tr th:nth-child(3){
-    width: 320px;
+    width: 35%;
+}
+.chatEZ_list table tr th:nth-child(n+4):nth-child(-n+6){
+    width: 125px;
 }
 
 .chatEZ_list table tr td{
@@ -94,13 +100,16 @@
     text-align: center;
     font-size: 18px;
     background-color: #ddd;
+    vertical-align: middle; /* 텍스트를 세로로 중앙 정렬 */
 }
 .chatEZ_list table tr td:nth-child(2){
-    width: 220px;
+    width: 240px;
 }
 .chatEZ_list table tr td a{
     width: 300px;
+    max-width: 460px;
     display: block;
+    box-sizing: border-box;
     overflow-wrap: break-word;
 }
 
@@ -154,7 +163,7 @@
 }
 
 .chat_list{
-    min-width: 350px; /* 추가된 부분 */
+    min-width: 275px; /* 추가된 부분 */
     float: left;
     width: 23%;
     height: 85vh;
@@ -185,14 +194,19 @@
 }
 
 .chatez_get_file {
-    width: 310px;
+    width: 100%;
     height: 80px;
     border-radius: 20px;
-    font-size: 22px;
+    font-size: 18px;
     padding: 10px;
     background-color: #fff;
     margin-bottom:10px;
     text-align:left;
+    border: none;
+    display: flex;             /* Flexbox 레이아웃을 적용합니다. */
+    align-items: center;      /* 항목들을 중앙에 정렬합니다. */
+    justify-content: flex-start;  /* 항목들을 왼쪽부터 시작하도록 정렬합니다. */
+    gap: 10px;                /* 이미지와 텍스트 사이에 간격을 줍니다. */
 }
 
 .chatez_get_file:hover{
@@ -208,6 +222,17 @@
     vertical-align: middle;
 }
 
+.file_manager{
+     min-width: 850px;
+     font-size: 22px;
+     float: right;
+     width: 73%;
+     height: 85vh;
+     background-color: #fff;
+     border-radius: 20px;
+     padding: 20px;
+ }
+
 .file_manager h3{
     padding-bottom: 10px;
     border-bottom: 2px solid #ddd;
@@ -218,15 +243,64 @@
     vertical-align: middle;
 }
 
-.file_manager{
-    min-width: 1030px;
-    font-size: 22px;
-    float: right;
-    width: 75%;
-    height: 85vh;
-    background-color: #fff;
+
+#file_select:disabled {
+    background-color: #ddd; /* 회색으로 변경 */
+    cursor: not-allowed; /* 커서를 '금지' 아이콘으로 변경 */
+    z-index: 0;
+}
+
+#file_select:enabled {
+    background-color: #3366FF; /* 푸른색으로 변경 */
+    cursor: pointer; /* 커서를 '손가락' 아이콘으로 변경 */
+}
+
+.file_manager #file_select {
+    font-size:22px;
+    width: 230px;
+    height: 80px;
     border-radius: 20px;
-    padding: 30px 20px 30px 20px;
+    border: none;
+    color: #FFF;
+}
+
+#file_delete{
+    height: 80px;
+    position: absolute;
+    bottom: 10%;
+    right: 0;
+}
+
+#file_delete_button{
+    font-size:22px;
+    width: 230px;
+    height: 80px;
+    border-radius: 20px;
+    border: none;
+    color: #000;
+    margin-top:20px;
+}
+
+#file_delete_button img{
+    vertical-align: middle;
+    margin-right: 20px;
+    width: 44px;
+    height: 44px;
+}
+
+#file_delete_button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+#file_delete_button:enabled {
+    background-color: #bbb;
+    cursor: pointer;
+}
+
+.file_list{
+    position: relative;
+    height:450px;
 }
 
 .file_list input{
@@ -256,7 +330,7 @@
 }
 
 #file_title ul li:nth-child(2){
-    width: 46.5%;
+    width: 43.5%;
 }
 
 #file_title ul li:nth-child(n+3):nth-child(-n+5){
@@ -275,7 +349,7 @@
 
 #file_index ul li:nth-child(2){
     margin-left: 20px;
-    width: 45%;
+    width: 43%;
 }
 
 #file_index ul li:nth-child(n+3):nth-child(-n+5){
