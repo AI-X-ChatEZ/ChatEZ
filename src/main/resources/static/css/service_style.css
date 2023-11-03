@@ -25,7 +25,7 @@
     background-color: #fff;
     /*width: 100%;*/
     min-width: 1100px;
-    height: 85vh;
+    height: 95vh;
     border-radius: 20px;
     padding: 20px 30px;
 }
@@ -166,7 +166,7 @@
     min-width: 275px; /* 추가된 부분 */
     float: left;
     width: 23%;
-    height: 85vh;
+    height: 95vh;
     background-color: #fff;
     border-radius: 20px;
     padding: 30px 20px 30px 20px;
@@ -227,7 +227,7 @@
      font-size: 22px;
      float: right;
      width: 73%;
-     height: 85vh;
+     height: 95vh;
      background-color: #fff;
      border-radius: 20px;
      padding: 20px;
@@ -267,7 +267,7 @@
 #file_delete{
     height: 80px;
     position: absolute;
-    bottom: 10%;
+    bottom: 5%;
     right: 0;
 }
 
@@ -300,7 +300,7 @@
 
 .file_list{
     position: relative;
-    height:450px;
+    height:80vh;
 }
 
 .file_list input{
@@ -313,6 +313,11 @@
     margin-left: 20px;
     width: 44px;
     height: 44px;
+}
+div#file_index{
+    height: 65vh;
+    overflow: auto;
+    font-size: 18px;
 }
 
 #file_index ul{
@@ -439,8 +444,8 @@
     margin-bottom: 20px;
     width: 370px;
     height: 430px;
-    margin-left: auto;
-    margin-right: auto;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
     overflow: auto;  /* 스크롤바 추가 */
 }
 
@@ -727,4 +732,10 @@
 #fileList::-webkit-scrollbar-track,
 .chat::-webkit-scrollbar-track{
     background: #ddd;  /*스크롤바 뒷 배경 색상*/
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
 }

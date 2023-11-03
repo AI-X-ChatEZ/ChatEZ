@@ -74,6 +74,19 @@ document.getElementById("fileUpload").addEventListener("click", function() {
     }
 });
 
+var fileSelectElement = document.getElementById("file_select");
+
+if (fileSelectElement) {
+    fileSelectElement.addEventListener("click", function() {
+        var fileInputElement = document.getElementById("fileInput");
+        if (fileInputElement) {
+            fileInputElement.click();
+        } else {
+            console.error('Element with ID "fileInput" not found.');
+        }
+    });
+}
+
 document.getElementById("uploadProfile").addEventListener("click", function() {
     document.getElementById("imageInput").click();
 });
