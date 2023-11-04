@@ -6,11 +6,16 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.opensearch.client.indices.GetIndexRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.opensearch.action.search.SearchRequest;
@@ -26,11 +31,15 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MyServiceService {
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     private final MyServiceRepository myServiceRepository;
     private final MemberRepository memberRepository;
@@ -44,7 +53,6 @@ public class MyServiceService {
     public List<MyService> findByMember_MemberNo(Long memberNo){
         return myServiceRepository.findByMember_MemberNo(memberNo);
     }
-
 
     public MyService userFileUplaod(MultipartFile imageFile, String aiName, String serviceId, String email) throws IOException {
 
@@ -134,6 +142,33 @@ public class MyServiceService {
         }
     }
 
+    @Transactional
+    public void activateServiceById(String aiId) {
+        MyService myService = myServiceRepository.findByServiceId(aiId);
+
+        if (myService != null) {
+            myService.setServiceActive(true);
+            System.out.println("aiId : " + aiId);
+            messagingTemplate.convertAndSend("/topic/notifications", aiId);
+        } else {
+            System.out.println("Service with ID: " + aiId + " not found.");
+        }
+    }
+
+    private final Map<String, Boolean> uploadStatusMap = new ConcurrentHashMap<>();
+
+    public void startUpload(String serviceId) {
+        uploadStatusMap.put(serviceId, false);
+    }
+
+    public void completeUpload(String serviceId) {
+        uploadStatusMap.put(serviceId, true);
+    }
+
+    public boolean isUploadCompleted(String serviceId) {
+        return uploadStatusMap.getOrDefault(serviceId, false);
+    }
+
     //s3파일 업로드
 
     private String s3FileUpload(MultipartFile file) throws IOException {
@@ -167,13 +202,6 @@ public class MyServiceService {
     }
 
 
-    public String openSearchFileUpload(List<MultipartFile> uploadFile, String aiName) {
-        for (MultipartFile file : uploadFile){
-            System.out.print(file.getOriginalFilename());
-        }
-        return "my_service";
-    }
-
     public Map<String, List<Map<String, Object>>> awsFileData(String email) {
         if (email == null) {
             throw new IllegalArgumentException("알 수 없는 사용자");
@@ -205,6 +233,13 @@ public class MyServiceService {
             List<Map<String, Object>> files = new ArrayList<>();
             System.out.println("ServiceId : " + myService.getServiceId());
             try {
+                GetIndexRequest getIndexRequest = new GetIndexRequest(myService.getServiceId());
+                boolean exists = client.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
+                if (!exists) {
+                    // 인덱스가 없는 경우의 처리 로직
+                    System.out.println("인덱스가 존재하지 않습니다: " + myService.getServiceId());
+                    continue; // 다음 서비스로 넘어갑니다
+                }
                 SearchRequest searchRequest = new SearchRequest(myService.getServiceId()); // 서비스 이름을 인덱스로 사용
                 SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 

@@ -197,11 +197,6 @@
     gap: 10px;                /* 이미지와 텍스트 사이에 간격을 줍니다. */
 }
 
-
-.chatez_get_file span{
-
-}
-
 .chatez_get_file:hover{
     background-color: #ddd;
 }
@@ -216,8 +211,13 @@
 }
 
 .file_manager h3{
+/*    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;*/
     padding-bottom: 10px;
     border-bottom: 2px solid #ddd;
+    display: flex;
+    justify-content: space-between; /* 항목을 양쪽 끝으로 배치합니다 */
+    align-items: center; /* 항목을 수직으로 정렬하려면 사용 */
 }
 
 .file_manager h3 img {
@@ -236,6 +236,53 @@
     padding: 30px 20px 30px 20px;
 }
 
+#file_select:disabled {
+    background-color: #ddd; /* 회색으로 변경 */
+    cursor: not-allowed; /* 커서를 '금지' 아이콘으로 변경 */
+}
+
+#file_select:enabled {
+    background-color: #3366FF; /* 푸른색으로 변경 */
+    cursor: pointer; /* 커서를 '손가락' 아이콘으로 변경 */
+}
+
+.file_manager #file_select {
+    font-size:22px;
+    width: 230px;
+    height: 80px;
+    border-radius: 20px;
+    border: none;
+    color: #FFF;
+}
+
+#file_delete_button{
+    float:right;
+    font-size:22px;
+    width: 230px;
+    height: 80px;
+    border-radius: 20px;
+    border: none;
+    color: #000;
+    margin-top:20px;
+}
+
+#file_delete_button img{
+    vertical-align: middle;
+    margin-right: 20px;
+    width: 44px;
+    height: 44px;
+}
+
+#file_delete_button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+#file_delete_button:enabled {
+    background-color: #bbb;
+    cursor: pointer;
+}
+
 .file_list input{
     width: 20px;
     height: 20px;
@@ -248,11 +295,29 @@
     height: 44px;
 }
 
-#file_index ul{
+.file_list{
+    position: relative;
+    height:650px;
+}
+
+#file_delete{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-top: 2px solid #ddd;
+}
+
+.file_index {
+    height: 480px;
+    overflow-y: auto;
+}
+
+.file_index ul{
     height: 70px;
     border-radius: 20px;
     background-color: #ddd;
     margin-bottom:10px;
+    margin-right:10px;
 }
 
 #file_title ul li{
@@ -270,22 +335,22 @@
     width: 15%;
 }
 
-#file_index ul li{
+.file_index ul li{
     vertical-align: middle;
     padding-top: 15px;
     display: inline-block;
 }
 
-#file_index ul li img{
+.file_index ul li img{
     vertical-align: middle;
 }
 
-#file_index ul li:nth-child(2){
+.file_index ul li:nth-child(2){
     margin-left: 20px;
     width: 45%;
 }
 
-#file_index ul li:nth-child(n+3):nth-child(-n+5){
+.file_index ul li:nth-child(n+3):nth-child(-n+5){
     text-align: center;
     width: 15%;
 }
@@ -305,7 +370,7 @@
     font-size: 22px;
 }
 
-#fileUpload{
+.panel_right #fileUpload{
     width: 230px;
     height: 80px;
     background-color: #3366FF;
@@ -646,17 +711,25 @@
 
 /* 스크롤바의 폭 너비 */
 #fileList::-webkit-scrollbar,
-.chat::-webkit-scrollbar{
+.chat::-webkit-scrollbar,
+.file_index::-webkit-scrollbar{
     width: 10px;
 }
 
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 #fileList::-webkit-scrollbar-thumb,
-.chat::-webkit-scrollbar-thumb{
+.chat::-webkit-scrollbar-thumb,
+.file_index::-webkit-scrollbar-thumb{
     background: #6289FF; /* 스크롤바 색상 */
     border-radius: 10px; /* 스크롤바 둥근 테두리 */
 }
 
 #fileList::-webkit-scrollbar-track,
-.chat::-webkit-scrollbar-track{
+.chat::-webkit-scrollbar-track,
+.file_index::-webkit-scrollbar-track{
     background: #ddd;  /*스크롤바 뒷 배경 색상*/
 }
