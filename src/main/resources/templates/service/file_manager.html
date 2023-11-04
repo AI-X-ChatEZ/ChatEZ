@@ -45,7 +45,16 @@
                 <ul th:each="file : ${servicesFiles.value}">
                     <li><input type="checkbox"></li>
                     <li>
-                        <img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">
+                        <img th:switch="${file.contentType}"
+                             th:src="@{${'img/' +
+                             (file.contentType == 'txt' ? 'txt_icon' :
+                             file.contentType == 'pdf' ? 'pdf_icon' :
+                             file.contentType == 'doc' ? 'doc_icon' :
+                             file.contentType == 'docx' ? 'docx_icon' :
+                             file.contentType == 'xls' ? 'xls_icon' :
+                             file.contentType == 'xlsx' ? 'xlsx_icon' :
+                             file.contentType == 'csv' ? 'csv_icon' : 'default_icon') + '.png'}}"
+                             alt="file_icon" class="file_icon">
                         <span th:text="${file.name}"></span>
                     </li>
                     <li><span th:text="${file.size}"></span></li>

@@ -22,11 +22,9 @@
             <p class="download my-4"> 서비스 관련 텍스트 파일이 없으시다면<br>아래 파일을 다운로드하여 작성후 업로드해주세요.
                 <br>
                 <button class="custom_btn my-4" id="download">예제 다운로드</button></p>
-
-
         </div>
         <div class="panel_right">
-            <input type="file" id="fileInput" style="display: none;" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple >
+            <input type="file" id="fileInput" style="display: none;" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,.csv" multiple >
             <button id="fileUpload">
                 <img th:src="@{img/upload_icon.png}" alt="upload_icon" class="upload_icon">파일 선택
             </button>

@@ -180,7 +180,7 @@ public class MyServiceController {
 
     @ResponseBody
     @PostMapping("/upload")
-    public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
+    public String handleFileUpload(@RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                                    @RequestParam("aiName") String aiName,
                                    @RequestParam("aiId") String aiId,
                                    @RequestParam("files") MultipartFile[] files,
@@ -202,6 +202,7 @@ public class MyServiceController {
                 for (Path savedFile : savedFiles) {
                     Files.deleteIfExists(savedFile);
                 }
+                Thread.sleep(1000);
                 myServiceService.activateServiceById(aiId);  // 추가된 코드
             } catch (Exception e) {
                 e.printStackTrace();

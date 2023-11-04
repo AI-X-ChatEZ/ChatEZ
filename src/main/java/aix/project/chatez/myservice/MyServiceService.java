@@ -55,16 +55,18 @@ public class MyServiceService {
     }
 
     public MyService userFileUplaod(MultipartFile imageFile, String aiName, String serviceId, String email) throws IOException {
+        String newFileName = null;
 
-        String newFileName = s3FileUpload(imageFile);
+        // 이미지 파일이 제공되었는지 그리고 비어 있지 않은지를 확인
+        if (imageFile != null && !imageFile.isEmpty()) {
+            newFileName = s3FileUpload(imageFile); // S3에 업로드하고 새 파일명을 받아옴
+        } else {
+            // 이미지 파일이 제공되지 않은 경우를 처리
+            // 예를 들어, S3에 저장된 기본 이미지로 newFileName을 설정하거나 null로 둘 수 있음
+            newFileName = "chatbot_icon.png"; // 필요한 경우 실제 기본 파일명으로 교체
+        }
 
         Member member = memberRepository.findByEmail(email).get();
-
-//        MyService myService = new MyService();
-//        myService.setServiceName(aiName);
-//        log.info("aiName:{}",aiName);
-//        myService.setProfilePic(newFileName);
-//        myService.setMember(member);  //엔티티와 엔티티 간의 연결 설정
 
         String urlValue = aiName+System.currentTimeMillis();
         return myServiceRepository.save(MyService.builder()
@@ -76,6 +78,11 @@ public class MyServiceService {
                 .build());
     }
 
+//        MyService myService = new MyService();
+//        myService.setServiceName(aiName);
+//        log.info("aiName:{}",aiName);
+//        myService.setProfilePic(newFileName);
+//        myService.setMember(member);  //엔티티와 엔티티 간의 연결 설정
 
     public String handleFileUpdate(String updateName, MultipartFile updateFile, String selectNo) {
         Long no = Long.parseLong(selectNo);

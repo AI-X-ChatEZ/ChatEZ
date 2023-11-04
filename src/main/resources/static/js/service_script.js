@@ -293,6 +293,27 @@ function fetchFileListAndUpdate() {
         .catch(error => console.error('Error fetching file list:', error));
 }
 
+function getFileIconByContentType(contentType) {
+  switch (contentType) {
+    case 'txt':
+      return 'img/txt_icon.png';
+    case 'pdf':
+      return 'img/pdf_icon.png';
+    case 'doc':
+      return 'img/doc_icon.png';
+    case 'docx':
+      return 'img/docx_icon.png';
+    case 'xls':
+      return 'img/xls_icon.png';
+    case 'xlsx':
+      return 'img/xlsx_icon.png';
+    case 'csv':
+      return 'img/csv_icon.png';
+    default:
+      return 'img/default_icon.png';
+  }
+}
+
 
 function updateFileListForService(serviceId, fileList) {
     // 서비스 ID에 해당하는 div를 찾습니다.
@@ -304,10 +325,11 @@ function updateFileListForService(serviceId, fileList) {
 
         // 새 파일 목록을 추가합니다.
         fileList.forEach(file => {
+            const iconSrc = getFileIconByContentType(file.contentType);
             const ul = document.createElement('ul');
             ul.innerHTML = `
                 <li><input type="checkbox"></li>
-                <li><img src="img/txt-file.png" alt="txt-file" class="txt-file"><span>${file.name}</span></li>
+                <li><img src="${iconSrc}" alt="file_icon" class="file_icon"><span class="file-name">${file.name}</span></li>
                 <li><span>${file.size}</span></li>
                 <li><span>${file.contentType}</span></li>
                 <li><span>${new Date(file.uploadTime).toLocaleDateString('ko-KR')}</span></li>
@@ -561,6 +583,20 @@ document.addEventListener('DOMContentLoaded', function () {
     // DOM이 완전히 로드된 후에 이벤트 리스너를 등록합니다.
     var fileInputElement = document.getElementById('fileInput');
 
+    function getFileIcon(ext) {
+        // 확장자에 따른 아이콘 경로를 정의합니다.
+        var icons = {
+            'txt': '/img/txt_icon.png',
+            'pdf': '/img/pdf_icon.png',
+            'doc': '/img/doc_icon.png',
+            'docx': '/img/docx_icon.png',
+            'xls': '/img/xls_icon.png',
+            'xlsx': '/img/xlsx_icon.png',
+            'csv': '/img/csv_icon.png'
+        };
+        return icons[ext.toLowerCase()] || '/img/default_icon.png'; // 일치하는 확장자가 없으면 기본 아이콘 사용
+    }
+
     if (fileInputElement) {
         fileInputElement.addEventListener('change', function () {
             var fileListElement = document.getElementById('fileList');
@@ -576,10 +612,13 @@ document.addEventListener('DOMContentLoaded', function () {
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 selectedFiles.push(file); // 파일을 selectedFiles 배열에 추가
+                var fileExt = file.name.split('.').pop();
+                var iconPath = getFileIcon(fileExt);
 
                 var listItem = document.createElement('li');
                 listItem.setAttribute('data-fileindex', selectedFiles.length - 1); // 파일 인덱스 저장
-                listItem.innerHTML = '<img src="/img/txt-file.png" alt="txt-file" class="txt-file">' + file.name +
+                listItem.innerHTML = '<img src="' + iconPath + '" alt="' + fileExt + '_icon" class="file-icon">' +
+                '<span class="filename">' + file.name + '</span>' +
                 '<span><img src="/img/close_icon.png" alt="close-icon" class="close-icon" onclick="removeFile(this)"></span>';
                 fileListElement.appendChild(listItem);
             }
@@ -688,10 +727,11 @@ function awsUpdateFileListForService(serviceId, fileList) {
     // 파일 목록을 지우고 새 목록으로 업데이트합니다.
     serviceFilesContainer.innerHTML = '';
     fileList.forEach(file => {
+        const iconSrc = getFileIconByContentType(file.contentType);
         const ul = document.createElement('ul');
         ul.innerHTML = `
             <li><input type="checkbox"></li>
-            <li><img src="img/txt-file.png" alt="txt-file" class="txt-file"><span>${file.name}</span></li>
+            <li><img src="${iconSrc}" alt="file_icon" class="file_icon"><span class="file-name">${file.name}</span></li>
             <li><span>${file.size}</span></li>
             <li><span>${file.contentType}</span></li>
             <li><span>${new Date(file.uploadTime).toLocaleDateString('ko-KR')}</span></li>
@@ -712,8 +752,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         var validFilesCount = selectedFiles.filter(file => file !== null).length;
 
-        if (aiNameValue === "" || imageInput.length === 0 || validFilesCount === 0) {
-            alert("AI 이름, 프로필 이미지와 파일을 모두 선택해주세요.");
+        if (aiNameValue === "" || validFilesCount === 0) {
+            alert("AI 이름과 파일을 모두 선택해주세요.");
             return;
         }
 
@@ -725,7 +765,12 @@ document.addEventListener("DOMContentLoaded", function() {
             var formData = new FormData();
             formData.append("aiName", aiNameValue);
             formData.append("aiId", aiIdValue);
-            formData.append("imageFile", imageInput.files[0]);
+
+            // 이미지 파일이 선택되지 않았다면 기본 이미지를 추가
+            if (imageInput.files.length > 0) {
+                formData.append("imageFile", imageInput.files[0]);
+            }
+
             var validFiles = selectedFiles.filter(file => file !== null);
 
             for (var i = 0; i < validFiles.length; i++) {
