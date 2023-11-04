@@ -6,6 +6,7 @@
             <li th:each="myServices : ${myServices}">
                 <button class="chatez_get_file"
                         th:data-service-name="${myServices.serviceName}"
+                        th:data-service-id="${myServices.serviceId}"
                         onclick="showFilesForService(this)">
                     <img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon">
                     <span><span th:text="${myServices.serviceName}"></span></span>
@@ -41,7 +42,7 @@
                  style="display: none;">
                 <h2 th:text="${servicesFiles.key}" style="display: none;">Service Name</h2>
                 <ul th:each="file : ${servicesFiles.value}">
-                    <li><input type="checkbox"></li>
+                    <li><input type="checkbox" th:data-file-id="${file.id}"></li>
                     <li>
                         <img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">
                         <span th:text="${file.name}"></span>

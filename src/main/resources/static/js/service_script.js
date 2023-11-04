@@ -34,46 +34,52 @@ function generateUuid(){
     const newUUID = uuid.v4().replace(/-/g, '');
     document.getElementById("aiId").value = newUUID;
 }
+const showPanelElement = document.getElementById("showPanel");
+if (showPanelElement) {
+        showPanelElement.addEventListener("click", function() {
+        closeAllPanels();
+        var newScreen = document.getElementById("newScreen");
+        newScreen.classList.remove('hide');
+        newScreen.classList.add('active');
+        generateUuid();
+    });
+}
+const createClose = document.getElementById("createClose");
+if(createClose) {
+    createClose.addEventListener("click", function () {
+        var newScreen = document.getElementById("newScreen");
+        newScreen.classList.remove('active');
 
-document.getElementById("showPanel").addEventListener("click", function() {
-    closeAllPanels();
-    var newScreen = document.getElementById("newScreen");
-    newScreen.classList.remove('hide');
-    newScreen.classList.add('active');
-    generateUuid();
-});
+        var aiName = document.getElementById("aiName");
+        aiName.value = '';
 
-document.getElementById("createClose").addEventListener("click", function() {
-    var newScreen = document.getElementById("newScreen");
-    newScreen.classList.remove('active');
+        var imageInput = document.getElementById("imageInput");
+        imageInput.value = '';
 
-    var aiName = document.getElementById("aiName");
-    aiName.value = '';
+        var uploadProfile = document.getElementById("uploadProfile");
+        uploadProfile.src = 'img/profile_icon.png';
 
-    var imageInput = document.getElementById("imageInput");
-    imageInput.value = '';
+        var fileInput = document.getElementById("fileInput");
+        fileInput.value = '';
 
-    var uploadProfile = document.getElementById("uploadProfile");
-    uploadProfile.src = 'img/profile_icon.png';
+        var fileList = document.getElementById("fileList");
+        while (fileList.firstChild) {
+            fileList.removeChild(fileList.firstChild);
+        }
+    });
+}
 
-    var fileInput = document.getElementById("fileInput");
-    fileInput.value = '';
-
-    var fileList = document.getElementById("fileList");
-    while (fileList.firstChild) {
-        fileList.removeChild(fileList.firstChild);
-    }
-});
-
-document.getElementById("fileUpload").addEventListener("click", function() {
-    var fileInputElement = document.getElementById("fileInput");
-    if (fileInputElement) {
-        fileInputElement.click();
-    } else {
-        console.error('Element with ID "fileInput" not found.');
-    }
-});
-
+const fileUpload = document.getElementById("fileUpload");
+if(fileUpload) {
+    fileUpload.addEventListener("click", function () {
+        var fileInputElement = document.getElementById("fileInput");
+        if (fileInputElement) {
+            fileInputElement.click();
+        } else {
+            console.error('Element with ID "fileInput" not found.');
+        }
+    });
+}
 var fileSelectElement = document.getElementById("file_select");
 
 if (fileSelectElement) {
@@ -86,27 +92,62 @@ if (fileSelectElement) {
         }
     });
 }
+function showFilesForService(button) {
+    var serviceName = button.getAttribute('data-service-name');
+    var serviceId = button.getAttribute('data-service-id');
+    console.log(serviceName);
+    console.log(serviceId);
 
-document.getElementById("uploadProfile").addEventListener("click", function() {
-    document.getElementById("imageInput").click();
-});
-
-document.getElementById("imageInput").addEventListener("change", function() {
-    console.log(this.files);
-});
-
-document.getElementById('imageInput').addEventListener('change', function(e) {
-    if (e.target.files && e.target.files[0]) {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            document.getElementById('uploadProfile').src = e.target.result;
+    var serviceElements = document.querySelectorAll('#file_index');
+    serviceElements.forEach(function(element) {
+        if (element.getAttribute('data-service-name') === serviceName) {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
         }
+    });
 
-        reader.readAsDataURL(e.target.files[0]);
-    }
-});
+    var buttons = document.querySelectorAll('.chatez_get_file');
+    buttons.forEach(function(btn) {
+        btn.classList.remove('clicked');
+    });
 
+    button.classList.add('clicked');
+
+    var fileSelectButton = document.getElementById('file_select');
+    fileSelectButton.setAttribute('data-service-id', serviceId);
+    fileSelectButton.setAttribute('data-service-name', serviceName);
+    fileSelectButton.removeAttribute('disabled');
+
+    document.getElementById('file_delete_button').removeAttribute('disabled');
+}
+
+
+const uploadProfile = document.getElementById("uploadProfile");
+if(uploadProfile) {
+    uploadProfile.addEventListener("click", function () {
+        document.getElementById("imageInput").click();
+    });
+}
+
+const imageInput = document.getElementById("imageInput");
+if(imageInput){
+    imageInput.addEventListener("change", function() {
+        console.log(this.files);
+    });
+
+    imageInput.addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                document.getElementById('uploadProfile').src = e.target.result;
+            }
+
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+}
 document.addEventListener('DOMContentLoaded', function() {
     // 'profile_icon' 클래스를 가진 모든 요소 선택
     var profileIcons = document.querySelectorAll('.update_profile_icon');
@@ -470,28 +511,29 @@ document.addEventListener("DOMContentLoaded", function() {
     }});
 
 const downloadButton = document.getElementById('download');
-downloadButton.addEventListener('click', async () => {
-    try {
-        const response = await fetch('/example_download');
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+if(downloadButton) {
+    downloadButton.addEventListener('click', async () => {
+        try {
+            const response = await fetch('/example_download');
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const blob = await response.blob();  // 파일 데이터를 Blob 형태로 받아옵니다.
+            const url = window.URL.createObjectURL(blob);  // Blob 데이터로부터 URL을 생성합니다.
+            const a = document.createElement('a');  // 새로운 <a> 태그를 생성합니다.
+            a.style.display = 'none';  // <a> 태그를 화면에 표시하지 않습니다.
+            a.href = url;  // <a> 태그의 href 속성에 Blob URL을 설정합니다.
+            a.download = 'example.zip';  // 다운로드되는 파일의 이름을 지정합니다.
+            document.body.appendChild(a);  // <a> 태그를 DOM에 추가합니다.
+            a.click();  // <a> 태그를 클릭하여 파일 다운로드를 수행합니다.
+            window.URL.revokeObjectURL(url);  // Blob URL을 해제하여 메모리를 절약합니다.
+        } catch (error) {
+            console.error('Error during file download:', error);
         }
 
-        const blob = await response.blob();  // 파일 데이터를 Blob 형태로 받아옵니다.
-        const url = window.URL.createObjectURL(blob);  // Blob 데이터로부터 URL을 생성합니다.
-        const a = document.createElement('a');  // 새로운 <a> 태그를 생성합니다.
-        a.style.display = 'none';  // <a> 태그를 화면에 표시하지 않습니다.
-        a.href = url;  // <a> 태그의 href 속성에 Blob URL을 설정합니다.
-        a.download = 'example.zip';  // 다운로드되는 파일의 이름을 지정합니다.
-        document.body.appendChild(a);  // <a> 태그를 DOM에 추가합니다.
-        a.click();  // <a> 태그를 클릭하여 파일 다운로드를 수행합니다.
-        window.URL.revokeObjectURL(url);  // Blob URL을 해제하여 메모리를 절약합니다.
-    } catch (error) {
-        console.error('Error during file download:', error);
-    }
-
-})
-
+    });
+}
 document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('updateAi')) {
@@ -604,3 +646,57 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+//파일 삭제
+const fileDeleteButtonElement = document.getElementById("file_delete_button");
+
+if (fileDeleteButtonElement) {
+    fileDeleteButtonElement.addEventListener("click", async function() {
+        
+        if (!window.confirm("정말로 삭제하시겠습니까?")) {
+            return;
+        }
+
+        let selectedFiles = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(input => input.getAttribute('data-file-id'));
+
+        if (selectedFiles.length > 0) {
+            try {
+
+                let serviceId = document.querySelector('.chatez_get_file').getAttribute('data-service-id');
+                const fastApiUrl = "http://localhost:8000/delete_files";
+                console.log(selectedFiles);
+                console.log(serviceId);
+                const requestBody = {
+                    file_ids: selectedFiles,
+                    index: serviceId
+                };
+                console.log("Request Body:", requestBody);
+                const response = await fetch(fastApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        file_ids: selectedFiles,
+                        index: serviceId
+                    })
+                });
+
+                if (response.ok) {
+                    // 서버 응답이 성공적이면 UI에서 해당 항목 제거!
+                    selectedFiles.forEach(fileId => {
+                        let checkboxElement = document.querySelector(`input[data-file-id="${fileId}"]`);
+                        if (checkboxElement) {
+                            let parentUl = checkboxElement.closest('ul');
+                            parentUl.remove();
+                        }
+                    });
+                } else {
+                    console.error("Error deleting files:", await response.text());
+                }
+            } catch (err) {
+                console.error("API call failed:", err);
+            }
+        }
+    });
+}

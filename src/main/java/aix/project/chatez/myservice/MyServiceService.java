@@ -252,6 +252,11 @@ public class MyServiceService {
 
                 for (SearchHit hit : searchResponse.getHits().getHits()) {
                     Map<String, Object> source = hit.getSourceAsMap();
+                    String fileId = hit.getId();
+//                    int startIndex = fileId.indexOf("'id': '") + 7;
+//                    int endIndex = fileId.indexOf("', 'id_index'");
+//                    String actualId = fileId.substring(startIndex, endIndex);
+                    source.put("id", fileId);
                     files.add(source);  // 각 hit의 정보를 리스트에 추가합니다.
                     System.out.println(source);
                 }
