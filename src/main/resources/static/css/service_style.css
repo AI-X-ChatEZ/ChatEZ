@@ -238,6 +238,10 @@
     border-bottom: 2px solid #ddd;
 }
 
+.file_manager span{
+    margin: 25px 0 0 25px
+}
+
 .file_manager h3 img {
     margin-right: 20px;
     vertical-align: middle;
@@ -267,7 +271,7 @@
 #file_delete{
     height: 80px;
     position: absolute;
-    bottom: 5%;
+    bottom:10%;
     right: 0;
 }
 
@@ -314,18 +318,20 @@
     width: 44px;
     height: 44px;
 }
-div#file_index{
+.file_index {
     height: 65vh;
-    overflow: auto;
+    overflow-y: auto;
     font-size: 18px;
 }
 
-#file_index ul{
+.file_index ul{
     height: 70px;
     border-radius: 20px;
     background-color: #ddd;
     margin-bottom:10px;
+    margin-right:10px;
 }
+
 
 #file_title ul li{
     vertical-align: middle;
@@ -342,22 +348,22 @@ div#file_index{
     width: 15%;
 }
 
-#file_index ul li{
+.file_index ul li{
     vertical-align: middle;
     padding-top: 15px;
     display: inline-block;
 }
 
-#file_index ul li img{
+.file_index ul li img{
     vertical-align: middle;
 }
 
-#file_index ul li:nth-child(2){
+.file_index ul li:nth-child(2){
     margin-left: 20px;
     width: 43%;
 }
 
-#file_index ul li:nth-child(n+3):nth-child(-n+5){
+.file_index ul li:nth-child(n+3):nth-child(-n+5){
     text-align: center;
     width: 15%;
 }
