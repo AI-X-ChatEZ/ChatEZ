@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorate="~{service/service_layout}">
+<html layout:decorate="~{service/service_layout}">
 <div layout:fragment="content" class="service_content">
     <div class="service">
         <h3><img th:src="@{img/service_logo_on.png}" alt="service_logo" class="category_logo">
@@ -15,7 +15,7 @@
             <p id="imageContainer">
                 <img th:src="@{img/profile_icon.png}" alt="profile_icon" class="profile_icon" id="uploadProfile">
             </p>
-            <input type="file" id="imageInput" style="display: none;" accept="image/*" required>
+            <input type="file" id="imageInput" style="display: none;" accept="image/*">
             <p><label for="aiName" class="blind">대화형 AI 이름</label>
                 <input type="text" id="aiName" placeholder="대화형 AI 이름 입력" maxlength="24"></p>
             <label for="aiId" class="blind">대화형 AI ID</label>
@@ -23,10 +23,9 @@
             <p class="download my-4"> 서비스 관련 텍스트 파일이 없으시다면<br>아래 파일을 다운로드하여 작성후 업로드해주세요.
                 <br>
                 <button class="custom_btn my-4" id="download">예제 다운로드</button></p>
-
         </div>
         <div class="panel_right">
-            <input type="file" id="fileInput" style="display: none;" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple required>
+            <input type="file" id="fileInput" style="display: none;" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,.csv" multiple >
             <button id="fileUpload">
                 <img th:src="@{img/upload_icon.png}" alt="upload_icon" class="upload_icon">파일 선택
             </button>
@@ -40,60 +39,60 @@
     <div class="chatEZ_list">
         <table id="myServicesTable">
             <thead>
-                <tr>
-                    <th></th>
-                    <th>이름</th>
-                    <th>URL</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th></th>
+                <th>이름</th>
+                <th>URL</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
             <tr th:each="myServices : ${myServices}"
                 th:class="${myServices.serviceActive} ? '' : 'disabled'"
                 th:data-ai-id="${myServices.serviceId}">
-                    <td><img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"></td>
-                    <td><span th:text="${myServices.serviceName}"></span></td>
-                    <td><a th:href="@{|/${myServices.serviceId}|}" th:text="|http://chatez.com/${myServices.serviceId}|"></a></td>
-                    <td><button type="button" class="btn btn-light startChat" th:attr="data-service-name=${myServices.serviceName}">실행</button></td>
+                <td><img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"></td>
+                <td><span th:text="${myServices.serviceName}"></span></td>
+                <td><a th:href="@{|/${myServices.serviceId}|}" th:text="|http://chatez.com/${myServices.serviceId}|"></a></td>
+                <td><button type="button" class="btn btn-light startChat" th:attr="data-service-name=${myServices.serviceName}">실행</button></td>
 
-                    <div th:id="'chatScreen-'+${myServices.serviceName}" class="hide panel chatScreen">
-                        <h4>
-                            <span><img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"><span th:text="${myServices.serviceName}"></span></span>
-                            <span class="chat_button"><button class="chatReset"><img th:src="@{img/reset_icon.png}" alt="reset_icon" class="reset_icon"></button>
+                <div th:id="'chatScreen-'+${myServices.serviceName}" class="hide panel chatScreen">
+                    <h4>
+                        <span><img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"><span th:text="${myServices.serviceName}"></span></span>
+                        <span class="chat_button"><button class="chatReset"><img th:src="@{img/reset_icon.png}" alt="reset_icon" class="reset_icon"></button>
                             <button class="chatClose"><img th:src="@{img/close_icon.png}" alt="close_icon"></button></span></h4>
-                        <div class="chat">
-                            <ul id="chatContent">
-                                <!-- 대화내용 -->
-                            </ul>
-                        </div>
-                        <p><textarea id="question" placeholder="이곳에 메세지를 입력하세요." maxlength="100" rows="1"></textarea>
-                            <button id="sendMessage"><img th:src="@{img/up_arrow_icon.png}" alt="up_arrow_icon" class="up_arrow_icon"></button></p>
+                    <div class="chat">
+                        <ul id="chatContent">
+                            <!-- 대화내용 -->
+                        </ul>
                     </div>
+                    <p><textarea id="question" placeholder="이곳에 메세지를 입력하세요." maxlength="100" rows="1"></textarea>
+                        <button id="sendMessage"><img th:src="@{img/up_arrow_icon.png}" alt="up_arrow_icon" class="up_arrow_icon"></button></p>
+                </div>
 
-                    <td><button type="button" class="btn btn-light updatePanel"
-                                th:attr="data-service-name=${myServices.serviceName}">수정</button></td>
+                <td><button type="button" class="btn btn-light updatePanel"
+                            th:attr="data-service-name=${myServices.serviceName}">수정</button></td>
 
-                    <div th:id="'updateScreen-'+${myServices.serviceName}" class="hide panel updateScreen">
-                        <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>수정하기</span></h4>
-                        <p id="imageContainer">
-                            <img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="profile_icon" class="update_profile_icon"
-                                 th:id="'updateProfile-' + ${myServices.serviceName}"></p>
-                        <input type="file" th:id="'imageUpdate-' + ${myServices.serviceName}"
-                               style="display: none;" accept="image/*" class="imageUpdate">
-                        <p><input type="text" th:id="'updateName-' + ${myServices.serviceName}" class="updateName"
-                                   th:value="${myServices.serviceName}" placeholder="대화형 AI 이름 입력" maxlength="24"></p>
-                        <p id="updateButton">
-                            <span id="serviceNo" th:id="'serviceNo-' + ${myServices.serviceName}" th:text="${myServices.serviceNo}" style="display:none;"></span>
-                            <span class="serviceName" id="serviceName" th:text="${myServices.serviceName}" style="display:none;"></span>
-                            <button th:id="'updateAi-' + ${myServices.serviceName}" class="updateAi custom_btn">확인</button>
-                            <button class="updateClose custom_btn">취소</button></p>
-                    </div>
+                <div th:id="'updateScreen-'+${myServices.serviceName}" class="hide panel updateScreen">
+                    <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>수정하기</span></h4>
+                    <p id="imageContainer">
+                        <img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="profile_icon" class="update_profile_icon"
+                             th:id="'updateProfile-' + ${myServices.serviceName}"></p>
+                    <input type="file" th:id="'imageUpdate-' + ${myServices.serviceName}"
+                           style="display: none;" accept="image/*" class="imageUpdate">
+                    <p><input type="text" th:id="'updateName-' + ${myServices.serviceName}" class="updateName"
+                              th:value="${myServices.serviceName}" placeholder="대화형 AI 이름 입력" maxlength="24"></p>
+                    <p id="updateButton">
+                        <span id="serviceNo" th:id="'serviceNo-' + ${myServices.serviceName}" th:text="${myServices.serviceNo}" style="display:none;"></span>
+                        <span class="serviceName" id="serviceName" th:text="${myServices.serviceName}" style="display:none;"></span>
+                        <button th:id="'updateAi-' + ${myServices.serviceName}" class="updateAi custom_btn">확인</button>
+                        <button class="updateClose custom_btn">취소</button></p>
+                </div>
 
-                    <td><button type="button" th:attr="data-service-no=${myServices.serviceNo}"
-                                class="btn btn-light deleteChat" id="deleteAi" >삭제</button></td>
-                </tr>
+                <td><button type="button" th:attr="data-service-no=${myServices.serviceNo}"
+                            class="btn btn-light deleteChat" id="deleteAi" >삭제</button></td>
+            </tr>
             </tbody>
         </table>
     </div>

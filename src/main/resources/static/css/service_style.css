@@ -418,8 +418,19 @@ div#file_index{
 }
 
 
-.txt-file{
+.file_icon{
+    width:44px;
+    height:44px;
     margin-right: 10px;;
+}
+
+.filename {
+    display: inline-block;
+    max-width: 200px; /* 최대 너비 설정 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
 }
 
 .panel_right ul li {

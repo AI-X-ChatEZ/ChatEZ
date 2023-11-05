@@ -6,6 +6,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.opensearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.opensearch.client.indices.GetIndexRequest;
+import org.opensearch.action.support.master.AcknowledgedResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -52,17 +56,24 @@ public class MyServiceService {
 
     public MyService userFileUplaod(MultipartFile imageFile, String aiName, String serviceId, String email) throws IOException {
 
-        String newFileName = s3FileUpload(imageFile);
+        String newFileName = null;
+
+        // 이미지 파일이 제공되었는지 그리고 비어 있지 않은지를 확인
+        if (imageFile != null && !imageFile.isEmpty()) {
+            newFileName = s3FileUpload(imageFile); // S3에 업로드하고 새 파일명을 받아옴
+        } else {
+            // 이미지 파일이 제공되지 않은 경우를 처리
+            // 예를 들어, S3에 저장된 기본 이미지로 newFileName을 설정하거나 null로 둘 수 있음
+            newFileName = "chatbot_icon.png"; // 필요한 경우 실제 기본 파일명으로 교체
+        }
 
         Member member = memberRepository.findByEmail(email).get();
         //엔티티와 엔티티 간의 연결 설정
 
-//        String urlValue = aiName+System.currentTimeMillis();
         return myServiceRepository.save(MyService.builder()
                 .serviceName(aiName)
                 .serviceId(serviceId)
                 .profilePic(newFileName)
-//                .url(UUID.nameUUIDFromBytes(urlValue.getBytes()).toString().replace("-",""))
                 .member(member)
                 .build());
     }
@@ -120,6 +131,23 @@ public class MyServiceService {
                     String imagePath = String.format("%s/%s",bucket, uploadPath);
                     amazonS3.deleteObject(imagePath, myService.getProfilePic());
                 }
+                //Opensearch 파일 삭제
+                RestHighLevelClient client = OpenSearchClient.createClient();
+                String serviceId = myService.getServiceId();
+                GetIndexRequest getIndexRequest = new GetIndexRequest(serviceId);
+                boolean indexExists = client.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
+
+                if (indexExists) {
+                    DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(serviceId);
+                    AcknowledgedResponse deleteIndexResponse = client.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
+
+                    // 삭제 성공 여부 확인
+                    if (!deleteIndexResponse.isAcknowledged()) {
+                        // 인덱스 삭제 실패에 대한 처리
+                        return String.format("%s 삭제에 실패하였습니다. 다시 시도해주세요",myService.getServiceName());
+
+                    }
+                }
 
                 myServiceRepository.deleteById(no);
 
@@ -143,6 +171,20 @@ public class MyServiceService {
         } else {
             System.out.println("Service with ID: " + serviceId + " not found.");
         }
+    }
+
+    private final Map<String, Boolean> uploadStatusMap = new ConcurrentHashMap<>();
+
+    public void startUpload(String serviceId) {
+        uploadStatusMap.put(serviceId, false);
+    }
+
+    public void completeUpload(String serviceId) {
+        uploadStatusMap.put(serviceId, true);
+    }
+
+    public boolean isUploadCompleted(String serviceId) {
+        return uploadStatusMap.getOrDefault(serviceId, false);
     }
 
     //s3파일 업로드
@@ -215,7 +257,6 @@ public class MyServiceService {
         for (MyService myService : myServices) {
             List<Map<String, Object>> files = new ArrayList<>();
             Set<String> existDocumentIds = new HashSet<>();
-//            Set<String> existNames = new HashSet<>();
             log.info("name : {} ", myService.getServiceName());
             try {
                 SearchRequest searchRequest = new SearchRequest(myService.getServiceId()); // 서비스 이름을 인덱스로 사용
@@ -233,12 +274,10 @@ public class MyServiceService {
                 for (SearchHit hit : searchResponse.getHits().getHits()) {
                     Map<String, Object> source = hit.getSourceAsMap();
                     String documentId = (String) source.get("documentId");
-//                    String name = (String) source.get("name");
                     log.info("document id1:{}", documentId);
                     if (!existDocumentIds.contains(documentId)) {
                         existDocumentIds.add(documentId);
                         log.info("document id2:{}", documentId);
-//                        existNames.add(name);
                         files.add(source);
                     }// 각 hit의 정보를 리스트에 추가합니다.
                     log.info("source:{}",source);

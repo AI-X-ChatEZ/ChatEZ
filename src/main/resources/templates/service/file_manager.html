@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" layout:decorate="~{service/service_layout}">
+<html layout:decorate="~{service/service_layout}">
 <div layout:fragment="content" class="file_manager_content">
     <div class="chat_list">
         <h2><img th:src="@{img/list_icon.png}" alt="list_icon" class="list_icon">생성 목록</h2>
@@ -8,6 +8,7 @@
                 <button class="chatez_get_file"
                         th:data-service-name="${myServices.serviceName}"
                         th:data-service-id="${myServices.serviceId}"
+                        th:disabled="${!myServices.serviceActive}"
                         onclick="showFilesForService(this)">
                     <img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon">
                     <span><span th:text="${myServices.serviceName}"></span></span>
@@ -21,7 +22,7 @@
                 <img th:src="@{img/manager_logo_on.png}" alt="manager_logo" class="manager_logo">파일 관리
             </span>
             <div>
-                <input type="file" id="fileInput" style="display: none;" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" multiple >
+                <input type="file" id="fileInput" style="display: none;" accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,.csv" multiple >
                 <button id="file_select" disabled>
                     <img th:src="@{img/upload_icon.png}" alt="upload_icon" class="upload_icon">파일 선택
                 </button>
@@ -30,25 +31,31 @@
         <div class="file_list">
             <div id="file_title">
                 <ul>
-                    <li><label>
-                        <input type="checkbox" id="checkAll">
-                    </label></li>
+                    <li><label for="checkAll"></label><input type="checkbox" id="checkAll"></li>
                     <li>이름</li>
                     <li>크기</li>
                     <li>형식</li>
                     <li>업로드일</li>
                 </ul>
             </div>
-            <div id="file_index"
+            <div class="file_index"
                  th:each="servicesFiles : ${servicesFiles}"
                  th:data-service-name="${servicesFiles.key}"
                  style="display: none;">
                 <h2 th:text="${servicesFiles.key}" style="display: none;">Service Name</h2>
                 <ul th:each="file : ${servicesFiles.value}">
+                    <li> <input type="checkbox" class="file_checkbox" th:data-file-id="${file.documentId}"></li>
                     <li>
-                        <input type="checkbox" class="file_checkbox" th:data-file-id="${file.documentId}"></li>
-                    <li>
-                        <img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">
+                        <img th:switch="${file.contentType}"
+                             th:src="@{${'img/' +
+                             (file.contentType == 'txt' ? 'txt_icon' :
+                             file.contentType == 'pdf' ? 'pdf_icon' :
+                             file.contentType == 'doc' ? 'doc_icon' :
+                             file.contentType == 'docx' ? 'docx_icon' :
+                             file.contentType == 'xls' ? 'xls_icon' :
+                             file.contentType == 'xlsx' ? 'xlsx_icon' :
+                             file.contentType == 'csv' ? 'csv_icon' : 'default_icon') + '.png'}}"
+                             alt="file_icon" class="file_icon">
                         <span th:text="${file.name}"></span>
                     </li>
                     <li><span th:text="${file.totalSize}"></span></li>

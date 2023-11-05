@@ -20,8 +20,6 @@ public class MyService {
     @Column(name = "service_name", nullable = false)
     private String serviceName;
 
-//    @Column(name = "url", unique = true)
-//    private String url;
 
     @Column(name = "profile_pic", nullable = false)
     private String profilePic;

@@ -15,6 +15,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Slf4j
 @Controller
@@ -81,6 +83,97 @@ public class MyServiceController {
         file.transferTo(targetPath.toFile());
 
         return targetPath;
+    }
+
+    @PostMapping("/fileUpdate")
+    public ResponseEntity<?> handleMultipleFileUpload(
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam("serviceId") String serviceId, Principal principal) throws IOException {
+        String email = extractEmail(principal);
+        myServiceService.startUpload(serviceId);
+        List<Path> savedFiles = new ArrayList<>();
+        for (MultipartFile file : files) {
+            Path savedFile = saveTempFile(file);
+            savedFiles.add(savedFile);
+        }
+        // 비동기 작업을 위한 Future 생성
+        Future<?> future = executorService.submit(() -> {
+            try {
+                // 파일을 FastAPI 서버에 업데이트하는 로직
+                updateToFastApi(serviceId, savedFiles);
+                // 임시 파일 삭제
+                for (Path savedFile : savedFiles) {
+                    Files.deleteIfExists(savedFile);
+                }
+                myServiceService.completeUpload(serviceId);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Error processing files", e);
+            }
+        });
+
+        try {
+            // Future 작업의 완료를 기다립니다.
+            future.get(); // 필요하다면 타임아웃을 설정할 수 있습니다.
+            Thread.sleep(1000);
+            // 비동기 작업이 완료된 후에 파일 데이터를 가져옵니다.
+            Map<String, List<Map<String, Object>>> servicesFilesMap = myServiceService.awsFileData(email);
+            // 업데이트된 파일 리스트를 JSON 형태로 클라이언트에 반환합니다.
+            return ResponseEntity.ok(servicesFilesMap);
+        } catch (Exception e) {
+            // 작업 중 오류가 발생한 경우
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error during file processing"));
+        }
+    }
+
+    @GetMapping("/uploadStatus")
+    public ResponseEntity<?> getUploadStatus(@RequestParam String serviceId) {
+        boolean isCompleted = myServiceService.isUploadCompleted(serviceId);
+        if(isCompleted) {
+            return ResponseEntity.ok(Map.of("serviceId", serviceId, "status", "completed"));
+        } else {
+            return ResponseEntity.ok(Map.of("serviceId", serviceId, "status", "inProgress"));
+        }
+    }
+
+    @GetMapping("/getFileList")
+    public ResponseEntity<?> getFileList(Principal principal) {
+        String email = extractEmail(principal);
+        Map<String, List<Map<String, Object>>> servicesFilesMap = myServiceService.awsFileData(email);
+        return ResponseEntity.ok(servicesFilesMap);
+    }
+
+    private void updateToFastApi(String serviceId, List<Path> files) {
+        // FastAPI 엔드포인트 URL 설정
+        String fastApiEndpoint = "http://localhost:8000/update_files";
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            // POST 요청 생성
+            HttpPost postRequest = new HttpPost(fastApiEndpoint);
+
+            // multipart 엔티티 구성
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            for (Path file : files) {
+                builder.addBinaryBody("files", Files.newInputStream(file), ContentType.DEFAULT_BINARY, file.getFileName().toString());
+            }
+            builder.addTextBody("index", serviceId, ContentType.TEXT_PLAIN);
+
+            // 요청에 엔티티 추가
+            HttpEntity entity = builder.build();
+            postRequest.setEntity(entity);
+
+            // 요청 실행
+            HttpResponse response = httpClient.execute(postRequest);
+            // 성공 여부 확인
+            if (response.getStatusLine().getStatusCode() != 200) {
+                // 에러 처리
+                String responseBody = EntityUtils.toString(response.getEntity());
+                throw new RuntimeException("실패: HTTP 에러 코드: " + response.getStatusLine().getStatusCode() + " : " + responseBody);
+            }
+        } catch (IOException e) {
+            // 예외 처리
+            e.printStackTrace();
+        }
     }
 
     @ResponseBody
