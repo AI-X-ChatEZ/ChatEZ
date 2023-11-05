@@ -48,7 +48,5 @@ public class MyService {
     public void updateProfilePic(String newFileName){
         this.profilePic = newFileName;
     }
-
-
 }
 

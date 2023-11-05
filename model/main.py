@@ -291,7 +291,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
 
         current_time = datetime.now()
         formatted_time = current_time.strftime("%H:%M:%S.%f")[:-3]
-        upload_time = current_time.strftime("%Y-%m-%d")
+        upload_time = current_time.strftime("%y-%m-%d")
 
         for i in range(len(contents)):
             content = contents["data"][i]
