@@ -6,11 +6,16 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.opensearch.client.indices.GetIndexRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.opensearch.action.search.SearchRequest;
@@ -26,18 +31,22 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MyServiceService {
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     private final MyServiceRepository myServiceRepository;
     private final MemberRepository memberRepository;
     private final AmazonS3 amazonS3;
-    @Value("${cloud.aws.s3.bucket}")
+    @Value("${cloud.aws.s3-bucket}")
     private String bucket;
-    @Value("${cloud.aws.s3.upload-path}")
+    @Value("${cloud.aws.s3-upload-path}")
     private String uploadPath;
 
 
@@ -45,18 +54,19 @@ public class MyServiceService {
         return myServiceRepository.findByMember_MemberNo(memberNo);
     }
 
-
     public MyService userFileUplaod(MultipartFile imageFile, String aiName, String serviceId, String email) throws IOException {
+        String newFileName = null;
 
-        String newFileName = s3FileUpload(imageFile);
+        // 이미지 파일이 제공되었는지 그리고 비어 있지 않은지를 확인
+        if (imageFile != null && !imageFile.isEmpty()) {
+            newFileName = s3FileUpload(imageFile); // S3에 업로드하고 새 파일명을 받아옴
+        } else {
+            // 이미지 파일이 제공되지 않은 경우를 처리
+            // 예를 들어, S3에 저장된 기본 이미지로 newFileName을 설정하거나 null로 둘 수 있음
+            newFileName = "chatbot_icon.png"; // 필요한 경우 실제 기본 파일명으로 교체
+        }
 
         Member member = memberRepository.findByEmail(email).get();
-
-//        MyService myService = new MyService();
-//        myService.setServiceName(aiName);
-//        log.info("aiName:{}",aiName);
-//        myService.setProfilePic(newFileName);
-//        myService.setMember(member);  //엔티티와 엔티티 간의 연결 설정
 
         String urlValue = aiName+System.currentTimeMillis();
         return myServiceRepository.save(MyService.builder()
@@ -68,6 +78,11 @@ public class MyServiceService {
                 .build());
     }
 
+//        MyService myService = new MyService();
+//        myService.setServiceName(aiName);
+//        log.info("aiName:{}",aiName);
+//        myService.setProfilePic(newFileName);
+//        myService.setMember(member);  //엔티티와 엔티티 간의 연결 설정
 
     public String handleFileUpdate(String updateName, MultipartFile updateFile, String selectNo) {
         Long no = Long.parseLong(selectNo);
@@ -134,9 +149,36 @@ public class MyServiceService {
         }
     }
 
-    //s3파일 업로드
-     private String s3FileUpload(MultipartFile file) throws IOException {
+    @Transactional
+    public void activateServiceById(String aiId) {
+        MyService myService = myServiceRepository.findByServiceId(aiId);
 
+        if (myService != null) {
+            myService.setServiceActive(true);
+            System.out.println("aiId : " + aiId);
+            messagingTemplate.convertAndSend("/topic/notifications", aiId);
+        } else {
+            System.out.println("Service with ID: " + aiId + " not found.");
+        }
+    }
+
+    private final Map<String, Boolean> uploadStatusMap = new ConcurrentHashMap<>();
+
+    public void startUpload(String serviceId) {
+        uploadStatusMap.put(serviceId, false);
+    }
+
+    public void completeUpload(String serviceId) {
+        uploadStatusMap.put(serviceId, true);
+    }
+
+    public boolean isUploadCompleted(String serviceId) {
+        return uploadStatusMap.getOrDefault(serviceId, false);
+    }
+
+    //s3파일 업로드
+
+    private String s3FileUpload(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         log.info("fileName:{}",fileName);
         //업로드 날짜 설정
@@ -167,13 +209,6 @@ public class MyServiceService {
     }
 
 
-    public String openSearchFileUpload(List<MultipartFile> uploadFile, String aiName) {
-        for (MultipartFile file : uploadFile){
-            System.out.print(file.getOriginalFilename());
-        }
-        return "my_service";
-    }
-
     public Map<String, List<Map<String, Object>>> awsFileData(String email) {
         if (email == null) {
             throw new IllegalArgumentException("알 수 없는 사용자");
@@ -203,9 +238,16 @@ public class MyServiceService {
 
         for (MyService myService : myServices) {
             List<Map<String, Object>> files = new ArrayList<>();
-            System.out.println("name : " + myService.getServiceName());
+            System.out.println("ServiceId : " + myService.getServiceId());
             try {
-                SearchRequest searchRequest = new SearchRequest(myService.getServiceName()); // 서비스 이름을 인덱스로 사용
+                GetIndexRequest getIndexRequest = new GetIndexRequest(myService.getServiceId());
+                boolean exists = client.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
+                if (!exists) {
+                    // 인덱스가 없는 경우의 처리 로직
+                    System.out.println("인덱스가 존재하지 않습니다: " + myService.getServiceId());
+                    continue; // 다음 서비스로 넘어갑니다
+                }
+                SearchRequest searchRequest = new SearchRequest(myService.getServiceId()); // 서비스 이름을 인덱스로 사용
                 SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
                 // Only fetch the "size", "name", and "contentType" fields
