@@ -20,8 +20,8 @@ public class MyService {
     @Column(name = "service_name", nullable = false)
     private String serviceName;
 
-    @Column(name = "url", unique = true)
-    private String url;
+//    @Column(name = "url", unique = true)
+//    private String url;
 
     @Column(name = "profile_pic", nullable = false)
     private String profilePic;
@@ -34,10 +34,9 @@ public class MyService {
     private Member member;
 
     @Builder
-    public MyService(String serviceName,String serviceId, String url, String profilePic, Member member){
+    public MyService(String serviceName,String serviceId, String profilePic, Member member){
         this.serviceName = serviceName;
         this.serviceId = serviceId;
-        this.url = url;
         this.profilePic = profilePic;
         this.member = member;
     }

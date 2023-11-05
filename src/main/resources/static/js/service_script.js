@@ -1,5 +1,5 @@
 function closeAllPanels() {
-    var panels = document.querySelectorAll('.panel.active');
+    const panels = document.querySelectorAll('.panel.active');
     panels.forEach(function(panel) {
         panel.classList.remove('active');
     });
@@ -7,10 +7,10 @@ function closeAllPanels() {
 
 //file list 생성
 function showFilesForService(button) {
-    var serviceName = button.getAttribute('data-service-name');
+    const serviceName = button.getAttribute('data-service-name');
     console.log(serviceName);
 
-    var serviceElements = document.querySelectorAll('#file_index');
+    const serviceElements = document.querySelectorAll('#file_index');
     serviceElements.forEach(function(element) {
         if (element.getAttribute('data-service-name') === serviceName) {
             element.style.display = 'block';
@@ -19,7 +19,7 @@ function showFilesForService(button) {
         }
     });
 
-    var buttons = document.querySelectorAll('.chatez_get_file');
+    const buttons = document.querySelectorAll('.chatez_get_file');
     buttons.forEach(function(btn) {
         btn.classList.remove('clicked');
     });
@@ -38,7 +38,7 @@ const showPanelElement = document.getElementById("showPanel");
 if (showPanelElement) {
         showPanelElement.addEventListener("click", function() {
         closeAllPanels();
-        var newScreen = document.getElementById("newScreen");
+        const newScreen = document.getElementById("newScreen");
         newScreen.classList.remove('hide');
         newScreen.classList.add('active');
         generateUuid();
@@ -47,22 +47,22 @@ if (showPanelElement) {
 const createClose = document.getElementById("createClose");
 if(createClose) {
     createClose.addEventListener("click", function () {
-        var newScreen = document.getElementById("newScreen");
+        const newScreen = document.getElementById("newScreen");
         newScreen.classList.remove('active');
 
-        var aiName = document.getElementById("aiName");
+        const aiName = document.getElementById("aiName");
         aiName.value = '';
 
-        var imageInput = document.getElementById("imageInput");
+        const imageInput = document.getElementById("imageInput");
         imageInput.value = '';
 
-        var uploadProfile = document.getElementById("uploadProfile");
+        const uploadProfile = document.getElementById("uploadProfile");
         uploadProfile.src = 'img/profile_icon.png';
 
-        var fileInput = document.getElementById("fileInput");
+        const fileInput = document.getElementById("fileInput");
         fileInput.value = '';
 
-        var fileList = document.getElementById("fileList");
+        const fileList = document.getElementById("fileList");
         while (fileList.firstChild) {
             fileList.removeChild(fileList.firstChild);
         }
@@ -72,7 +72,7 @@ if(createClose) {
 const fileUpload = document.getElementById("fileUpload");
 if(fileUpload) {
     fileUpload.addEventListener("click", function () {
-        var fileInputElement = document.getElementById("fileInput");
+        const fileInputElement = document.getElementById("fileInput");
         if (fileInputElement) {
             fileInputElement.click();
         } else {
@@ -80,11 +80,11 @@ if(fileUpload) {
         }
     });
 }
-var fileSelectElement = document.getElementById("file_select");
+const fileSelectElement = document.getElementById("file_select");
 
 if (fileSelectElement) {
     fileSelectElement.addEventListener("click", function() {
-        var fileInputElement = document.getElementById("fileInput");
+        const fileInputElement = document.getElementById("fileInput");
         if (fileInputElement) {
             fileInputElement.click();
         } else {
@@ -93,12 +93,12 @@ if (fileSelectElement) {
     });
 }
 function showFilesForService(button) {
-    var serviceName = button.getAttribute('data-service-name');
-    var serviceId = button.getAttribute('data-service-id');
+    const serviceName = button.getAttribute('data-service-name');
+    const serviceId = button.getAttribute('data-service-id');
     console.log(serviceName);
     console.log(serviceId);
 
-    var serviceElements = document.querySelectorAll('#file_index');
+    const serviceElements = document.querySelectorAll('#file_index');
     serviceElements.forEach(function(element) {
         if (element.getAttribute('data-service-name') === serviceName) {
             element.style.display = 'block';
@@ -107,14 +107,14 @@ function showFilesForService(button) {
         }
     });
 
-    var buttons = document.querySelectorAll('.chatez_get_file');
+    const buttons = document.querySelectorAll('.chatez_get_file');
     buttons.forEach(function(btn) {
         btn.classList.remove('clicked');
     });
 
     button.classList.add('clicked');
 
-    var fileSelectButton = document.getElementById('file_select');
+    const fileSelectButton = document.getElementById('file_select');
     fileSelectButton.setAttribute('data-service-id', serviceId);
     fileSelectButton.setAttribute('data-service-name', serviceName);
     fileSelectButton.removeAttribute('disabled');
@@ -150,27 +150,27 @@ if(imageInput){
 }
 document.addEventListener('DOMContentLoaded', function() {
     // 'profile_icon' 클래스를 가진 모든 요소 선택
-    var profileIcons = document.querySelectorAll('.update_profile_icon');
+    const profileIcons = document.querySelectorAll('.update_profile_icon');
 
     profileIcons.forEach(function(icon) {
         icon.addEventListener('click', function() {
-            var panel = icon.closest('.panel');
-            var serviceName = panel.querySelector('.serviceName').textContent;
+            const panel = icon.closest('.panel');
+            const serviceName = panel.querySelector('.serviceName').textContent;
 
             panel.querySelector('.imageUpdate').click();
         });
     });
 
     // 'imageUpdate' 클래스를 가진 모든 파일 입력 상자 선택
-    var imageUpdateElements = document.querySelectorAll('.imageUpdate');
+    const imageUpdateElements = document.querySelectorAll('.imageUpdate');
 
     // 각 파일 입력 상자에 대한 이벤트 리스너 추가
     imageUpdateElements.forEach(function(input) {
         input.addEventListener('change', function(e) {
             // Find the closest '.panel' element
-            var panel = input.closest('.panel');
+            const panel = input.closest('.panel');
 
-            var serviceName = panel.querySelector('.serviceName').textContent;
+            const serviceName = panel.querySelector('.serviceName').textContent;
 
             if (e.target.files && e.target.files[0]) {
                 const reader = new FileReader();
@@ -187,13 +187,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     // Update Panel
-    var updatePanelElements = document.querySelectorAll('.updatePanel');
+    const updatePanelElements = document.querySelectorAll('.updatePanel');
 
      updatePanelElements.forEach(function(updatePanelElement) {
         updatePanelElement.addEventListener('click', function() {
             closeAllPanels();
-            var serviceName = updatePanelElement.getAttribute('data-service-name');
-            var updateScreen = document.getElementById('updateScreen-' + serviceName);
+            const serviceName = updatePanelElement.getAttribute('data-service-name');
+            const updateScreen = document.getElementById('updateScreen-' + serviceName);
             if (updateScreen) {
                 updateScreen.classList.remove('hide');
                 updateScreen.classList.add('active');
@@ -202,26 +202,26 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Update Close
-    var updateCloseElements = document.querySelectorAll('.updateClose');
+    const updateCloseElements = document.querySelectorAll('.updateClose');
 
     updateCloseElements.forEach(function(updateCloseElement) {
         updateCloseElement.addEventListener('click', function() {
-            var updateScreen = updateCloseElement.closest('.updateScreen');
+            const updateScreen = updateCloseElement.closest('.updateScreen');
             if (updateScreen) {
                 updateScreen.classList.remove('active');
             }
 
-            var aiName = document.getElementById('updateName');
+            const aiName = document.getElementById('updateName');
             if (aiName) {
                 aiName.value = '';
             }
 
-            var imageUpdate = document.getElementById('imageUpdate');
+            const imageUpdate = document.getElementById('imageUpdate');
             if (imageUpdate) {
                 imageUpdate.value = '';
             }
 
-            var updateProfile = document.getElementById('updateProfile');
+            const updateProfile = document.getElementById('updateProfile');
             if (updateProfile) {
                 updateProfile.src = 'img/profile_icon.png';
             }
@@ -229,12 +229,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
    // Start Chat
-    var startChatElements = document.querySelectorAll('.startChat');
+    const startChatElements = document.querySelectorAll('.startChat');
     startChatElements.forEach(function(startChatElement) {
         startChatElement.addEventListener('click', function() {
             closeAllPanels();
-            var serviceName = startChatElement.getAttribute('data-service-name');
-            var chatScreen = document.getElementById('chatScreen-' + serviceName);
+            const serviceName = startChatElement.getAttribute('data-service-name');
+            const chatScreen = document.getElementById('chatScreen-' + serviceName);
             if (chatScreen) {
                 chatScreen.classList.remove('hide');
                 chatScreen.classList.add('active');
@@ -243,11 +243,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Chat Close
-    var chatCloseElements = document.querySelectorAll('.chatClose');
+    const chatCloseElements = document.querySelectorAll('.chatClose');
     chatCloseElements.forEach(function(chatCloseElement) {
         chatCloseElement.addEventListener('click', function() {
             // `chatClose` 버튼의 부모 `.panel` 요소를 찾습니다.
-            var chatPanel = chatCloseElement.closest('.panel');
+            const chatPanel = chatCloseElement.closest('.panel');
 
             if (chatPanel) {
                 chatPanel.classList.add('hide');
@@ -258,13 +258,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    var chatAreas = document.querySelectorAll('.chatEZ_list .chatScreen');
+    const chatAreas = document.querySelectorAll('.chatEZ_list .chatScreen');
 
     chatAreas.forEach(function(chatArea) {
-        var textarea = chatArea.querySelector('textarea');
-        var chatContent = chatArea.querySelector('#chatContent');
-        var sendMessageButton = chatArea.querySelector('#sendMessage');
-        var chat = chatArea.querySelector('.chat');
+        const textarea = chatArea.querySelector('textarea');
+        const chatContent = chatArea.querySelector('#chatContent');
+        const sendMessageButton = chatArea.querySelector('#sendMessage');
+        const chat = chatArea.querySelector('.chat');
 
         if (textarea) {
             textarea.addEventListener('keydown', function (e) {
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function addMessageToChat(textarea, chatContent, chat) {
-        var message = textarea.value.trim();
+        const message = textarea.value.trim();
         if (message) {
         textarea.disabled = true; // textarea를 비활성화
         textarea.placeholder = "답변을 기다리는 중...";
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 textarea.placeholder = "이곳에 메세지를 입력하세요.";
             });
 
-            var li = document.createElement('li');
+            const li = document.createElement('li');
             li.textContent = message;
             chatContent.appendChild(li);
             textarea.value = '';
@@ -316,17 +316,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function addServerResponseToChat(data, chatContent, chat) {
-        var li = document.createElement('li');
+        const li = document.createElement('li');
         li.textContent = data;  //서버로부터 받은 메시지
         li.classList.add('server-response'); // 답변 CSS 클래스 적용
         chatContent.appendChild(li);
         chat.scrollTop = chat.scrollHeight;
     }
 
-    var resetButtons = document.querySelectorAll('.chatReset');
+    const resetButtons = document.querySelectorAll('.chatReset');
         resetButtons.forEach(function(resetButton) {
             resetButton.addEventListener('click', function() {
-                var chatContent = this.closest('.chatScreen').querySelector('#chatContent');
+                const chatContent = this.closest('.chatScreen').querySelector('#chatContent');
                 chatContent.innerHTML = ''; // 대화 내용을 비움
             });
         });
@@ -334,29 +334,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('input', function(e) {
     if(e.target.tagName.toLowerCase() === 'textarea' && e.target.closest('.chatScreen')) {
-        var chat = e.target.closest('.chatScreen').querySelector('.chat');
-        var initialChatHeight = chat.offsetHeight;
-        var initialTextareaHeight = e.target.offsetHeight;
+        const chat = e.target.closest('.chatScreen').querySelector('.chat');
+        const initialChatHeight = chat.offsetHeight;
+        const initialTextareaHeight = e.target.offsetHeight;
 
         e.target.style.height = 'auto';
         e.target.style.height = (e.target.scrollHeight) + 'px';
 
-        var deltaHeight = initialTextareaHeight - e.target.offsetHeight;
+        const deltaHeight = initialTextareaHeight - e.target.offsetHeight;
         chat.style.height = (initialChatHeight + deltaHeight) + 'px';
     }
 });
 
-var selectedFiles = [];  // 현재 선택된 파일을 저장하는 배열
+const selectedFiles = [];  // 현재 선택된 파일을 저장하는 배열
 
 document.getElementById('fileInput').addEventListener('change', function () {
-    var fileList = document.getElementById('fileList');
-    var files = this.files;
+    const fileList = document.getElementById('fileList');
+    const files = this.files;
 
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
+    for (const i = 0; i < files.length; i++) {
+        const file = files[i];
         selectedFiles.push(file);  // 파일을 selectedFiles 배열에 추가
 
-        var listItem = document.createElement('li');
+        const listItem = document.createElement('li');
         listItem.setAttribute('data-fileindex', selectedFiles.length - 1);  // 파일 인덱스 저장
         listItem.innerHTML = '<img src="/img/txt-file.png" alt="txt-file" class="txt-file">' + file.name +
         '<span><img src="/img/close_icon.png" alt="close-icon" class="close-icon" onclick="removeFile(this)"></span>';
@@ -365,9 +365,9 @@ document.getElementById('fileInput').addEventListener('change', function () {
 });
 
 function removeFile(element) {
-    var listItem = element.closest('li');
+    const listItem = element.closest('li');
     if (listItem) {
-        var fileIndex = listItem.getAttribute('data-fileindex');  // 파일 인덱스 가져오기
+        const fileIndex = listItem.getAttribute('data-fileindex');  // 파일 인덱스 가져오기
         selectedFiles[fileIndex] = null;  // 해당 인덱스의 파일 제거
         listItem.parentNode.removeChild(listItem);
     }
@@ -414,25 +414,25 @@ function onFileUploadComplete(aiId) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    var createAiButton = document.getElementById("createAi");
+    const createAiButton = document.getElementById("createAi");
     if (createAiButton) {
         createAiButton.addEventListener("click", function() {
-            var aiNameValue = document.getElementById("aiName").value;
-            var aiIdValue = document.getElementById("aiId").value;
-            var imageInput = document.getElementById("imageInput");
-            var fileInput = document.getElementById("fileInput").files;
-            var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
+            const aiNameValue = document.getElementById("aiName").value;
+            const aiIdValue = document.getElementById("aiId").value;
+            const imageInput = document.getElementById("imageInput");
+            const fileInput = document.getElementById("fileInput").files;
+            const csrfMetaTag = document.querySelector('meta[nafme="_csrf"]');
 
-            var validFilesCount = selectedFiles.filter(file => file !== null).length;
+            const validFilesCount = selectedFiles.filter(file => file !== null).length;
 
-            if (aiNameValue === "" || imageInput.length === 0 || validFilesCount === 0) {
+            if (aiNameValue === "" || imageInput.files.length === 0 || validFilesCount === 0) {
                 alert("AI 이름, 프로필 이미지와 파일을 모두 선택해주세요.");
                 return;
             }
 
             var fetchUpload = null;
             if (csrfMetaTag) {
-                var csrfToken = csrfMetaTag.content;
+                const csrfToken = csrfMetaTag.content;
 
                 // 기존 엔드포인트로 나머지 데이터 전송
                 var formData = new FormData();
@@ -461,36 +461,36 @@ document.addEventListener("DOMContentLoaded", function() {
                     })
                     .then(data => {
                         setTimeout(function() {
-                            var newScreen = document.getElementById("newScreen");
+                            const newScreen = document.getElementById("newScreen");
                             if(newScreen){
                                 newScreen.classList.remove('active');
                             }
 
-                            var aiName = document.getElementById("aiName");
+                            const aiName = document.getElementById("aiName");
                             if(aiName){
                                 aiName.value = '';
                             }
-                            var aiId = document.getElementById("aiId");
+                            const aiId = document.getElementById("aiId");
                             if(aiId){
                                 aiId.value = '';
                             }
 
-                            var imageInput = document.getElementById("imageInput");
+                            const imageInput = document.getElementById("imageInput");
                             if(imageInput){
                                 imageInput.value = '';
                             }
 
-                            var uploadProfile = document.getElementById("uploadProfile");
+                            const uploadProfile = document.getElementById("uploadProfile");
                             if(uploadProfile){
                                 uploadProfile.src = 'img/profile_icon.png';
                             }
 
-                            var fileInput = document.getElementById("fileInput");
+                            const fileInput = document.getElementById("fileInput");
                             if(fileInput){
                                 fileInput.value = '';
                             }
 
-                            var fileList = document.getElementById("fileList");
+                            const fileList = document.getElementById("fileList");
                             if(fileList){
                                 while (fileList.firstChild) {
                                     fileList.removeChild(fileList.firstChild);
@@ -537,14 +537,14 @@ if(downloadButton) {
 document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('updateAi')) {
-            var serviceName = event.target.id.replace('updateAi-', '');
-            var serviceNo = document.getElementById('serviceNo-' + serviceName).textContent;
-            var updateAiButton = document.getElementById("updateAi-" + serviceName);
+            const serviceName = event.target.id.replace('updateAi-', '');
+            const serviceNo = document.getElementById('serviceNo-' + serviceName).textContent;
+            const updateAiButton = document.getElementById("updateAi-" + serviceName);
 
             if (updateAiButton) {
-                var aiNameInput = document.getElementById('updateName-' + serviceName).value;
-                var imageInput = document.getElementById('imageUpdate-' + serviceName).files[0];
-                var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
+                const aiNameInput = document.getElementById('updateName-' + serviceName).value;
+                const imageInput = document.getElementById('imageUpdate-' + serviceName).files[0];
+                const csrfMetaTag = document.querySelector('meta[name="_csrf"]');
 
                 if (aiNameInput === "") {
                     alert("수정할 AI 이름을 작성해 주세요.");
@@ -552,9 +552,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 if (csrfMetaTag) {
-                    var csrfToken = csrfMetaTag.content;
+                    const csrfToken = csrfMetaTag.content;
 
-                    var formData = new FormData();
+                    const formData = new FormData();
                     formData.append("selectNo", serviceNo);
                     formData.append("updateName", aiNameInput);
                     if (imageInput) {
@@ -577,16 +577,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         .then(data => {
                             window.location.reload();
                             setTimeout(function() {
-                                var newScreen = document.getElementById("updateScreen-" + serviceName);
+                                const newScreen = document.getElementById("updateScreen-" + serviceName);
                                 newScreen.classList.remove('active');
 
-                                var aiName = document.getElementById("updateName-" + serviceName);
+                                const aiName = document.getElementById("updateName-" + serviceName);
                                 aiName.value = '';
 
-                                var imageUpdate = document.getElementById("imageUpdate-" + serviceName);
+                                const imageUpdate = document.getElementById("imageUpdate-" + serviceName);
                                 imageUpdate.value = '';
 
-                                var updateProfile = document.getElementById("updateProfile-" + serviceName);
+                                const updateProfile = document.getElementById("updateProfile-" + serviceName);
                                 updateProfile.src = 'img/profile_icon.png';
                             }, 500);  // 5000 밀리초 = 5초
                         })
@@ -604,7 +604,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    var deleteButtons = document.querySelectorAll(".deleteChat");
+    const deleteButtons = document.querySelectorAll(".deleteChat");
 
     deleteButtons.forEach(function (deleteAiButton) {
         deleteAiButton.addEventListener("click", function () {
@@ -612,13 +612,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;  // "취소(Cancel)" 버튼을 클릭했다면 여기서 이벤트 처리 종료
             }
 
-            var serviceNo = deleteAiButton.getAttribute('data-service-no');
-            var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
+            const serviceNo = deleteAiButton.getAttribute('data-service-no');
+            const csrfMetaTag = document.querySelector('meta[name="_csrf"]');
 
             if (csrfMetaTag) {
-                var csrfToken = csrfMetaTag.content;
+                const csrfToken = csrfMetaTag.content;
 
-                var formData = new FormData();
+                const formData = new FormData();
                 formData.append("serviceNo", serviceNo);
 
                 fetch("/delete", {
@@ -652,12 +652,11 @@ const fileDeleteButtonElement = document.getElementById("file_delete_button");
 
 if (fileDeleteButtonElement) {
     fileDeleteButtonElement.addEventListener("click", async function() {
-        
+        let selectedFiles = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(input => input.getAttribute('data-file-id'));
+
         if (!window.confirm("정말로 삭제하시겠습니까?")) {
             return;
         }
-
-        let selectedFiles = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(input => input.getAttribute('data-file-id'));
 
         if (selectedFiles.length > 0) {
             try {
@@ -697,6 +696,20 @@ if (fileDeleteButtonElement) {
             } catch (err) {
                 console.error("API call failed:", err);
             }
+        }else{
+            alert("파일을 1개이상 선택 해주세요");
         }
     });
+
+    const AllCheckbox = document.getElementById("checkAll");
+    if(AllCheckbox){
+        AllCheckbox.addEventListener("change",function () {
+            const fileCheckboxes = document.querySelectorAll(".file_checkbox");
+
+            fileCheckboxes.forEach(function (checkbox){
+                checkbox.checked = AllCheckbox.checked;
+            })
+
+        })
+    }
 }

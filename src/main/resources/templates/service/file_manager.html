@@ -1,4 +1,5 @@
-<html layout:decorate="~{service/service_layout}">
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{service/service_layout}">
 <div layout:fragment="content" class="file_manager_content">
     <div class="chat_list">
         <h2><img th:src="@{img/list_icon.png}" alt="list_icon" class="list_icon">생성 목록</h2>
@@ -29,7 +30,9 @@
         <div class="file_list">
             <div id="file_title">
                 <ul>
-                    <li><input type="checkbox"></li>
+                    <li><label>
+                        <input type="checkbox" id="checkAll">
+                    </label></li>
                     <li>이름</li>
                     <li>크기</li>
                     <li>형식</li>
@@ -42,12 +45,13 @@
                  style="display: none;">
                 <h2 th:text="${servicesFiles.key}" style="display: none;">Service Name</h2>
                 <ul th:each="file : ${servicesFiles.value}">
-                    <li><input type="checkbox" th:data-file-id="${file.id}"></li>
+                    <li>
+                        <input type="checkbox" class="file_checkbox" th:data-file-id="${file.documentId}"></li>
                     <li>
                         <img th:src="@{img/txt-file.png}" alt="txt-file" class="txt-file">
                         <span th:text="${file.name}"></span>
                     </li>
-                    <li><span th:text="${file.size}"></span></li>
+                    <li><span th:text="${file.totalSize}"></span></li>
                     <li><span th:text="${file.contentType}"></span></li>
                     <li><span th:text="${file.uploadTime}"></span></li>
                 </ul>

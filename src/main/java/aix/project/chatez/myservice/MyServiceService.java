@@ -12,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.opensearch.action.search.SearchRequest;
@@ -56,19 +55,14 @@ public class MyServiceService {
         String newFileName = s3FileUpload(imageFile);
 
         Member member = memberRepository.findByEmail(email).get();
+        //엔티티와 엔티티 간의 연결 설정
 
-//        MyService myService = new MyService();
-//        myService.setServiceName(aiName);
-//        log.info("aiName:{}",aiName);
-//        myService.setProfilePic(newFileName);
-//        myService.setMember(member);  //엔티티와 엔티티 간의 연결 설정
-
-        String urlValue = aiName+System.currentTimeMillis();
+//        String urlValue = aiName+System.currentTimeMillis();
         return myServiceRepository.save(MyService.builder()
                 .serviceName(aiName)
                 .serviceId(serviceId)
                 .profilePic(newFileName)
-                .url(UUID.nameUUIDFromBytes(urlValue.getBytes()).toString().replace("-",""))
+//                .url(UUID.nameUUIDFromBytes(urlValue.getBytes()).toString().replace("-",""))
                 .member(member)
                 .build());
     }
@@ -188,24 +182,10 @@ public class MyServiceService {
 
             Member member = memberRepository.findByEmail(email).get();
 
-            List<MyService> myServices = myServiceRepository.findByMember_MemberNo(member.getMemberNo());
-            if(!myServices.isEmpty()) {
-                System.out.println("no : " + myServices.get(0).getServiceNo());
-                System.out.println("name : " + myServices.get(0).getServiceName());
-                System.out.println("profilePic : " + myServices.get(0).getProfilePic());
-            }
-            return myServices;
+        return myServiceRepository.findByMember_MemberNo(member.getMemberNo());
 
     }
 
-
-
-//    public String openSearchFileUpload(List<MultipartFile> uploadFile, String aiName) {
-//        for (MultipartFile file : uploadFile){
-//            System.out.print(file.getOriginalFilename());
-//        }
-//        return "my_service";
-//    }
 
     public Map<String, List<Map<String, Object>>> awsFileData(String email) {
         if (email == null) {
@@ -219,15 +199,13 @@ public class MyServiceService {
             throw new IllegalArgumentException("회원의 Email 값을 찾지 못했습니다.");
         }
 
-//        String name = loginUser.get().getName();
         Optional<Member> member = memberRepository.findByEmail(email);
 
         Long memberNo;
         if (member.isPresent()) {
             memberNo = member.get().getMemberNo();
-            System.out.println("no : " + memberNo);
+            log.info("no : {}",memberNo);
         } else {
-            System.out.println("회원의 번호를 찾을 수 없습니다.");
             return Collections.emptyMap();
         }
 
@@ -236,13 +214,15 @@ public class MyServiceService {
 
         for (MyService myService : myServices) {
             List<Map<String, Object>> files = new ArrayList<>();
-            System.out.println("name : " + myService.getServiceName());
+            Set<String> existDocumentIds = new HashSet<>();
+//            Set<String> existNames = new HashSet<>();
+            log.info("name : {} ", myService.getServiceName());
             try {
                 SearchRequest searchRequest = new SearchRequest(myService.getServiceId()); // 서비스 이름을 인덱스로 사용
                 SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
                 // Only fetch the "size", "name", and "contentType" fields
-                String[] includeFields = new String[]{"size", "name", "contentType", "uploadTime"};
+                String[] includeFields = new String[]{"documentId","totalSize", "name", "contentType", "uploadTime"};
                 String[] excludeFields = new String[]{};
                 searchSourceBuilder.fetchSource(includeFields, excludeFields);
 
@@ -252,13 +232,16 @@ public class MyServiceService {
 
                 for (SearchHit hit : searchResponse.getHits().getHits()) {
                     Map<String, Object> source = hit.getSourceAsMap();
-                    String fileId = hit.getId();
-//                    int startIndex = fileId.indexOf("'id': '") + 7;
-//                    int endIndex = fileId.indexOf("', 'id_index'");
-//                    String actualId = fileId.substring(startIndex, endIndex);
-                    source.put("id", fileId);
-                    files.add(source);  // 각 hit의 정보를 리스트에 추가합니다.
-                    System.out.println(source);
+                    String documentId = (String) source.get("documentId");
+//                    String name = (String) source.get("name");
+                    log.info("document id1:{}", documentId);
+                    if (!existDocumentIds.contains(documentId)) {
+                        existDocumentIds.add(documentId);
+                        log.info("document id2:{}", documentId);
+//                        existNames.add(name);
+                        files.add(source);
+                    }// 각 hit의 정보를 리스트에 추가합니다.
+                    log.info("source:{}",source);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
