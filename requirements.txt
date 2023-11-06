@@ -1,0 +1,17 @@
+fastapi==0.104.1
+uvicorn==0.23.2
+python-multipart==0.0.6
+openpyxl==3.0.10
+pydantic==1.10.8
+opensearch-py==2.3.2
+nltk==3.8.1
+python-docx==1.0.1
+chardet==4.0.0
+kss==4.5.4
+pandas==2.0.3
+numpy==1.24.3
+konlpy==0.6.0
+sentence-transformers==2.2.2
+transformers==4.32.1
+rank_bm25==0.2.2
+openai
