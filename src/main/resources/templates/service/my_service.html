@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html layout:decorate="~{service/service_layout}">
 <div layout:fragment="content" class="service_content">
     <div class="service">
@@ -53,7 +54,7 @@
                 th:data-ai-id="${myServices.serviceId}">
                 <td><img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"></td>
                 <td><span th:text="${myServices.serviceName}"></span></td>
-                <td><a th:href="@{|/${myServices.url}|}" th:text="|http://chatez.com/${myServices.url}|"></a></td>
+                <td><a th:href="@{|/${myServices.serviceId}|}" th:text="|http://chatez.com/${myServices.serviceId}|"></a></td>
                 <td><button type="button" class="btn btn-light startChat" th:attr="data-service-name=${myServices.serviceName}">실행</button></td>
 
                 <div th:id="'chatScreen-'+${myServices.serviceName}" class="hide panel chatScreen">

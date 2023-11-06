@@ -8,5 +8,6 @@ import java.util.List;
 @Repository
 public interface MyServiceRepository extends JpaRepository<MyService, Long> {
     List<MyService> findByMember_MemberNo(Long memberNo);
+
     MyService findByServiceId(String serviceId);
 }

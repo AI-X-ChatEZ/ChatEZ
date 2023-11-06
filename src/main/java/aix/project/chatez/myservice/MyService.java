@@ -20,8 +20,6 @@ public class MyService {
     @Column(name = "service_name", nullable = false)
     private String serviceName;
 
-    @Column(name = "url", unique = true)
-    private String url;
 
     @Column(name = "profile_pic", nullable = false)
     private String profilePic;
@@ -34,14 +32,15 @@ public class MyService {
     private Member member;
 
     @Builder
-    public MyService(String serviceName,String serviceId, String url, String profilePic, Member member){
+    public MyService(String serviceName,String serviceId, String profilePic, Member member){
         this.serviceName = serviceName;
         this.serviceId = serviceId;
-        this.url = url;
         this.profilePic = profilePic;
         this.member = member;
     }
-
+    public void activate() {
+        this.serviceActive = true;
+    }
     public void updateServiceName(String newServiceName){
         this.serviceName = newServiceName;
     }
@@ -49,6 +48,5 @@ public class MyService {
     public void updateProfilePic(String newFileName){
         this.profilePic = newFileName;
     }
-    public void setServiceActive(boolean serviceActive){ this.serviceActive = serviceActive; }
 }
 

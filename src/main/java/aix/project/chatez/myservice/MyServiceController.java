@@ -4,13 +4,13 @@ import aix.project.chatez.config.S3Properties;
 import aix.project.chatez.member.MemberDetails;
 import aix.project.chatez.member.MemberService;
 import aix.project.chatez.member.Member;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -50,6 +51,8 @@ public class MyServiceController {
     private final S3Properties s3Properties;
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
+
+
     @GetMapping("/service_layout")
     public String service_layout(){return "service/service_layout";}
 
@@ -70,21 +73,16 @@ public class MyServiceController {
     }
 
     private Path saveTempFile(MultipartFile file) throws IOException {
-        // 원본 파일 이름을 얻습니다.
         String originalFilename = file.getOriginalFilename();
-
-        // null 체크 후 임시 디렉토리에 저장할 파일 경로를 생성합니다.
-        // 파일 이름이 중복되지 않는 환경이라고 가정합니다.
-        Path tempFile = null;
-        if (originalFilename != null) {
-            tempFile = Files.createTempDirectory("uploads").resolve(originalFilename);
+        if (originalFilename == null) {
+            throw new IOException("Original filename is null");
         }
-        // MultipartFile의 내용을 임시 파일에 복사합니다.
-        if (tempFile != null) {
-            file.transferTo(tempFile.toFile());
-        }
+//        String fileExtension = originalFilename != null ? originalFilename.substring(originalFilename.lastIndexOf(".")) : ".tmp";
+        Path tempDirectory = Files.createTempDirectory("uploadDir");
+        Path targetPath = tempDirectory.resolve(originalFilename);
+        file.transferTo(targetPath.toFile());
 
-        return tempFile;
+        return targetPath;
     }
 
     @PostMapping("/fileUpdate")
@@ -180,16 +178,14 @@ public class MyServiceController {
 
     @ResponseBody
     @PostMapping("/upload")
-    public String handleFileUpload(@RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+    public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
                                    @RequestParam("aiName") String aiName,
                                    @RequestParam("aiId") String aiId,
                                    @RequestParam("files") MultipartFile[] files,
                                    Principal principal) throws IOException {
-
         String email = extractEmail(principal);
-        Member member = memberService.findByEmail(email);
+        myServiceService.userFileUplaod(imageFile, aiName, aiId, email);
 
-        myServiceService.userFileUplaod(imageFile, aiName, aiId, member.getEmail());
         List<Path> savedFiles = new ArrayList<>();
         for (MultipartFile file : files) {
             Path savedFile = saveTempFile(file);
@@ -201,15 +197,14 @@ public class MyServiceController {
                 uploadToFastApi(aiId, savedFiles);
                 for (Path savedFile : savedFiles) {
                     Files.deleteIfExists(savedFile);
+                    Files.deleteIfExists(savedFile.getParent());
                 }
-                Thread.sleep(1000);
                 myServiceService.activateServiceById(aiId);  // 추가된 코드
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        return "redirect:/my_service";
-
+        return "redirect:my_service";
     }
 
     private void uploadToFastApi(String aiId, List<Path> files) {
@@ -241,6 +236,13 @@ public class MyServiceController {
         }
     }
 
+
+    @PreDestroy
+    public void onDestroy() {
+        executorService.shutdown();
+    }
+
+
     @ResponseBody
     @PostMapping("/update")
     public String handleFileUpdate(@RequestParam("updateName") String updateName,
@@ -267,12 +269,12 @@ public class MyServiceController {
     public ModelAndView file_manager(Principal principal){
         String email = extractEmail(principal);
         Member member = memberService.findByEmail(email);
-        List<MyService> myServices = myServiceService.findByMember_MemberNo(member.getMemberNo());
-        Map<String, List<Map<String, Object>>> servicesFiles = myServiceService.awsFileData(email);
+        List<MyService> myServices = myServiceService.userServiceDate(member.getEmail());
+        Map<String, List<Map<String, Object>>> servicesFilesMap = myServiceService.awsFileData(member.getEmail());
         ModelAndView modelAndView = new ModelAndView("service/file_manager");
         modelAndView.addObject("member",member);
         modelAndView.addObject("myServices",myServices);
-        modelAndView.addObject("servicesFiles",servicesFiles);
+        modelAndView.addObject("servicesFiles", servicesFilesMap);
         modelAndView.addObject("bucket", s3Properties.getS3Bucket());
         modelAndView.addObject("folder",s3Properties.getS3UploadPath());
         return modelAndView;

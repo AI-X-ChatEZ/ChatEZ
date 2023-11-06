@@ -1,0 +1,84 @@
+name: CI/CD using Github Actions & Docker
+
+# 언제 이 파일의 내용이 실행될 것인지 정의'
+# 아래 적은 브랜치에 코드가 push되거나 pull_request되었을 때 실행할 것을 말한다.
+on:
+  push:
+    branches: [je]
+  pull_request:
+    branches: [main]
+
+# 코드의 내용을 이 파일을 실행하여 action을 수행하는 주체(github actions에서 사용하는 VM)가 읽을 수 있도록 허용
+permissions:
+  contents: read
+
+# 실제 실행될 내용들을 정의
+jobs:
+  build:
+    runs-on: ubuntu-latest #최선버전에서 script를 진행
+
+    steps:
+      # 지정한 저장소(현재 repository)에서 코드를 워크플로우 환경으로 가져오도록 하는 git action
+      - name: Checkout source
+        uses: actions/checkout@v3
+      # open jdk 17버전 환경을 세팅
+      - name: Setup Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      # gradle caching
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      #Github secrets로부터 데이터를 받아 워크플로우 파일을 생성
+      - name: Make application.yml
+        run: |
+          cd ./src/main/resources
+          touch ./application.yml
+          echo "${{ secrets.JE_YML }}" > ./application.yml
+        shell: bash
+
+      # Build Gradle
+      - name: Build with Gradle
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build -x test
+
+      #dockerfile을 통해 이미지를 빌드하고 이를 docker repo로 push
+      #이때 ${{ secrets.DOCKER_REPO }}/directors-dev 가 위에서 만든 도커 repository 입니다.
+      - name: docker build & push to docker repo
+        run: |
+          docker login -u ${{ secrets.JE_DOCKER_USERNAME }} -p ${{ secrets.JE_DOCKER_PASSWORD }}
+          docker build -f Dockerfile -t ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }} .
+          docker push ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }}:latest
+
+      # appleboy/ssh-action@master 액션을 사용하여 지정한 서버에 ssh로 접속하고, script를 실행합니다.
+      # script의 내용은 도커의 기존 프로세스들을 제거하고, docker repo로부터 방금 위에서 push한 내용을 pull 받아 실행
+      # cicd container 생성하고 cicd 컨테이너 start
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        #        id: deploy
+        with:
+          host: ${{ secrets.JE_HOST }}
+          username: ubuntu
+          key: ${{ secrets.JE_PRIVATE_KEY }}
+          #          envs: GITHUB_SHA
+          script: |
+            CONTAINERS=$(sudo docker ps -qa)
+            if [ ! -z "$CONTAINERS" ]; then
+              sudo docker rm -f $CONTAINERS
+            fi
+            sudo docker pull ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }}:latest
+            sudo docker run -d -p 8080:8080 --name chatez ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }}:latest
+            sudo docker image prune -f
+
+
+

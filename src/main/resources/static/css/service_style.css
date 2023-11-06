@@ -25,7 +25,7 @@
     background-color: #fff;
     /*width: 100%;*/
     min-width: 1100px;
-    height: 85vh;
+    height: 95vh;
     border-radius: 20px;
     padding: 20px 30px;
 }
@@ -67,13 +67,13 @@
     width: 30px !important;
     height: 38px !important;
 }
-
 .chatEZ_list table {
-    width: 100%;             /* 테이블의 전체 너비를 지정합니다. 필요에 따라 조정 가능합니다. */
-    table-layout: fixed;     /* 각 셀의 너비를 정확하게 지정하도록 설정합니다. */
+    width: 100%;
+    table-layout: fixed;
 }
 
 .chatEZ_list table tr th{
+    width: 100px;
     padding: 10px 0;
     text-align: center;
     font-size: 22px;
@@ -91,7 +91,6 @@
 .chatEZ_list table tr th:nth-child(3){
     width: 35%;
 }
-
 .chatEZ_list table tr th:nth-child(n+4):nth-child(-n+6){
     width: 125px;
 }
@@ -101,25 +100,38 @@
     text-align: center;
     font-size: 18px;
     background-color: #ddd;
-    text-align: center; /* 텍스트를 가로로 중앙 정렬 */
     vertical-align: middle; /* 텍스트를 세로로 중앙 정렬 */
 }
-
 .chatEZ_list table tr td:nth-child(2){
     width: 240px;
 }
-
-.chatEZ_list table tr td a {
-    min-width: 300px;
+.chatEZ_list table tr td a{
+    width: 300px;
     max-width: 460px;
     display: block;
     box-sizing: border-box;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .chatEZ_list tr td button{
     width: 100px;
 }
+
+
+.chatEZ_list table tr td:nth-child(2){
+    width: 220px;
+}
+
+.chatEZ_list table tr td a{
+    width: 300px;
+    display: block;
+    overflow-wrap: break-word;
+}
+
+.chatEZ_list tr td button{
+    width: 100px;
+}
+
 
 .chatEZ_list .btn-light{
     background-color: #FFF;
@@ -151,10 +163,10 @@
 }
 
 .chat_list{
-    min-width: 370px; /* 추가된 부분 */
+    min-width: 275px; /* 추가된 부분 */
     float: left;
-    width: 28;
-    height: 85vh;
+    width: 23%;
+    height: 95vh;
     background-color: #fff;
     border-radius: 20px;
     padding: 30px 20px 30px 20px;
@@ -182,7 +194,7 @@
 }
 
 .chatez_get_file {
-    width: 334px;
+    width: 100%;
     height: 80px;
     border-radius: 20px;
     font-size: 18px;
@@ -206,18 +218,28 @@
 }
 
 .chat_list ul li img{
-    margin-right: 10px;
+    margin-right: 20px;
     vertical-align: middle;
 }
 
+.file_manager{
+     min-width: 850px;
+     font-size: 22px;
+     float: right;
+     width: 73%;
+     height: 95vh;
+     background-color: #fff;
+     border-radius: 20px;
+     padding: 20px;
+ }
+
 .file_manager h3{
-/*    padding-bottom: 10px;
-    border-bottom: 2px solid #ddd;*/
     padding-bottom: 10px;
     border-bottom: 2px solid #ddd;
-    display: flex;
-    justify-content: space-between; /* 항목을 양쪽 끝으로 배치합니다 */
-    align-items: center; /* 항목을 수직으로 정렬하려면 사용 */
+}
+
+.file_manager h3 span{
+    margin: 25px 0 0 25px
 }
 
 .file_manager h3 img {
@@ -225,20 +247,11 @@
     vertical-align: middle;
 }
 
-.file_manager{
-    min-width: 1030px;
-    font-size: 22px;
-    float: right;
-    width: 73%;
-    height: 85vh;
-    background-color: #fff;
-    border-radius: 20px;
-    padding: 30px 20px 30px 20px;
-}
 
 #file_select:disabled {
     background-color: #ddd; /* 회색으로 변경 */
     cursor: not-allowed; /* 커서를 '금지' 아이콘으로 변경 */
+    z-index: 0;
 }
 
 #file_select:enabled {
@@ -255,8 +268,14 @@
     color: #FFF;
 }
 
+#file_delete{
+    height: 80px;
+    position: absolute;
+    bottom:10%;
+    right: 0;
+}
+
 #file_delete_button{
-    float:right;
     font-size:22px;
     width: 230px;
     height: 80px;
@@ -283,6 +302,11 @@
     cursor: pointer;
 }
 
+.file_list{
+    position: relative;
+    height:80vh;
+}
+
 .file_list input{
     width: 20px;
     height: 20px;
@@ -294,22 +318,10 @@
     width: 44px;
     height: 44px;
 }
-
-.file_list{
-    position: relative;
-    height:650px;
-}
-
-#file_delete{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    border-top: 2px solid #ddd;
-}
-
 .file_index {
-    height: 480px;
+    height: 65vh;
     overflow-y: auto;
+    font-size: 18px;
 }
 
 .file_index ul{
@@ -320,6 +332,7 @@
     margin-right:10px;
 }
 
+
 #file_title ul li{
     vertical-align: middle;
     padding: 10px 0 10px 0;
@@ -328,7 +341,7 @@
 }
 
 #file_title ul li:nth-child(2){
-    width: 46.5%;
+    width: 43.5%;
 }
 
 #file_title ul li:nth-child(n+3):nth-child(-n+5){
@@ -347,7 +360,7 @@
 
 .file_index ul li:nth-child(2){
     margin-left: 20px;
-    width: 45%;
+    width: 43%;
 }
 
 .file_index ul li:nth-child(n+3):nth-child(-n+5){
@@ -370,7 +383,7 @@
     font-size: 22px;
 }
 
-.panel_right #fileUpload{
+#fileUpload{
     width: 230px;
     height: 80px;
     background-color: #3366FF;
@@ -385,6 +398,7 @@
 
 #newScreen.panel.active {
     right: 60px;
+    z-index: 10;
 }
 
 .panel_left{
@@ -409,6 +423,7 @@
     background-color: #6ea8fe;
 }
 
+
 .file_icon{
     width:44px;
     height:44px;
@@ -416,12 +431,12 @@
 }
 
 .filename {
-  display: inline-block;
-  max-width: 200px; /* 최대 너비 설정 */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: bottom;
+    display: inline-block;
+    max-width: 200px; /* 최대 너비 설정 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
 }
 
 .panel_right ul li {
@@ -447,8 +462,8 @@
     margin-bottom: 20px;
     width: 370px;
     height: 430px;
-    margin-left: auto;
-    margin-right: auto;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
     overflow: auto;  /* 스크롤바 추가 */
 }
 
@@ -486,6 +501,7 @@
     vertical-align: middle;
     width: 54px;
     height: 54px;
+    margin-left:20px;
 }
 
 #imageContainer{
@@ -721,25 +737,23 @@
 
 /* 스크롤바의 폭 너비 */
 #fileList::-webkit-scrollbar,
-.chat::-webkit-scrollbar,
-.file_index::-webkit-scrollbar{
+.chat::-webkit-scrollbar{
     width: 10px;
 }
 
-.disabled {
-    opacity: 0.5;
-    pointer-events: none;
-}
-
 #fileList::-webkit-scrollbar-thumb,
-.chat::-webkit-scrollbar-thumb,
-.file_index::-webkit-scrollbar-thumb{
+.chat::-webkit-scrollbar-thumb{
     background: #6289FF; /* 스크롤바 색상 */
     border-radius: 10px; /* 스크롤바 둥근 테두리 */
 }
 
 #fileList::-webkit-scrollbar-track,
-.chat::-webkit-scrollbar-track,
-.file_index::-webkit-scrollbar-track{
+.chat::-webkit-scrollbar-track{
     background: #ddd;  /*스크롤바 뒷 배경 색상*/
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
 }
