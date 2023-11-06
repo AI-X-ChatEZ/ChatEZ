@@ -21,9 +21,9 @@ class Upsert:
         self.auth = auth
         self.index_name = chatbot_name
         self.verbose = verbose
-        self.index_creation()
+        self.create_index()
 
-    def index_creation(self):
+    def create_index(self):
         if self.env_type == "local":
             self.client = OpenSearch(
                 hosts=[{'host': self.host, 'port': self.port}],
