@@ -6,7 +6,7 @@ on:
       - model
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
     - name: Check out the repository
@@ -30,7 +30,10 @@ jobs:
           OPENSEARCH_USER=${{ secrets.JE_OPENSEARCH_USER }}
           OPENSEARCH_PASSWORD=${{ secrets.JE_OPENSEARCH_PASSWORD }}
           OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Deploy to the server
       uses: appleboy/ssh-action@master
       with:
