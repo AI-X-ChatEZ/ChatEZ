@@ -6,6 +6,7 @@ from fastapi import FastAPI, UploadFile, File, Form, Body  # 추가된 코드
 from fastapi.middleware.cors import CORSMiddleware
 from openpyxl import load_workbook  # CORS보안 기능 설정
 from pydantic import BaseModel
+from urllib.parse import unquote
 from opensearchpy import OpenSearch
 
 import re
@@ -176,11 +177,13 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
 
     #total_size 초기화
     total_size_in_bytes = 0
-    print(files)
+
 
     for file in files:
+        decoded_filename = unquote(file.filename)
+        print(decoded_filename)
         file_content = await file.read()
-        file_extension = file.filename.split(".")[-1]  # 파일 확장자 추출
+        file_extension = decoded_filename.split(".")[-1]  # 파일 확장자 추출
 
         # 인코딩 확인
         bytes_io = BytesIO(file_content)
@@ -197,7 +200,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
                 full_text += paragraph.text + "\n"
             full_text = preprocessing(full_text)
 
-            data = split_by_tokens(file.filename, full_text)
+            data = split_by_tokens(decoded_filename, full_text)
             data = pd.DataFrame(data, columns=["data"])
             contents = data.explode("data").reset_index(drop=True)
 
@@ -213,7 +216,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
                     content = rawdata.decode(charenc)
 
             content = preprocessing(content)
-            data = split_by_tokens(file.filename, content)
+            data = split_by_tokens(decoded_filename, content)
             data = pd.DataFrame(data, columns=["data"])
             contents = data.explode("data").reset_index(drop=True)
 
@@ -278,7 +281,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
                 elif columns_len == 1:
                     data.rename(columns={data.columns[0]: "context"}, inplace=True)
                     data = data.apply(
-                        lambda row: split_by_tokens(file.filename, row.context), axis=1
+                        lambda row: split_by_tokens(decoded_filename, row.context), axis=1
                     )
 
                 data = pd.DataFrame(data, columns=["data"])
@@ -289,7 +292,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
                     [f"{col}:{data[col].iloc[0]}" for col in data.columns]
                 )
                 data = data.apply(
-                    lambda row: split_by_tokens(file.filename, row.data), axis=1
+                    lambda row: split_by_tokens(decoded_filename, row.data), axis=1
                 )
                 data = pd.DataFrame(data, columns=["data"])
                 contents = data.explode("data").reset_index(drop=True)
@@ -299,7 +302,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
 
         current_time = datetime.now()
         formatted_time = current_time.strftime("%H:%M:%S.%f")[:-3]
-        upload_time = current_time.strftime("%y-%m-%d")
+        upload_time = current_time.strftime("%Y-%m-%d")
 
         for i in range(len(contents)):
             content = contents["data"][i]
@@ -312,20 +315,20 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
             print(type(BM25_tokenized))
             SBERT_Embedding = model.encode(content).tolist()
             print(type(SBERT_Embedding))
-
+            file_name = decoded_filename.rsplit('.', 1)[0]
             document = {
-                "documentId": f"{file.filename}_{formatted_time}",
+                "documentId": f"{decoded_filename}_{formatted_time}",
                 "size": readable_size,
                 "totalSize": readable_total_size,
                 "contents": content.strip(),
-                "name": file.filename,  # 파일 이름만 저장
+                "name": file_name,  # 파일 이름만 저장
                 "contentType": file_extension,
                 "uploadTime": upload_time,
                 "BM25_tokenized": BM25_tokenized,
                 "SBERT_Embedding": SBERT_Embedding,
             }
 
-            unique_key = f"{file.filename}_{formatted_time}_{i}"
+            unique_key = f"{decoded_filename}_{formatted_time}_{i}"
             response = client.index(index=index, id=unique_key, body=document)
             print(response)
 
@@ -337,13 +340,14 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
     # Opensearch 서버 연결 확인
     if not client.ping():
         return "Opensearch 서버에 연결할 수 없습니다."
-    
+
     #total_size 초기화
     total_size_in_bytes = 0
 
     for file in files:
+        decoded_filename = unquote(file.filename)
         file_content = await file.read()
-        file_extension = file.filename.split(".")[-1]  # 파일 확장자 추출
+        file_extension = decoded_filename.split(".")[-1]  # 파일 확장자 추출
 
         # 인코딩 확인
         bytes_io = BytesIO(file_content)
@@ -360,7 +364,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
                 full_text += paragraph.text + "\n"
             full_text = preprocessing(full_text)
 
-            data = split_by_tokens(file.filename, full_text)
+            data = split_by_tokens(decoded_filename, full_text)
             data = pd.DataFrame(data, columns=["data"])
             contents = data.explode("data").reset_index(drop=True)
 
@@ -376,7 +380,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
                     content = rawdata.decode(charenc)
 
             content = preprocessing(content)
-            data = split_by_tokens(file.filename, content)
+            data = split_by_tokens(decoded_filename, content)
             data = pd.DataFrame(data, columns=["data"])
             contents = data.explode("data").reset_index(drop=True)
 
@@ -399,7 +403,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
                     data = pd.read_csv(
                         BytesIO(file_content), sep="\t", encoding=charenc
                     )
-                    data = pd.read_csv(BytesIO(file_content), sep="\t")
+                    # data = pd.read_csv(BytesIO(file_content), sep="\t")
 
             if data.isna().any().any():
                 data.fillna(" ", inplace=True)
@@ -441,7 +445,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
                 elif columns_len == 1:
                     data.rename(columns={data.columns[0]: "context"}, inplace=True)
                     data = data.apply(
-                        lambda row: split_by_tokens(file.filename, row.context), axis=1
+                        lambda row: split_by_tokens(decoded_filename, row.context), axis=1
                     )
 
                 data = pd.DataFrame(data, columns=["data"])
@@ -452,9 +456,9 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
                     [f"{col}:{data[col].iloc[0]}" for col in data.columns]
                 )
                 data = data.apply(
-                    lambda row: split_by_tokens(file.filename, row.data), axis=1
+                    lambda row: split_by_tokens(decoded_filename, row.data), axis=1
                 )
-                data = pd.DataFrame(data, columns=["data"])
+                # data = pd.DataFrame(data, columns=["data"])
                 contents = data.explode("data").reset_index(drop=True)
 
         else:
@@ -476,13 +480,14 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
             # print(type(BM25_tokenized))
             SBERT_Embedding = model.encode(content).tolist()
             # print(type(SBERT_Embedding))
-            file_name = file.filename.rsplit('.', 1)[0]
+            file_name = decoded_filename.rsplit('.', 1)[0]
+            
             document = {
-                "documentId": f"{file.filename}_{formatted_time}",
+                "documentId": f"{decoded_filename}_{formatted_time}",
                 "size": readable_size,
                 "totalSize": readable_total_size,
                 "contents": content.strip(),
-                "name": file.filename,  # 파일 이름만 저장
+                "name": file_name,  # 파일 이름만 저장
                 "contentType": file_extension,
                 "uploadTime": upload_time,
                 "BM25_tokenized": BM25_tokenized,
@@ -504,9 +509,9 @@ async def delete_files(request: DeleteFilesRequest):
         return "Opensearch 서버에 연결할 수 없습니다."
 
     for file_id in request.file_ids:
-        
+
         print(file_id)
-        
+
         # _id 필드 안에서 해당 문자열을 포함하는 모든 문서 검색
         search_query = {
             "query": {
@@ -517,7 +522,7 @@ async def delete_files(request: DeleteFilesRequest):
         }
 
         response = client.search(index=request.index, body=search_query)
-        print(response)
+#         print(response)
         # 검색된 문서들 삭제
         for hit in response["hits"]["hits"]:
             client.delete(index=request.index, id=hit["_id"])
