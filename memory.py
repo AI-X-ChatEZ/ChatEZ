@@ -61,10 +61,10 @@ class MemoryManagementWithOpenAI:
                 print('The number of prompt tokens: ', cb.prompt_tokens)
                 print('The number of completion tokens: ', cb.completion_tokens)
             except Exception:
-                print('AN ERROR TAKES PLACE:', Exception)
+                print('AN ERROR HAD TAKEN PLACE:', Exception)
 
         end = time.time()
-        taken_time = f"It takes {(end - start)} seconds."
+        taken_time = f"It took {(end - start)} seconds."
 
         return result, taken_time
 
