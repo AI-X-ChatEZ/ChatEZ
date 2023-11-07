@@ -191,6 +191,8 @@
 
 .chat_list ul{
     margin-top: 20px;
+    overflow-y: auto;
+    height: 70vh;
 }
 
 .chatez_get_file {
