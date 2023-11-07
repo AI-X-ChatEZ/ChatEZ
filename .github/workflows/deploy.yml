@@ -45,8 +45,8 @@ jobs:
           if [ ! -z "$CONTAINERS" ]; then
             sudo docker rm -f $CONTAINERS
           fi
-          docker pull ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO_MODEL }}:latest
-          docker run -d --name fastapi -p 80:8000 \
+          sudo docker pull ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO_MODEL }}:latest
+          sudo docker run -d --name fastapi -p 80:8000 \
             -e OPENSEARCH_HOST="${{ secrets.JE_OPENSEARCH_HOST }}" \
             -e OPENSEARCH_USER="${{ secrets.OPENSEARCH_USERNAME }}" \
             -e OPENSEARCH_PASSWORD="${{ secrets.JE_OPENSEARCH_PASSWORD }}" \
