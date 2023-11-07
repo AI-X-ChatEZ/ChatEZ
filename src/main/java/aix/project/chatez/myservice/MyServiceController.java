@@ -31,6 +31,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.Principal;
@@ -154,7 +156,10 @@ public class MyServiceController {
             // multipart 엔티티 구성
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             for (Path file : files) {
-                builder.addBinaryBody("files", Files.newInputStream(file), ContentType.DEFAULT_BINARY, file.getFileName().toString());
+                String encodedFileName = URLEncoder.encode(file.getFileName().toString(), StandardCharsets.UTF_8.toString());
+                encodedFileName = encodedFileName.replaceAll("\\+", "%20");
+                ContentType contentType = ContentType.create(ContentType.MULTIPART_FORM_DATA.getMimeType(), StandardCharsets.UTF_8);
+                builder.addBinaryBody("files", Files.newInputStream(file), contentType, encodedFileName);
             }
             builder.addTextBody("index", serviceId, ContentType.TEXT_PLAIN);
 
@@ -178,14 +183,16 @@ public class MyServiceController {
 
     @ResponseBody
     @PostMapping("/upload")
-    public String handleFileUpload(@RequestParam("imageFile") MultipartFile imageFile,
+    public String handleFileUpload(@RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                                    @RequestParam("aiName") String aiName,
                                    @RequestParam("aiId") String aiId,
                                    @RequestParam("files") MultipartFile[] files,
                                    Principal principal) throws IOException {
-        String email = extractEmail(principal);
-        myServiceService.userFileUplaod(imageFile, aiName, aiId, email);
 
+        String email = extractEmail(principal);
+        Member member = memberService.findByEmail(email);
+
+        myServiceService.userFileUplaod(imageFile, aiName, aiId, member.getEmail());
         List<Path> savedFiles = new ArrayList<>();
         for (MultipartFile file : files) {
             Path savedFile = saveTempFile(file);
@@ -197,14 +204,15 @@ public class MyServiceController {
                 uploadToFastApi(aiId, savedFiles);
                 for (Path savedFile : savedFiles) {
                     Files.deleteIfExists(savedFile);
-                    Files.deleteIfExists(savedFile.getParent());
                 }
+                Thread.sleep(1000);
                 myServiceService.activateServiceById(aiId);  // 추가된 코드
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        return "redirect:my_service";
+        return "redirect:/my_service";
+
     }
 
     private void uploadToFastApi(String aiId, List<Path> files) {
@@ -215,8 +223,15 @@ public class MyServiceController {
 
             // Creating multipart entity
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+//            for (Path file : files) {
+//                System.out.println(file.getFileName());
+//                builder.addBinaryBody("files", Files.newInputStream(file), ContentType.MULTIPART_FORM_DATA, file.getFileName().toString());
+//            }
             for (Path file : files) {
-                builder.addBinaryBody("files", Files.newInputStream(file), ContentType.MULTIPART_FORM_DATA, file.getFileName().toString());
+                String encodedFileName = URLEncoder.encode(file.getFileName().toString(), StandardCharsets.UTF_8.toString());
+                encodedFileName = encodedFileName.replaceAll("\\+", "%20");
+                ContentType contentType = ContentType.create(ContentType.MULTIPART_FORM_DATA.getMimeType(), StandardCharsets.UTF_8);
+                builder.addBinaryBody("files", Files.newInputStream(file), contentType, encodedFileName);
             }
             builder.addTextBody("index", aiId);
 
