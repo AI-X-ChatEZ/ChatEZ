@@ -27,7 +27,7 @@ jobs:
         tags: ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO_MODEL }}:latest
         build-args: |
           OPENSEARCH_HOST=${{ secrets.JE_OPENSEARCH_HOST }}
-          OPENSEARCH_USER=${{ secrets.JE_OPENSEARCH_USERNAME }}
+          OPENSEARCH_USERNAME=${{ secrets.JE_OPENSEARCH_USERNAME }}
           OPENSEARCH_PASSWORD=${{ secrets.JE_OPENSEARCH_PASSWORD }}
           OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
   deploy:
@@ -48,7 +48,7 @@ jobs:
           sudo docker pull ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO_MODEL }}:latest
           sudo docker run -d --name fastapi -p 80:8000 \
             -e OPENSEARCH_HOST="${{ secrets.JE_OPENSEARCH_HOST }}" \
-            -e OPENSEARCH_USER="${{ secrets.OPENSEARCH_USERNAME }}" \
+            -e OPENSEARCH_USERNAME="${{ secrets.OPENSEARCH_USERNAME }}" \
             -e OPENSEARCH_PASSWORD="${{ secrets.JE_OPENSEARCH_PASSWORD }}" \
             -e OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
             ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO_MODEL }}:latest
