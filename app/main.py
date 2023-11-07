@@ -458,7 +458,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
                 data = data.apply(
                     lambda row: split_by_tokens(decoded_filename, row.data), axis=1
                 )
-                # data = pd.DataFrame(data, columns=["data"])
+                data = pd.DataFrame(data, columns=["data"])
                 contents = data.explode("data").reset_index(drop=True)
 
         else:
