@@ -746,104 +746,104 @@ function awsUpdateFileListForService(serviceId, fileList) {
 document.addEventListener("DOMContentLoaded", function() {
     var createAiButton = document.getElementById("createAi");
     if (createAiButton) {
-        createAiButton.addEventListener("click", function() {
-            var aiNameValue = document.getElementById("aiName").value;
-            var aiIdValue = document.getElementById("aiId").value;
-            var imageInput = document.getElementById("imageInput");
-            var fileInput = document.getElementById("fileInput").files;
-            var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
+    createAiButton.addEventListener("click", function() {
+        var aiNameValue = document.getElementById("aiName").value;
+        var aiIdValue = document.getElementById("aiId").value;
+        var imageInput = document.getElementById("imageInput");
+        var fileInput = document.getElementById("fileInput").files;
+        var csrfMetaTag = document.querySelector('meta[name="_csrf"]');
 
-            var validFilesCount = selectedFiles.filter(file => file !== null).length;
+        var validFilesCount = selectedFiles.filter(file => file !== null).length;
 
-            if (aiNameValue === "" || validFilesCount === 0) {
-                alert("AI 이름과 파일을 모두 선택해주세요.");
-                return;
+        if (aiNameValue === "" || validFilesCount === 0) {
+            alert("AI 이름과 파일을 모두 선택해주세요.");
+            return;
+        }
+
+        var fetchUpload = null;
+        if (csrfMetaTag) {
+            var csrfToken = csrfMetaTag.content;
+
+            // 기존 엔드포인트로 나머지 데이터 전송
+            var formData = new FormData();
+            formData.append("aiName", aiNameValue);
+            formData.append("aiId", aiIdValue);
+
+            // 이미지 파일이 선택되지 않았다면 기본 이미지를 추가
+            if (imageInput.files.length > 0) {
+                formData.append("imageFile", imageInput.files[0]);
             }
 
-            var fetchUpload = null;
-            if (csrfMetaTag) {
-                var csrfToken = csrfMetaTag.content;
+            var validFiles = selectedFiles.filter(file => file !== null);
 
-                // 기존 엔드포인트로 나머지 데이터 전송
-                var formData = new FormData();
-                formData.append("aiName", aiNameValue);
-                formData.append("aiId", aiIdValue);
+            for (var i = 0; i < validFiles.length; i++) {
+                formData.append("files", validFiles[i]);
+            }
 
-                // 이미지 파일이 선택되지 않았다면 기본 이미지를 추가
-                if (imageInput.files.length > 0) {
-                    formData.append("imageFile", imageInput.files[0]);
+            var fetchUpload = fetch("/upload", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": csrfToken,
+                },
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
+                    throw new Error("에러가 발생하였습니다.");
                 }
+                return response.text();
+            })
+            .then(data => {
+                setTimeout(function() {
+                    var newScreen = document.getElementById("newScreen");
+                    if(newScreen){
+                        newScreen.classList.remove('active');
+                    }
 
-                var validFiles = selectedFiles.filter(file => file !== null);
+                    var aiName = document.getElementById("aiName");
+                    if(aiName){
+                        aiName.value = '';
+                    }
+                    var aiId = document.getElementById("aiId");
+                    if(aiId){
+                        aiId.value = '';
+                    }
 
-                for (var i = 0; i < validFiles.length; i++) {
-                    formData.append("files", validFiles[i]);
-                }
+                    var imageInput = document.getElementById("imageInput");
+                    if(imageInput){
+                        imageInput.value = '';
+                    }
 
-                var fetchUpload = fetch("/upload", {
-                    method: "POST",
-                    headers: {
-                        "X-CSRF-TOKEN": csrfToken,
-                    },
-                    body: formData,
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
-                            throw new Error("에러가 발생하였습니다.");
+                    var uploadProfile = document.getElementById("uploadProfile");
+                    if(uploadProfile){
+                        uploadProfile.src = 'img/profile_icon.png';
+                    }
+
+                    var fileInput = document.getElementById("fileInput");
+                    if(fileInput){
+                        fileInput.value = '';
+                    }
+
+                    var fileList = document.getElementById("fileList");
+                    if(fileList){
+                        while (fileList.firstChild) {
+                            fileList.removeChild(fileList.firstChild);
                         }
-                        return response.text();
-                    })
-                    .then(data => {
-                        setTimeout(function() {
-                            var newScreen = document.getElementById("newScreen");
-                            if(newScreen){
-                                newScreen.classList.remove('active');
-                            }
-
-                            var aiName = document.getElementById("aiName");
-                            if(aiName){
-                                aiName.value = '';
-                            }
-                            var aiId = document.getElementById("aiId");
-                            if(aiId){
-                                aiId.value = '';
-                            }
-
-                            var imageInput = document.getElementById("imageInput");
-                            if(imageInput){
-                                imageInput.value = '';
-                            }
-
-                            var uploadProfile = document.getElementById("uploadProfile");
-                            if(uploadProfile){
-                                uploadProfile.src = 'img/profile_icon.png';
-                            }
-
-                            var fileInput = document.getElementById("fileInput");
-                            if(fileInput){
-                                fileInput.value = '';
-                            }
-
-                            var fileList = document.getElementById("fileList");
-                            if(fileList){
-                                while (fileList.firstChild) {
-                                    fileList.removeChild(fileList.firstChild);
-                                }
-                            }
-                        }, 500);  // 5000 밀리초 = 5초
-                        window.location.reload();
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
-                    });
-            } else {
+                    }
+                }, 500);  // 5000 밀리초 = 5초
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
                 alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
-                console.error("CSRF 메타 태그가 존재하지 않습니다.");
-            }
-        });
-    }});
+            });
+        } else {
+            alert("대화형 AI 생성 중 오류 발생 관리자에게 문의해 주세요.");
+            console.error("CSRF 메타 태그가 존재하지 않습니다.");
+        }
+    });
+}});
 
 
 if (downloadButton) {
