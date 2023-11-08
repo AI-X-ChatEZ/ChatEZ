@@ -43,8 +43,8 @@
                  th:data-service-name="${servicesFiles.key}"
                  style="display: none;">
                 <h2 th:text="${servicesFiles.key}" style="display: none;">Service Name</h2>
-                <div class="fail_detail_list">
-                <label th:for="${'checkAll'+servicesFiles.key}"></label><input type="checkbox" th:id="${'checkAll'+servicesFiles.key}">
+                <div class="file_detail_list">
+                <label th:for="${'checkAll'+servicesFiles.key}"></label><input type="checkbox" class="checkAll" th:id="${'checkAll'+servicesFiles.key}">
                 <ul th:each="file : ${servicesFiles.value}">
                     <li><label>
                         <input type="checkbox" th:class="${'file_checkbox box' + servicesFiles.key}" th:data-file-id="${file.documentId}">

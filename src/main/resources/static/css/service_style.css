@@ -326,10 +326,18 @@ div.chatEZ_list{
     height: 44px;
 }
 
+div#file_title{
+    position: relative;
+}
+div#file_title ul{
+    width: 100%;
+    position: absolute;
+    bottom: -40px;
+}
 
 #file_title ul li{
-    vertical-align: middle;
-    padding: 10px 0 10px 0;
+    vertical-align: bottom;
+    padding: 10px 0 0 0;
     display: inline-block;
     text-align: center;
 }
@@ -342,11 +350,21 @@ div.chatEZ_list{
     width: 15%;
 }
 
+div.file_detail_list{
+    padding-top: 30px;
+}
+
 
 .file_index {
     height: 65vh;
     overflow-y: auto;
     font-size: 18px;
+    position: relative;
+}
+
+.file_index input.checkAll{
+    position: absolute;
+    top: 20px;
 }
 
 .file_index ul{
@@ -369,8 +387,8 @@ div.chatEZ_list{
 }
 
 .file_index ul li:nth-child(2){
-    margin-left: 20px;
-    width: 43%;
+    margin-left: 40px;
+    width: 35%;
 }
 
 .file_index ul li:nth-child(n+3):nth-child(-n+5){
