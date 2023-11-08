@@ -325,19 +325,6 @@ div.chatEZ_list{
     width: 44px;
     height: 44px;
 }
-.file_index {
-    height: 65vh;
-    overflow-y: auto;
-    font-size: 18px;
-}
-
-.file_index ul{
-    height: 70px;
-    border-radius: 20px;
-    background-color: #ddd;
-    margin-bottom:10px;
-    margin-right:10px;
-}
 
 
 #file_title ul li{
@@ -354,6 +341,22 @@ div.chatEZ_list{
 #file_title ul li:nth-child(n+3):nth-child(-n+5){
     width: 15%;
 }
+
+
+.file_index {
+    height: 65vh;
+    overflow-y: auto;
+    font-size: 18px;
+}
+
+.file_index ul{
+    height: 70px;
+    border-radius: 20px;
+    background-color: #ddd;
+    margin-bottom:10px;
+    margin-right:10px;
+}
+
 
 .file_index ul li{
     vertical-align: middle;

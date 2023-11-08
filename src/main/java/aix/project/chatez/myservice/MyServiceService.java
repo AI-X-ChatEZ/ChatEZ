@@ -294,7 +294,7 @@ public class MyServiceService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            servicesFilesMap.put(myService.getServiceName(), files);
+            servicesFilesMap.put(myService.getServiceId(), files);
         }
         try {
             client.close();

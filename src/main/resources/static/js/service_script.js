@@ -110,7 +110,7 @@ function showFilesForService(button) {
 
     const serviceElements = document.querySelectorAll('.file_index');
     serviceElements.forEach(function(element) {
-        if (element.getAttribute('data-service-name') === serviceName) {
+        if (element.getAttribute('data-service-name') === serviceId) {
             element.style.display = 'block';
         } else {
             element.style.display = 'none';
@@ -985,7 +985,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 if (fileDeleteButtonElement) {
     fileDeleteButtonElement.addEventListener("click", async function() {
-        let selectedFiles = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(input => input.getAttribute('data-file-id'));
+        let selectedFiles = Array.from(document.querySelectorAll('input.file_checkbox[type="checkbox"]:checked')).map(input => input.getAttribute('data-file-id'));
 
         if (!window.confirm("정말로 삭제하시겠습니까?")) {
             return;
@@ -1036,14 +1036,24 @@ if (fileDeleteButtonElement) {
         }
     });
 
-    if(AllCheckbox){
-        AllCheckbox.addEventListener("change",function () {
-            const fileCheckboxes = document.querySelectorAll(".file_checkbox");
+    document.querySelectorAll('[id*=checkAll]').forEach(function(element) {
+        element.addEventListener('change', function() {
+            const id = this.id;
 
-            fileCheckboxes.forEach(function (checkbox){
-                checkbox.checked = AllCheckbox.checked;
+            // id 값에서 'checkAll'을 제거
+            const className = id.replace('checkAll', '');
+            const Allcheckboxs = document.querySelectorAll('.file_checkbox')
+            Allcheckboxs.forEach(function (checkbox){
+                checkbox.checked = false;
             })
+            this.checked=true;
+            // 제거된 값을 클래스로 가진 모든 체크박스를 찾아 체크 상태를 변경합니다.
+            document.querySelectorAll('.box' + className).forEach(function(checkbox) {
+                checkbox.checked = !checkbox.checked; // 체크박스가 체크되어 있다면 해제하고, 해제되어 있다면 체크합니다.
+            });
+        });
+    });
 
-        })
-    }
+
+
 }
