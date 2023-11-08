@@ -517,6 +517,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function addMessageToChat(textarea, chatContent, chat) {
+        let handleQuery = 'http://localhost:8000/handle_query'
         var message = textarea.value.trim();
         if (message) {
             textarea.disabled = true; // textarea를 비활성화
@@ -994,7 +995,9 @@ if (fileDeleteButtonElement) {
             try {
 
                 let serviceId = document.querySelector('.chatez_get_file').getAttribute('data-service-id');
-                const fastApiUrl = "http://localhost:8000/delete_files";
+                let fastApiUrl = "http://localhost:8000/delete_files";
+                // 배포 url
+                //fastApiUrl = "http://43.202.44.31:8000/delete_files";
                 console.log(selectedFiles);
                 console.log(serviceId);
                 const requestBody = {
