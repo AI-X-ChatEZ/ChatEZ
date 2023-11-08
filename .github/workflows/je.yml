@@ -74,6 +74,15 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
 
+      - name: Copy docker-compose file to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.JE_HOST }}
+          username: ubuntu
+          key: ${{ secrets.JE_PRIVATE_KEY }}
+          source: "./docker-compose.yml"
+          target: "/"
+
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         #        id: deploy
