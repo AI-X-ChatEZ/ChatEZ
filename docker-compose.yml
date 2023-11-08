@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  chatez-app:
+    image : ${JE_DOCKER_USERNAME}/${JE_DOCKER_REPO}:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080"
+    networks:
+      - chatez-network
+
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - chatez-app
+    networks:
+      - chatez-network
+
+networks:
+  chatez-network:
+    driver: bridge
