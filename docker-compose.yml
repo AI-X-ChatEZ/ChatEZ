@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  chatez-app:
+  web:
     image : ${JE_DOCKER_USERNAME}/${JE_DOCKER_REPO}:latest
     build:
       context: .
