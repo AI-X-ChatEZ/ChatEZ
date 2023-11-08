@@ -14,6 +14,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +52,10 @@ public class MyServiceController {
     private final MyServiceService myServiceService;
     private final MemberService memberService;
     private final S3Properties s3Properties;
-
     private final ExecutorService executorService = Executors.newFixedThreadPool(20);
+
+    @Value("${fastApi.endpoint}")
+    private String fastApiEndpoint;
 
 
     @GetMapping("/service_layout")
@@ -148,10 +151,10 @@ public class MyServiceController {
 
     private void updateToFastApi(String serviceId, List<Path> files) {
         // FastAPI 엔드포인트 URL 설정
-        String fastApiEndpoint = "http://localhost:8000/update_files";
+        String fastApiUpdate = fastApiEndpoint+"/update_files";
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             // POST 요청 생성
-            HttpPost postRequest = new HttpPost(fastApiEndpoint);
+            HttpPost postRequest = new HttpPost(fastApiUpdate);
 
             // multipart 엔티티 구성
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
@@ -216,10 +219,10 @@ public class MyServiceController {
     }
 
     private void uploadToFastApi(String aiId, List<Path> files) {
-        String fastApiEndpoint = "http://localhost:8000/upload_files";
+        String fastApiUpload = fastApiEndpoint+"/upload_files";
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            HttpPost postRequest = new HttpPost(fastApiEndpoint);
+            HttpPost postRequest = new HttpPost(fastApiUpload);
 
             // Creating multipart entity
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();

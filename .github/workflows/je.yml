@@ -96,6 +96,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.JE_PRIVATE_KEY }}
           script: |
+            cd ~/chatez 
             CONTAINERS=$(sudo docker ps -qa)
             if [ ! -z "$CONTAINERS" ]; then
             sudo docker rm -f $CONTAINERS
