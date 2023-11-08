@@ -74,6 +74,11 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
 
+      - name: Replace environment variable placeholders
+        run: |
+          sed -i "s/\${JE_DOCKER_USERNAME}/${{ secrets.JE_DOCKER_USERNAME }}/g" ./docker-compose.yml
+          sed -i "s/\${JE_DOCKER_REPO}/${{ secrets.JE_DOCKER_REPO }}/g" ./docker-compose.yml
+
       - name: Copy docker-compose file to Server
         uses: appleboy/scp-action@master
         with:
@@ -81,7 +86,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.JE_PRIVATE_KEY }}
           source: "./docker-compose.yml"
-          target: "~/docker-compose.yml"
+          target: "~/chatez"
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
@@ -91,7 +96,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.JE_PRIVATE_KEY }}
           script: |
-            cd ~ 
+            cd ~/chatez 
             docker-compose -f docker-compose.yml down
             docker pull ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }}:latest
             docker-compose -f docker-compose.yml  up -d
