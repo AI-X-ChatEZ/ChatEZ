@@ -81,7 +81,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.JE_PRIVATE_KEY }}
           source: "./docker-compose.yml"
-          target: "/"
+          target: "~/docker-compose.yml"
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
@@ -90,11 +90,9 @@ jobs:
           host: ${{ secrets.JE_HOST }}
           username: ubuntu
           key: ${{ secrets.JE_PRIVATE_KEY }}
-          #          envs: GITHUB_SHA
           script: |
-            docker-compose down
+            cd ~ 
+            docker-compose -f docker-compose.yml down
             docker pull ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }}:latest
-            docker-compose up -d
+            docker-compose -f docker-compose.yml  up -d
             docker image prune -f
-
-
