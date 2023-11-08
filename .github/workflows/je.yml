@@ -97,7 +97,11 @@ jobs:
           key: ${{ secrets.JE_PRIVATE_KEY }}
           script: |
             cd ~/chatez 
-            docker-compose -f docker-compose.yml down
+            #docker-compose -f docker-compose.yml down
+            docker ps -q --filter "name=nginx" | xargs -r docker stop
+            # Remove any containers that might be still there with the nginx name to free up the port
+            docker ps -aq --filter "name=nginx" | xargs -r docker rm -f
+            # Now pull the latest image and bring up the services
             docker pull ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }}:latest
-            docker-compose -f docker-compose.yml  up -d
+            docker-compose -f docker-compose.yml up -d
             docker image prune -f
