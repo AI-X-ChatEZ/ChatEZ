@@ -1,5 +1,5 @@
 from typing import Union
-from typing import List  # 추가된 코드
+from typing import List, Optional  # 추가된 코드
 from datetime import datetime
 
 from fastapi import FastAPI, UploadFile, File, Form, Body  # 추가된 코드
@@ -142,7 +142,7 @@ class Upload(BaseModel):
 
 class Query(BaseModel):
     query: str
-    history: List[str]  # 메시지 히스토리를 위한 리스트
+    history: Optional[List[str]] = None  # 메시지 히스토리를 위한 리스트
 
 
 class DeleteFilesRequest(BaseModel):
@@ -301,7 +301,7 @@ async def upload_files(index: str = Form(...), files: List[UploadFile] = File(..
             contents = ["지원하지 않는 확장자"]
 
         current_time = datetime.now()
-        formatted_time = current_time.strftime("%H:%M:%S.%f")[:-3]
+        formatted_time = current_time.strftime("%H:%M:%S.%f")[:-4]
         upload_time = current_time.strftime("%Y-%m-%d")
 
         for i in range(len(contents)):
@@ -522,10 +522,28 @@ async def delete_files(request: DeleteFilesRequest):
         }
 
         response = client.search(index=request.index, body=search_query)
-#         print(response)
+        #print(response)
         # 검색된 문서들 삭제
         for hit in response["hits"]["hits"]:
             client.delete(index=request.index, id=hit["_id"])
             print(f"Deleted document with ID: {hit['_id']}")
 
     return "Opensearch에서 파일 삭제 성공"
+
+@app.post("/handle_query/{index}")
+def handle_query(index: str, query: Query):
+    print(index)
+    message = query.query  # 메시지 내용을 가져옴
+    message_history = query.history  # 메시지 히스토리를 가져옴
+    
+    print("Current Message:", message)  # 콘솔에 메시지 내용 출력
+    print("Message History:", message_history)
+    
+    search_query = {
+    "query": {
+        "match_all":{}
+        }
+    } 
+    response = client.search(index=index, body=search_query)
+    print(response)
+    return "ok"
