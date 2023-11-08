@@ -55,6 +55,9 @@ jobs:
       #dockerfile을 통해 이미지를 빌드하고 이를 docker repo로 push
       #이때 ${{ secrets.DOCKER_REPO }}/directors-dev 가 위에서 만든 도커 repository 입니다.
       - name: docker-compose build & push to docker repo
+        env:
+          JE_DOCKER_USERNAME: ${{ secrets.JE_DOCKER_USERNAME }}
+          JE_DOCKER_REPO: ${{ secrets.JE_DOCKER_REPO }}
         run: |
           docker login -u ${{ secrets.JE_DOCKER_USERNAME }} -p ${{ secrets.JE_DOCKER_PASSWORD }}
           docker-compose build chatez-app
