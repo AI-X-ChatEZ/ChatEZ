@@ -7,7 +7,7 @@ const imageInputElement = document.getElementById('imageInput');
 const uploadProfileElement = document.getElementById('uploadProfile');
 const fileDeleteButtonElement = document.getElementById("file_delete_button");
 const downloadButton = document.getElementById('download');
-const AllCheckbox = document.getElementById("checkAll");
+
 
 
 
@@ -467,8 +467,8 @@ document.addEventListener('DOMContentLoaded', function() {
     startChatElements.forEach(function(startChatElement) {
         startChatElement.addEventListener('click', function() {
             closeAllPanels();
-            var serviceName = startChatElement.getAttribute('data-service-name');
-            var chatScreen = document.getElementById('chatScreen-' + serviceName);
+            let serviceName = startChatElement.getAttribute('data-service-name');
+            let chatScreen = document.getElementById('chatScreen-' + serviceName);
             if (chatScreen) {
                 chatScreen.classList.remove('hide');
                 chatScreen.classList.add('active');
@@ -499,12 +499,13 @@ document.addEventListener('DOMContentLoaded', function () {
         var chatContent = chatArea.querySelector('#chatContent');
         var sendMessageButton = chatArea.querySelector('#sendMessage');
         var chat = chatArea.querySelector('.chat');
-
+        let index = chatArea.id;
+        console.log(index)
         if (textarea) {
             textarea.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    addMessageToChat(textarea, chatContent, chat);
+                    addMessageToChat(textarea, chatContent, chat, index);
                 }
             });
         }
@@ -516,18 +517,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    function addMessageToChat(textarea, chatContent, chat) {
-        let handleQuery = 'http://localhost:8000/handle_query'
+    function addMessageToChat(textarea, chatContent, chat,index) {
+
+        index = index.replace('chatScreen-','');
+        console.log(index);
+        let handleQuery = 'http://localhost:8000/handle_query/'+index;
+        console.log(handleQuery);
         var message = textarea.value.trim();
         if (message) {
             textarea.disabled = true; // textarea를 비활성화
             textarea.placeholder = "답변을 기다리는 중...";
-            fetch('http://localhost:8000/handle_query', {
+            fetch(handleQuery, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({query: message}) // 쿼리를 JSON 형식으로 변환
+                body: JSON.stringify({query: message,history: []}) // 쿼리를 JSON 형식으로 변환
             }).then(response => response.json())
                 .then(data => {
                     console.log(data);
