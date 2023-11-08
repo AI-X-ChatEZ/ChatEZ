@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  web:
+  web-app:
     image : ${JE_DOCKER_USERNAME}/${JE_DOCKER_REPO}:latest
     build:
       context: .
@@ -19,7 +19,7 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
     depends_on:
-      - chatez-app
+      - web-app
     networks:
       - chatez-network
 
