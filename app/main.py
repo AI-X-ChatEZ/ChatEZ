@@ -58,7 +58,7 @@ def preprocessing(text):
     text = str(text)
     text = normalize("NFKC", text)
     text = text.lower()
-    text = re.sub(r"[^a-zA-Zㄱ-ㅣ가-힣0-9:%&#@\$€¥£.?!,~\-\n\(\) ]", " ", text)
+    text = re.sub(r"[^a-zA-Zㄱ-ㅣ가-힣0-9:%&#@\$€¥£.?!,~\-\n\(\)\[\] ]", " ", text)
     text = re.sub(" +", " ", text)
     text = re.sub("\n+", "\n", text)
     return text
@@ -571,7 +571,7 @@ def handle_query(index: str, query: Query):
     )
     df = df.sort_values(by=["Hybrid_score"], ascending=False)
     selected_docs = list(df.iloc[:5]["contents"])
-
+    print(selected_docs)
     while True:
         try:
             # preconv = ' '.join(preconvs)
