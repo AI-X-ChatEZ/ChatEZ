@@ -9,6 +9,8 @@ from pydantic import BaseModel
 from urllib.parse import unquote
 from opensearchpy import OpenSearch
 
+from collections import deque
+import tiktoken
 import re
 import os
 import nltk
@@ -536,14 +538,24 @@ def handle_query(index: str, query: Query):
     message = query.query  # 메시지 내용을 가져옴
     message_history = query.history  # 메시지 히스토리를 가져옴
     
-    print("Current Message:", message)  # 콘솔에 메시지 내용 출력
-    print("Message History:", message_history)
-    
+    # print("Current Message:", message)  # 콘솔에 메시지 내용 출력
+    # print("Message History:", message_history)
+    preconvs= deque(message_history) 
+    print("preconvs deque: ", preconvs)
+
     search_query = {
     "query": {
         "match_all":{}
         }
     } 
-    response = client.search(index=index, body=search_query)
-    print(response)
+    # response = client.search(index=index, body=search_query)
+    fields = ['contents', "BM25_tokenized", "SBERT_Embedding"]
+    response = client.search(index=index, _source = fields)
+
+    data  =[]
+    for hit in response["hits"]["hits"]:
+        data.append(hit["_source"]) 
+    
+    df = pd.DataFrame(data)
+    print(df)
     return "ok"
