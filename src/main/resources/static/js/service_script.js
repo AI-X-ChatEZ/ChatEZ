@@ -502,7 +502,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var sendMessageButton = chatArea.querySelector('#sendMessage');
         var chat = chatArea.querySelector('.chat');
         let index = chatArea.id;
-        console.log(index)
+        // console.log(index)
         if (textarea) {
             textarea.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -525,9 +525,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!chatHistories[index]) {
             chatHistories[index] = [];
         }
-        console.log(index);
+        // console.log(index);
         let handleQuery = 'http://localhost:8000/handle_query/'+index;
-        console.log(handleQuery);
+        handleQuery = 'http://43.202.44.31:8000//handle_query/'+index
+        // console.log(handleQuery);
         var message = textarea.value.trim();
         if (message) {
             chatHistories[index].push(message);
@@ -592,7 +593,7 @@ document.addEventListener('input', function(e) {
         var initialTextareaHeight = e.target.offsetHeight;
 
         e.target.style.height = 'auto';
-        e.target.style.height = (e.target.scrollHeight) + 'px';
+        // e.target.style.height = (e.target.scrollHeight) + 'px';
 
         var deltaHeight = initialTextareaHeight - e.target.offsetHeight;
         chat.style.height = (initialChatHeight + deltaHeight) + 'px';
@@ -1015,7 +1016,7 @@ if (fileDeleteButtonElement) {
                 let serviceId = document.querySelector('.chatez_get_file').getAttribute('data-service-id');
                 let fastApiUrl = "http://localhost:8000/delete_files";
                 // 배포 url
-                //fastApiUrl = "http://43.202.44.31:8000/delete_files";
+                fastApiUrl = "http://43.202.44.31:8000/delete_files";
                 console.log(selectedFiles);
                 console.log(serviceId);
                 const requestBody = {
