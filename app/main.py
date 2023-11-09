@@ -44,9 +44,10 @@ tokenizer = Okt()
 nltk.download("punkt")
 nltk.download("averaged_perceptron_tagger")
 
+model = SentenceTransformer("jhgan/ko-sroberta-multitask")
+
 tokenizer_split = AutoTokenizer.from_pretrained("jhgan/ko-sroberta-multitask")
 
-model = SentenceTransformer("jhgan/ko-sroberta-multitask")
 model.max_seq_length = 512  #
 tiktok = tiktoken.get_encoding("cl100k_base")
 openai.api_key = openai_api_key
@@ -107,8 +108,11 @@ def split_by_tokens(title, text, max_tokens=100):
 
 def mixed_tokenizer(text):
     # 한글과 영어를 분리
-    korean_text = re.sub("[^가-힣\s]", "", text)
-    english_text = re.sub("[^a-zA-Z\s]", "", text)
+    korean_text = re.sub("[^가-힣\s]", " ", text)
+    english_text = re.sub("[^a-zA-Z\s]", " ", text)
+    korean_text = re.sub(" +", " ", korean_text)
+    english_text = re.sub(" +", " ", english_text)
+    
     korean_tokens = tokenizer.nouns(korean_text)
     english_tokens = pos_tag(nltk.word_tokenize(english_text))
     eng_nouns = [word for word, tag in english_tokens if tag.startswith("NN")]
@@ -508,7 +512,7 @@ async def delete_files(request: DeleteFilesRequest):
 
     for file_id in request.file_ids:
 
-        print(file_id)
+        # print(file_id)
 
         # _id 필드 안에서 해당 문자열을 포함하는 모든 문서 검색
         search_query = {
@@ -534,11 +538,11 @@ def handle_query(index: str, query: Query):
     message = query.query  # 메시지 내용을 가져옴
     message_history = query.history  # 메시지 히스토리를 가져옴
     
-    print("Current Message:", message)  # 콘솔에 메시지 내용 출력
-    print("Message History:", message_history)
+    # print("Current Message:", message)  # 콘솔에 메시지 내용 출력
+    # print("Message History:", message_history)
     preconvs= deque(message_history) 
     
-    print("preconvs deque: ", preconvs)
+    # print("preconvs deque: ", preconvs)
 
     search_query = {
     "query": {
@@ -557,7 +561,7 @@ def handle_query(index: str, query: Query):
         data.append(hit["_source"]) 
     
     df = pd.DataFrame(data)
-    # print(df)
+    # print(df["SBERT_Embedding"])
     query_token = mixed_tokenizer(message)
     # query_token = tokenizer.tokenize(message)
     bm25 = BM25Okapi(df["BM25_tokenized"])
@@ -573,10 +577,10 @@ def handle_query(index: str, query: Query):
     df["Hybrid_score"] = (
         df["BM25_score"] * 4 + df["cossim_score"] * 6
     )
-    print(df['contents'])
+    # print(df['contents'])
     df = df.sort_values(by=["Hybrid_score"], ascending=False)
     selected_docs = list(df.iloc[:5]["contents"])
-    print(selected_docs)
+    # print(selected_docs)
     while True:
         try:
             # preconv = ' '.join(preconvs)
@@ -587,7 +591,7 @@ def handle_query(index: str, query: Query):
                     preconv += " question : " + i[0]
 
             selected_doc = " ".join(selected_docs)
-            print(selected_docs)
+            # print(selected_docs)
 
             system_content = "You are a helpful, respectful, friendly chatbot."
 
