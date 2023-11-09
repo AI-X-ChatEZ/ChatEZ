@@ -86,7 +86,7 @@
                     <p id="updateButton">
                         <span id="serviceNo" th:id="'serviceNo-' + ${myServices.serviceId}" th:text="${myServices.serviceNo}" style="display:none;"></span>
                         <span class="serviceName" id="serviceName" th:text="${myServices.serviceName}" style="display:none;"></span>
-                        <button th:id="'updateAi-' + ${myServices.serviceName}" class="updateAi custom_btn">확인</button>
+                        <button th:id="'updateAi-' + ${myServices.serviceId}" class="updateAi custom_btn">확인</button>
                         <button class="updateClose custom_btn">취소</button></p>
                 </div>
 

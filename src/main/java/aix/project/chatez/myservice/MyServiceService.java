@@ -270,26 +270,39 @@ public class MyServiceService {
                 }
                 SearchRequest searchRequest = new SearchRequest(myService.getServiceId()); // 서비스 이름을 인덱스로 사용
                 SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-
+                searchSourceBuilder.size(300);
                 // Only fetch the "size", "name", and "contentType" fields
-                String[] includeFields = new String[]{"documentId","totalSize", "name", "contentType", "uploadTime"};
+                String[] includeFields = new String[]{"documentId", "totalSize", "name", "contentType", "uploadTime"};
                 String[] excludeFields = new String[]{};
                 searchSourceBuilder.fetchSource(includeFields, excludeFields);
 
                 searchRequest.source(searchSourceBuilder);
 
                 SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+                SearchHit[] searchHits = searchResponse.getHits().getHits();
+                while (searchHits != null && searchHits.length > 0) {
+                    for (SearchHit hit : searchResponse.getHits().getHits()) {
+                        Map<String, Object> source = hit.getSourceAsMap();
+                        String documentId = (String) source.get("documentId");
+                        log.info("document id1:{}", documentId);
+                        if (!existDocumentIds.contains(documentId)) {
+                            existDocumentIds.add(documentId);
+                            log.info("document id2:{}", documentId);
+                            files.add(source);
+                        }// 각 hit의 정보를 리스트에 추가합니다.
+                        log.info("source:{}", source);
+                    }
+                    // 마지막 히트에 정렬 값이 있는 경우에만 진행합니다.
+                    if (searchHits[searchHits.length - 1].getSortValues().length > 0) {
+                    Object[] sortValues = searchHits[searchHits.length - 1].getSortValues();
+                    searchSourceBuilder.searchAfter(sortValues);
 
-                for (SearchHit hit : searchResponse.getHits().getHits()) {
-                    Map<String, Object> source = hit.getSourceAsMap();
-                    String documentId = (String) source.get("documentId");
-                    log.info("document id1:{}", documentId);
-                    if (!existDocumentIds.contains(documentId)) {
-                        existDocumentIds.add(documentId);
-                        log.info("document id2:{}", documentId);
-                        files.add(source);
-                    }// 각 hit의 정보를 리스트에 추가합니다.
-                    log.info("source:{}",source);
+                    searchRequest.source(searchSourceBuilder);
+                    searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+                    searchHits = searchResponse.getHits().getHits();
+                    } else {
+                        break;
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
