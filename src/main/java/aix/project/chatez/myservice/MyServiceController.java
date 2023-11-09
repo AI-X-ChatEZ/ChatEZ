@@ -52,7 +52,7 @@ public class MyServiceController {
     private final MyServiceService myServiceService;
     private final MemberService memberService;
     private final S3Properties s3Properties;
-    private final ExecutorService executorService = Executors.newFixedThreadPool(20);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(30);
 
     @Value("${fastApi.endpoint}")
     private String fastApiEndpoint;

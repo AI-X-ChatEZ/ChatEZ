@@ -711,8 +711,8 @@ div.file_detail_list{
 }
 
 #chatContent li{
-    background-color: #3366FF;
-    color: #FFF;
+    background-color: #C5E0E8;
+    color: #1E2628;
     display: block;
     width: fit-content;
     padding: 5px 10px;
@@ -727,7 +727,7 @@ div.file_detail_list{
 
 #chatContent li.server-response{
     float: left;
-    background-color: #FF6633;
+    background-color: #3366FF;
     color: #FFF;
 }
 
