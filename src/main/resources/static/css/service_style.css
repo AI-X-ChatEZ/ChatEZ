@@ -216,6 +216,13 @@ div.chatEZ_list{
     gap: 10px;                /* 이미지와 텍스트 사이에 간격을 줍니다. */
 }
 
+.chatez_get_file>span{
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .chatez_get_file:hover{
     background-color: #ddd;
 }
@@ -355,6 +362,7 @@ div.file_detail_list{
 }
 
 
+
 .file_index {
     height: 65vh;
     overflow-y: auto;
@@ -380,11 +388,15 @@ div.file_detail_list{
     vertical-align: middle;
     padding-top: 15px;
     display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .file_index ul li img{
     vertical-align: middle;
 }
+
 
 .file_index ul li:nth-child(2){
     margin-left: 40px;
@@ -581,6 +593,7 @@ div.file_detail_list{
 
 .updateScreen.panel.active {
     right: 60px;
+    z-index: 10;
 }
 
 .updateScreen.panel h4{
@@ -622,6 +635,7 @@ div.file_detail_list{
 
 .chatScreen.active {
     right: 60px;
+    z-index: 10;
 }
 
 .chatScreen .edit_icon {
