@@ -527,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         // console.log(index);
         let handleQuery = 'http://localhost:8000/handle_query/'+index;
-        handleQuery = 'http://43.202.44.31:8000//handle_query/'+index
+        handleQuery = 'http://43.202.44.31:8000/handle_query/'+index
         // console.log(handleQuery);
         var message = textarea.value.trim();
         if (message) {
