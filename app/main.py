@@ -534,26 +534,30 @@ def handle_query(index: str, query: Query):
     message = query.query  # 메시지 내용을 가져옴
     message_history = query.history  # 메시지 히스토리를 가져옴
     
-    # print("Current Message:", message)  # 콘솔에 메시지 내용 출력
-    # print("Message History:", message_history)
+    print("Current Message:", message)  # 콘솔에 메시지 내용 출력
+    print("Message History:", message_history)
     preconvs= deque(message_history) 
+    
     print("preconvs deque: ", preconvs)
 
     search_query = {
     "query": {
         "match_all":{}
-        }
+        },
+         "size": 10000
     } 
     # response = client.search(index=index, body=search_query)
     fields = ['contents', "BM25_tokenized", "SBERT_Embedding"]
     response = client.search(index=index, _source = fields)
+    response = client.search(index=index, body=search_query, _source=fields)
 
+    # print(response)
     data  =[]
     for hit in response["hits"]["hits"]:
         data.append(hit["_source"]) 
     
     df = pd.DataFrame(data)
-
+    # print(df)
     query_token = mixed_tokenizer(message)
     # query_token = tokenizer.tokenize(message)
     bm25 = BM25Okapi(df["BM25_tokenized"])
@@ -569,6 +573,7 @@ def handle_query(index: str, query: Query):
     df["Hybrid_score"] = (
         df["BM25_score"] * 4 + df["cossim_score"] * 6
     )
+    print(df['contents'])
     df = df.sort_values(by=["Hybrid_score"], ascending=False)
     selected_docs = list(df.iloc[:5]["contents"])
     print(selected_docs)
@@ -584,7 +589,7 @@ def handle_query(index: str, query: Query):
             selected_doc = " ".join(selected_docs)
             print(selected_docs)
 
-            system_content = "You are a helpful, respectrul, friendly chatbot."
+            system_content = "You are a helpful, respectful, friendly chatbot."
 
             instruction = """knowledge:
             1. If someone asks for the price of 3 items, multiply the price of the item by 3 to find the total price.
