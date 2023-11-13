@@ -1,0 +1,811 @@
+@charset "utf-8";
+
+/*컨텐츠 영역*/
+.btn-outline-light.active,
+.show > .btn-outline-light.dropdown-toggle {
+    background-color: #E6ECFF !important;
+}
+
+.btn.btn-outline-light.active .category_logo_off,
+.btn.btn-outline-light.active .category_logo_on {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.btn.btn-outline-light.active .category_logo_on {
+    opacity: 1;
+}
+
+.btn.btn-outline-light.active .category_text {
+    color: #3366FF !important;
+    transition: color 0.3s ease-in-out;
+}
+
+.service_content {
+    background-color: #fff;
+    /*width: 100%;*/
+    min-width: 1100px;
+    height: 95vh;
+    border-radius: 20px;
+    padding: 20px 30px;
+}
+
+.service{
+    border-bottom:2px solid #ddd;
+    height: 90px;
+}
+
+.service h3{
+    padding-top: 14px;
+    padding-left: 20px;
+    font-size: 26px;
+    float: left;
+}
+
+.service h3 img{
+    vertical-align: middle;
+}
+
+.service .btn-primary{
+    width: 210px;
+    height: 70px;
+    float: right;
+    background-color: #3366FF;
+    font-size: 22px;
+    border-radius: 20px;
+}
+
+.service .btn-primary:hover{
+    background-color: #3366FF;
+}
+
+.service .btn-primary img{
+    margin-top: -5px;
+}
+
+.plus_icon{
+    width: 30px !important;
+    height: 38px !important;
+}
+
+div.chatEZ_list{
+    height: 70vh;
+    overflow-y: auto;
+}
+.chatEZ_list table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.chatEZ_list table tr th{
+    width: 100px;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 22px;
+}
+
+.chatEZ_list table tr th:nth-child(1){
+    width: 8%;
+}
+
+.chatEZ_list table tr th:nth-child(2){
+    /*padding-right:20px;*/
+    width: 25%;
+}
+
+.chatEZ_list table tr th:nth-child(3){
+    width: 35%;
+}
+.chatEZ_list table tr th:nth-child(n+4):nth-child(-n+6){
+    width: 125px;
+}
+
+.chatEZ_list table tr td{
+    padding: 5px 10px;
+    text-align: center;
+    font-size: 18px;
+    background-color: #ddd;
+    vertical-align: middle; /* 텍스트를 세로로 중앙 정렬 */
+}
+.chatEZ_list table tr td:nth-child(2){
+    width: 240px;
+}
+.chatEZ_list table tr td a{
+    width: 300px;
+    max-width: 460px;
+    display: block;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+}
+
+.chatEZ_list tr td button{
+    width: 100px;
+}
+
+
+.chatEZ_list table tr td:nth-child(2){
+    width: 220px;
+}
+
+.chatEZ_list table tr td a{
+    width: 300px;
+    display: block;
+    overflow-wrap: break-word;
+}
+
+.chatEZ_list tr td button{
+    width: 100px;
+}
+
+
+.chatEZ_list .btn-light{
+    background-color: #FFF;
+    border: 2px solid #151515;
+    color: #151515;
+    border-radius: 10px;
+}
+
+.btn-light:active {
+    background-color: #E6ECFF !important;
+    color: #151515 !important;
+    border-color: #151515 !important;
+}
+
+/**/
+.btn-outline-light.active,
+.show > .btn-outline-light.dropdown-toggle {
+    background-color: #E6ECFF !important;
+}
+
+.btn.btn-outline-light.active .category_logo_off,
+.btn.btn-outline-light.active .category_logo_on {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.btn.btn-outline-light.active .category_logo_on {
+    opacity: 1;
+}
+
+.chat_list{
+    min-width: 275px; /* 추가된 부분 */
+    float: left;
+    width: 23%;
+    height: 95vh;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 30px 20px 30px 20px;
+    margin-right: 20px;
+}
+
+.file_manager_content {
+    display: flex;
+    flex-wrap: nowrap; /* 항목들이 줄바꿈되지 않게 설정 */
+}
+
+.chat_list h2{
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+    font-size: 22px;
+}
+
+.chat_list h2 img{
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+.chat_list ul{
+    margin-top: 20px;
+    overflow-y: auto;
+    height: 70vh;
+}
+
+.chatez_get_file {
+    width: 100%;
+    height: 80px;
+    border-radius: 20px;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #fff;
+    margin-bottom:10px;
+    text-align:left;
+    border: none;
+    display: flex;             /* Flexbox 레이아웃을 적용합니다. */
+    align-items: center;      /* 항목들을 중앙에 정렬합니다. */
+    justify-content: flex-start;  /* 항목들을 왼쪽부터 시작하도록 정렬합니다. */
+    gap: 10px;                /* 이미지와 텍스트 사이에 간격을 줍니다. */
+}
+
+.chatez_get_file>span{
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chatez_get_file:hover{
+    background-color: #ddd;
+}
+
+.clicked {
+    background-color: #ddd;
+}
+
+.chat_list ul li img{
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+.file_manager{
+     min-width: 850px;
+     font-size: 22px;
+     float: right;
+     width: 73%;
+     height: 95vh;
+     background-color: #fff;
+     border-radius: 20px;
+     padding: 20px;
+ }
+
+.file_manager h3{
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.file_manager h3 span{
+    margin: 25px 0 0 25px
+}
+
+.file_manager h3 img {
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+
+#file_select:disabled {
+    background-color: #ddd; /* 회색으로 변경 */
+    cursor: not-allowed; /* 커서를 '금지' 아이콘으로 변경 */
+    z-index: 0;
+}
+
+#file_select:enabled {
+    background-color: #3366FF; /* 푸른색으로 변경 */
+    cursor: pointer; /* 커서를 '손가락' 아이콘으로 변경 */
+}
+
+.file_manager #file_select {
+    font-size:22px;
+    width: 230px;
+    height: 80px;
+    border-radius: 20px;
+    border: none;
+    color: #FFF;
+}
+
+#file_delete{
+    height: 80px;
+    position: absolute;
+    bottom:10%;
+    right: 0;
+}
+
+#file_delete_button{
+    font-size:22px;
+    width: 230px;
+    height: 80px;
+    border-radius: 20px;
+    border: none;
+    color: #000;
+    margin-top:20px;
+}
+
+#file_delete_button img{
+    vertical-align: middle;
+    margin-right: 20px;
+    width: 44px;
+    height: 44px;
+}
+
+#file_delete_button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+#file_delete_button:enabled {
+    background-color: #bbb;
+    cursor: pointer;
+}
+
+.file_list{
+    position: relative;
+    height:80vh;
+}
+
+.file_list input{
+    width: 20px;
+    height: 20px;
+    margin-left: 30px;
+}
+
+.file_list .chatbot_icon{
+    margin-left: 20px;
+    width: 44px;
+    height: 44px;
+}
+
+div#file_title{
+    position: relative;
+}
+div#file_title ul{
+    width: 100%;
+    position: absolute;
+    bottom: -40px;
+}
+
+#file_title ul li{
+    vertical-align: bottom;
+    padding: 10px 0 0 0;
+    display: inline-block;
+    text-align: center;
+}
+
+#file_title ul li:nth-child(2){
+    width: 43.5%;
+}
+
+#file_title ul li:nth-child(n+3):nth-child(-n+5){
+    width: 15%;
+}
+
+div.file_detail_list{
+    padding-top: 30px;
+}
+
+
+
+.file_index {
+    height: 65vh;
+    overflow-y: auto;
+    font-size: 18px;
+    position: relative;
+}
+
+.file_index input.checkAll{
+    position: absolute;
+    top: 20px;
+}
+
+.file_index ul{
+    height: 70px;
+    border-radius: 20px;
+    background-color: #ddd;
+    margin-bottom:10px;
+    margin-right:10px;
+}
+
+
+.file_index ul li{
+    vertical-align: middle;
+    padding-top: 15px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file_index ul li img{
+    vertical-align: middle;
+}
+
+
+.file_index ul li:nth-child(2){
+    margin-left: 40px;
+    width: 35%;
+}
+
+.file_index ul li:nth-child(n+3):nth-child(-n+5){
+    text-align: center;
+    width: 15%;
+}
+
+
+#newScreen.panel {
+    bottom:60px;
+    position: fixed;
+    right: -170%;
+    width: 800px;
+    height: 650px;
+    background: #fff;
+    transition: right 0.5s ease-in-out;
+    border: 2px solid #151515;
+    border-radius: 20px;
+    padding: 20px 0 20px 20px;
+    font-size: 22px;
+}
+
+#fileUpload{
+    width: 230px;
+    height: 80px;
+    background-color: #3366FF;
+    border-radius: 20px;
+    border: none;
+    color: #FFF;
+}
+
+#newScreen.panel img{
+    vertical-align: middle;
+}
+
+#newScreen.panel.active {
+    right: 60px;
+    z-index: 10;
+}
+
+.panel_left{
+    text-align: center;
+    width: 377px;
+    height: 608px;
+    float: left;
+    border-right: 2px solid #A0D3FF;
+}
+
+.panel_left h4{
+    text-align: left;
+}
+/*다운로드 버튼*/
+.panel_left .download{
+    font-size: 15px;
+}
+.panel_left .download #download{
+    width: 120px;
+    height: 40px;
+    /*font-size: 16px;*/
+    background-color: #6ea8fe;
+}
+
+
+.file_icon{
+    width:44px;
+    height:44px;
+    margin-right: 10px;;
+}
+
+.filename {
+    display: inline-block;
+    max-width: 200px; /* 최대 너비 설정 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+}
+
+.panel_right ul li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 340px;
+    height: 70px;
+    background-color: #ddd;
+    border-radius: 20px;
+    padding: 0 20px 0px 20px;
+    margin-bottom: 10px;
+}
+
+.close-icon{
+    position: absolute;
+    top:25px;
+    right: 20px;
+}
+
+.panel_right ul{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 370px;
+    height: 430px;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    overflow: auto;  /* 스크롤바 추가 */
+}
+
+
+.plus_icon {
+    margin-right: 20px;
+}
+
+.panel_right{
+    text-align: center;
+    height: 628px;
+    width: 377px;
+    float: right;
+}
+
+#aiName{
+    margin-top: 30px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #151515;
+}
+
+.updateName{
+    margin-top: 30px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #151515;
+}
+
+.profile_icon,
+.update_profile_icon{
+    width: 200px;
+    height: 200px;
+}
+
+.chatbot_icon{
+    vertical-align: middle;
+    width: 54px;
+    height: 54px;
+    margin-left:20px;
+}
+
+#imageContainer{
+    margin-top: 100px;
+}
+
+.edit_icon{
+    width: 54px;
+    height: 54px;
+}
+
+#createAi{
+    width: 120px;
+    height: 50px;
+    background-color: #3366FF;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.updateAi{
+    width: 120px;
+    height: 50px;
+    background-color: #3366FF;
+    color: #fff;
+    margin-right: 10px;
+}
+
+#createClose{
+    width: 120px;
+    height: 50px;
+    background-color: #ddd;
+    margin: 0 10px;
+}
+
+.updateScreen.panel {
+    bottom:60px;
+    position: fixed;
+    right: -100%;
+    width: 380px;
+    height: 650px;
+    background: #fff;
+    transition: right 0.5s ease-in-out;
+    border: 2px solid #151515;
+    border-radius: 20px;
+    padding: 20px 0 20px 20px;
+    font-size: 22px;
+    text-align: center;
+}
+
+.updateScreen.panel.active {
+    right: 60px;
+    z-index: 10;
+}
+
+.updateScreen.panel h4{
+    text-align: left;
+}
+
+.updateScreen.panel .edit_icon {
+    vertical-align: middle;
+    width: 54px;
+    height: 54px;
+}
+
+#updateButton{
+    margin-top: 120px;
+    margin-left:10px;
+}
+
+.updateClose{
+    width: 120px;
+    height: 50px;
+    background-color: #ddd;
+    margin: 0 10px;
+}
+
+.chatScreen {
+    bottom: 60px;
+    position: fixed;
+    right: -100%;
+    width: 380px;
+    height: 650px;
+    background: #fff;
+    transition: right 0.5s ease-in-out;
+    border: 2px solid #151515;
+    border-radius: 20px;
+    padding: 20px 0 20px 20px;
+    font-size: 18px;
+    text-align: center;
+}
+
+.chatScreen.active {
+    right: 60px;
+    z-index: 10;
+}
+
+.chatScreen .edit_icon {
+    vertical-align: middle;
+    width: 54px;
+    height: 54px;
+}
+
+.chatScreen h4{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    text-align: left;
+}
+.chatScreen h4 span:first-child img{
+    margin: 0 10px 0 0;
+}
+
+.chatScreen #chatContent {
+    padding: 20px;
+}
+
+#question:focus {
+    outline: none;
+    border: none;
+}
+#sendMessage{
+    padding: 0;
+}
+
+.chatScreen .up_arrow_icon{
+    width: 50px;
+    height: 50px;
+}
+
+.chatScreen p{
+    width: 340px;
+    height: 50px;
+    border-radius: 50px;
+    background-color: #D5DEF9;
+    box-sizing: border-box;
+}
+
+.chatScreen p button{
+    float: right;
+    border-radius: 50px;
+    background-color: #D5DEF9;
+    border: none;
+}
+
+.chatScreen #question{
+    width: 250px;
+    font-size: 16px;
+    background-color: #D5DEF9;
+    margin-top: 10px;
+    overflow-y: auto;
+    max-height: 115px;
+    resize: none;
+    border: none;
+}
+
+.chat {
+    height: 480px;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+    margin-right:10px;
+}
+
+#chatContent {
+    text-align: right;
+    width: 100%;
+}
+
+#chatContent li{
+    background-color: #C5E0E8;
+    color: #1E2628;
+    display: block;
+    width: fit-content;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+    text-align: left;
+    float: right;
+    clear: both;
+}
+
+#chatContent li.server-response{
+    float: left;
+    background-color: #3366FF;
+    color: #FFF;
+}
+
+.chatScreen p textarea {
+    padding: 4px 0;
+    overflow-y: hidden;
+    resize: none;
+}
+
+.chatScreen .chat_button {
+    /*display:block;*/
+    /*float:right;*/
+    /*margin-top:8px;*/
+    /*display: flex;*/
+    /*align-items: center;*/
+}
+
+.chatScreen .chatClose{
+    width: 28px;
+    height: 28px;
+    background-color:#fff;
+    margin: 0 20px 2px 10px;
+    border: none;
+
+}
+
+.chatScreen .chatClose img{
+    width: 28px;
+    height: 28px;
+    margin-bottom:2px;
+}
+
+.chatScreen .chatReset{
+    width: 36px;
+    height: 36px;
+    background-color:#fff;
+    border: none;
+}
+
+.chatScreen .chatReset img{
+    width: 36px;
+    height: 36px;
+}
+
+.close-icon{
+    width:22px;
+    height:22px;
+}
+
+/* 스크롤바의 폭 너비 */
+#fileList::-webkit-scrollbar,
+.chat::-webkit-scrollbar,
+.chat_list ul::-webkit-scrollbar,
+div.file_index::-webkit-scrollbar,
+div.chatEZ_list::-webkit-scrollbar
+{
+    width: 10px;
+}
+
+#fileList::-webkit-scrollbar-thumb,
+.chat::-webkit-scrollbar-thumb,
+.chat_list ul::-webkit-scrollbar-thumb,
+div.file_index::-webkit-scrollbar-thumb,
+div.chatEZ_list::-webkit-scrollbar-thumb{
+    background: #6289FF; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 둥근 테두리 */
+}
+
+#fileList::-webkit-scrollbar-track,
+.chat::-webkit-scrollbar-track,
+.chat_list ul::-webkit-scrollbar-track,
+div.file_index::-webkit-scrollbar-track,
+div.chatEZ_list::-webkit-scrollbar-track{
+    background: #ddd;  /*스크롤바 뒷 배경 색상*/
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+}

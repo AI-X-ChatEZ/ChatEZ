@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="img/favicon-32x32.png" type="image/x-icon" />
+  <link rel="stylesheet" type="text/css" th:href="@{css/bootstrap.min.css}" />
+  <link rel="stylesheet" type="text/css" th:href="@{css/login_style.css}" />
+  <script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+<!-- header-->
+<header>
+  <div class="d-flex justify-content-between center">
+    <h1>
+      <a th:href="@{/}" sec:authorize="isAnonymous()">
+        <img src="/img/ChatEZ_logo.svg" alt="ChatEz" /><span>ChatEZ</span>
+      </a>
+      <a th:href="@{/my_service}" sec:authorize="isAuthenticated()">
+        <img src="/img/ChatEZ_logo.svg" alt="ChatEz" /><span>ChatEZ</span>
+      </a>
+    </h1>
+    <!-- Button trigger modal -->
+    <button type="button" sec:authorize="isAnonymous()" class="custom_btn login_btn" data-bs-toggle="modal" data-bs-target="#loginModal">
+      로그인
+    </button>
+
+    <!-- Modal -->
+    <div th:replace="~{fragments/login :: loginModalFragment}"></div>
+
+    <div class="custom_btn btn login_btn" sec:authorize="isAuthenticated()">
+      <a th:href="@{/logout}" >로그아웃</a>
+    </div>
+  </div>
+</header>
+<!--    <header th:replace="~{header :: headerFragment}"></header>-->
+<!-- 각 페이지의 container내용-->
+<th:block layout:fragment="content"></th:block>
+<!-- footer -->
+<footer  th:replace="~{fragments/footer :: footerFragment}"></footer>
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>
