@@ -28,7 +28,7 @@ class MemoryManagementWithOpenAI:
         self.style = stack_style
         self.default = k
 
-    def memory_creation(self):
+    def create_ConversationalMemory(self):
         if self.style == "buffer":
             self.memory = ConversationChain(llm=self.llm,
                                             memory=ConversationBufferMemory())
@@ -51,7 +51,7 @@ class MemoryManagementWithOpenAI:
         else:
             print("Check parameters.")
 
-    def memory_checker(self, input_query):
+    def check_ConversationalMemory(self, input_query):
         start = time.time()
 
         with get_openai_callback() as cb:
@@ -73,10 +73,10 @@ if __name__ == '__main__':
     memory_management = MemoryManagementWithOpenAI(openai_key=open_ai_api.key,
                                                    model_name="text-davinci-003")
 
-    memory_management.memory_creation()
+    memory_management.create_ConversationalMemory()
 
     to_check = memory_management.memory('Hello!')
     print(to_check)
 
-    checker_checker = memory_management.memory_checker('Hello!')
+    checker_checker = memory_management.check_ConversationalMemory('Hello!')
     print(checker_checker)
