@@ -2,13 +2,15 @@
 
 ### ✅개발 기간
 - 📅 2023.09.15 ~ 2023.11.07
-- WBS</br>
+### WBS
 ![image](https://github.com/AI-X-ChatEZ/ChatEZ/assets/134981437/e32808c6-70b5-4c43-a047-d47d0ca9cf02)
 
   
 ### ✅개발 목적
 - ✏️소기업/소상공인을 위한 쉽고 빠른 대화형 AI 맞춤 생성 서비스
 ## 개발환경
+<img width="635" alt="스크린샷 2023-11-13 오후 6 51 03" src="https://github.com/AI-X-ChatEZ/ChatEZ/assets/134981437/7042d0dc-3a18-405c-be7c-e4b3ae81c47c">
+
 
 ## Coding Convention
    👉 [Click!-업데이트예정](https://github.com/AI-X-ChatEZ/ChatEZ/wiki/Coding-Convention)
@@ -32,7 +34,7 @@
 
 
 ## 화면 설계
-   📝 [프로토타입](https://ovenapp.io/view/aDJJeIWHDSdIb7wC2VKh39i5rhSDfnUB/](https://www.figma.com/proto/AWlNaC2a8iRycrNeBZSpD5/ChatEZ-%ED%95%B5%EC%8B%AC%EA%B8%B0%EC%88%A0%EA%B5%AC%EC%84%B1%2FUI?page-id=18%3A44&type=design&node-id=47-596&viewport=-670%2C867%2C0.2&t=CQWMxkOdobJkI8aY-1&scaling=min-zoom&starting-point-node-id=95%3A271&mode=design)https://www.figma.com/proto/AWlNaC2a8iRycrNeBZSpD5/ChatEZ-%ED%95%B5%EC%8B%AC%EA%B8%B0%EC%88%A0%EA%B5%AC%EC%84%B1%2FUI?page-id=18%3A44&type=design&node-id=47-596&viewport=-670%2C867%2C0.2&t=CQWMxkOdobJkI8aY-1&scaling=min-zoom&starting-point-node-id=95%3A271&mode=design)<br>
+   📝 [프로토타입](https://www.figma.com/proto/AWlNaC2a8iRycrNeBZSpD5/ChatEZ-%ED%95%B5%EC%8B%AC%EA%B8%B0%EC%88%A0%EA%B5%AC%EC%84%B1%2FUI?page-id=18%3A44&type=design&node-id=95-271&viewport=-312%2C803%2C0.13&t=xb8PM3dwT7Og8cJW-1&scaling=scale-down&starting-point-node-id=95%3A271&mode=design)<br>
 
 
 ## 주요기능
