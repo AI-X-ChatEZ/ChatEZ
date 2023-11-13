@@ -7,7 +7,7 @@ const imageInputElement = document.getElementById('imageInput');
 const uploadProfileElement = document.getElementById('uploadProfile');
 const fileDeleteButtonElement = document.getElementById("file_delete_button");
 const downloadButton = document.getElementById('download');
-const AllCheckbox = document.getElementById("checkAll");
+
 
 
 
@@ -110,7 +110,7 @@ function showFilesForService(button) {
 
     const serviceElements = document.querySelectorAll('.file_index');
     serviceElements.forEach(function(element) {
-        if (element.getAttribute('data-service-name') === serviceName) {
+        if (element.getAttribute('data-service-name') === serviceId) {
             element.style.display = 'block';
         } else {
             element.style.display = 'none';
@@ -467,8 +467,8 @@ document.addEventListener('DOMContentLoaded', function() {
     startChatElements.forEach(function(startChatElement) {
         startChatElement.addEventListener('click', function() {
             closeAllPanels();
-            var serviceName = startChatElement.getAttribute('data-service-name');
-            var chatScreen = document.getElementById('chatScreen-' + serviceName);
+            let serviceName = startChatElement.getAttribute('data-service-name');
+            let chatScreen = document.getElementById('chatScreen-' + serviceName);
             if (chatScreen) {
                 chatScreen.classList.remove('hide');
                 chatScreen.classList.add('active');
@@ -491,6 +491,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+const chatHistories = {}
+
 document.addEventListener('DOMContentLoaded', function () {
     var chatAreas = document.querySelectorAll('.chatEZ_list .chatScreen');
 
@@ -499,12 +501,13 @@ document.addEventListener('DOMContentLoaded', function () {
         var chatContent = chatArea.querySelector('#chatContent');
         var sendMessageButton = chatArea.querySelector('#sendMessage');
         var chat = chatArea.querySelector('.chat');
-
+        let index = chatArea.id;
+        // console.log(index)
         if (textarea) {
             textarea.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    addMessageToChat(textarea, chatContent, chat);
+                    addMessageToChat(textarea, chatContent, chat, index);
                 }
             });
         }
@@ -516,17 +519,28 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    function addMessageToChat(textarea, chatContent, chat) {
+    function addMessageToChat(textarea, chatContent, chat,index) {
+
+        index = index.replace('chatScreen-','');
+        if (!chatHistories[index]) {
+            chatHistories[index] = [];
+        }
+        // console.log(index);
+        let handleQuery = 'http://localhost:8000/handle_query/'+index;
+        handleQuery = 'http://43.202.44.31:8000/handle_query/'+index
+        // console.log(handleQuery);
         var message = textarea.value.trim();
         if (message) {
+            chatHistories[index].push(message);
+            console.log(chatHistories[index])
             textarea.disabled = true; // textarea를 비활성화
             textarea.placeholder = "답변을 기다리는 중...";
-            fetch('http://localhost:8000/handle_query', {
+            fetch(handleQuery, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({query: message}) // 쿼리를 JSON 형식으로 변환
+                body: JSON.stringify({query: message,history:chatHistories[index]}) // 쿼리를 JSON 형식으로 변환
             }).then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -560,7 +574,13 @@ document.addEventListener('DOMContentLoaded', function () {
     var resetButtons = document.querySelectorAll('.chatReset');
     resetButtons.forEach(function(resetButton) {
         resetButton.addEventListener('click', function() {
-            var chatContent = this.closest('.chatScreen').querySelector('#chatContent');
+            let chatScreen = this.closest('.chatScreen');
+            let chatContent = chatScreen.querySelector('#chatContent');
+            let index = chatScreen.id.replace('chatScreen-','');
+            // Reset the specific chatHistory for this index
+            if (chatHistories[index]) {
+                chatHistories[index] = [];
+            }
             chatContent.innerHTML = ''; // 대화 내용을 비움
         });
     });
@@ -573,7 +593,7 @@ document.addEventListener('input', function(e) {
         var initialTextareaHeight = e.target.offsetHeight;
 
         e.target.style.height = 'auto';
-        e.target.style.height = (e.target.scrollHeight) + 'px';
+        // e.target.style.height = (e.target.scrollHeight) + 'px';
 
         var deltaHeight = initialTextareaHeight - e.target.offsetHeight;
         chat.style.height = (initialChatHeight + deltaHeight) + 'px';
@@ -984,7 +1004,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 if (fileDeleteButtonElement) {
     fileDeleteButtonElement.addEventListener("click", async function() {
-        let selectedFiles = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(input => input.getAttribute('data-file-id'));
+        let selectedFiles = Array.from(document.querySelectorAll('input.file_checkbox[type="checkbox"]:checked')).map(input => input.getAttribute('data-file-id'));
 
         if (!window.confirm("정말로 삭제하시겠습니까?")) {
             return;
@@ -994,7 +1014,9 @@ if (fileDeleteButtonElement) {
             try {
 
                 let serviceId = document.querySelector('.chatez_get_file').getAttribute('data-service-id');
-                const fastApiUrl = "http://localhost:8000/delete_files";
+                let fastApiUrl = "http://localhost:8000/delete_files";
+                // 배포 url
+                fastApiUrl = "http://43.202.44.31:8000/delete_files";
                 console.log(selectedFiles);
                 console.log(serviceId);
                 const requestBody = {
@@ -1033,14 +1055,24 @@ if (fileDeleteButtonElement) {
         }
     });
 
-    if(AllCheckbox){
-        AllCheckbox.addEventListener("change",function () {
-            const fileCheckboxes = document.querySelectorAll(".file_checkbox");
+    document.querySelectorAll('[id*=checkAll]').forEach(function(element) {
+        element.addEventListener('change', function() {
+            const id = this.id;
 
-            fileCheckboxes.forEach(function (checkbox){
-                checkbox.checked = AllCheckbox.checked;
+            // id 값에서 'checkAll'을 제거
+            const className = id.replace('checkAll', '');
+            const Allcheckboxs = document.querySelectorAll('.file_checkbox')
+            Allcheckboxs.forEach(function (checkbox){
+                checkbox.checked = false;
             })
+            this.checked=true;
+            // 제거된 값을 클래스로 가진 모든 체크박스를 찾아 체크 상태를 변경합니다.
+            document.querySelectorAll('.box' + className).forEach(function(checkbox) {
+                checkbox.checked = !checkbox.checked; // 체크박스가 체크되어 있다면 해제하고, 해제되어 있다면 체크합니다.
+            });
+        });
+    });
 
-        })
-    }
+
+
 }

@@ -55,9 +55,9 @@
                 <td><img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"></td>
                 <td><span th:text="${myServices.serviceName}"></span></td>
                 <td><a th:href="@{|/${myServices.serviceId}|}" th:text="|http://chatez.com/${myServices.serviceId}|"></a></td>
-                <td><button type="button" class="btn btn-light startChat" th:attr="data-service-name=${myServices.serviceName}">실행</button></td>
+                <td><button type="button" class="btn btn-light startChat" th:attr="data-service-name=${myServices.serviceId}">실행</button></td>
 
-                <div th:id="'chatScreen-'+${myServices.serviceName}" class="hide panel chatScreen">
+                <div th:id="'chatScreen-'+${myServices.serviceId}" class="hide panel chatScreen">
                     <h4>
                         <span><img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="chatbot_icon" class="chatbot_icon"><span th:text="${myServices.serviceName}"></span></span>
                         <span class="chat_button"><button class="chatReset"><img th:src="@{img/reset_icon.png}" alt="reset_icon" class="reset_icon"></button>
@@ -72,21 +72,21 @@
                 </div>
 
                 <td><button type="button" class="btn btn-light updatePanel"
-                            th:attr="data-service-name=${myServices.serviceName}">수정</button></td>
+                            th:attr="data-service-name=${myServices.serviceId}">수정</button></td>
 
-                <div th:id="'updateScreen-'+${myServices.serviceName}" class="hide panel updateScreen">
+                <div th:id="'updateScreen-'+${myServices.serviceId}" class="hide panel updateScreen">
                     <h4><img th:src="@{img/edit_icon.png}" alt="edit_icon" class="edit_icon"><span>수정하기</span></h4>
                     <p id="imageContainer">
                         <img th:src="|https://${bucket}.s3.ap-northeast-2.amazonaws.com/${folder}/${myServices.profilePic}|" alt="profile_icon" class="update_profile_icon"
-                             th:id="'updateProfile-' + ${myServices.serviceName}"></p>
-                    <input type="file" th:id="'imageUpdate-' + ${myServices.serviceName}"
+                             th:id="'updateProfile-' + ${myServices.serviceId}"></p>
+                    <input type="file" th:id="'imageUpdate-' + ${myServices.serviceId}"
                            style="display: none;" accept="image/*" class="imageUpdate">
-                    <p><input type="text" th:id="'updateName-' + ${myServices.serviceName}" class="updateName"
+                    <p><input type="text" th:id="'updateName-' + ${myServices.serviceId}" class="updateName"
                               th:value="${myServices.serviceName}" placeholder="대화형 AI 이름 입력" maxlength="24"></p>
                     <p id="updateButton">
-                        <span id="serviceNo" th:id="'serviceNo-' + ${myServices.serviceName}" th:text="${myServices.serviceNo}" style="display:none;"></span>
+                        <span id="serviceNo" th:id="'serviceNo-' + ${myServices.serviceId}" th:text="${myServices.serviceNo}" style="display:none;"></span>
                         <span class="serviceName" id="serviceName" th:text="${myServices.serviceName}" style="display:none;"></span>
-                        <button th:id="'updateAi-' + ${myServices.serviceName}" class="updateAi custom_btn">확인</button>
+                        <button th:id="'updateAi-' + ${myServices.serviceId}" class="updateAi custom_btn">확인</button>
                         <button class="updateClose custom_btn">취소</button></p>
                 </div>
 

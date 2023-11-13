@@ -31,7 +31,7 @@
         <div class="file_list">
             <div id="file_title">
                 <ul>
-                    <li><label for="checkAll"></label><input type="checkbox" id="checkAll"></li>
+                    <li></li>
                     <li>이름</li>
                     <li>크기</li>
                     <li>형식</li>
@@ -43,8 +43,12 @@
                  th:data-service-name="${servicesFiles.key}"
                  style="display: none;">
                 <h2 th:text="${servicesFiles.key}" style="display: none;">Service Name</h2>
+                <div class="file_detail_list">
+                <label th:for="${'checkAll'+servicesFiles.key}"></label><input type="checkbox" class="checkAll" th:id="${'checkAll'+servicesFiles.key}">
                 <ul th:each="file : ${servicesFiles.value}">
-                    <li> <input type="checkbox" class="file_checkbox" th:data-file-id="${file.documentId}"></li>
+                    <li><label>
+                        <input type="checkbox" th:class="${'file_checkbox box' + servicesFiles.key}" th:data-file-id="${file.documentId}">
+                    </label></li>
                     <li>
                         <img th:switch="${file.contentType}"
                              th:src="@{${'img/' +
@@ -62,6 +66,7 @@
                     <li><span th:text="${file.contentType}"></span></li>
                     <li><span th:text="${file.uploadTime}"></span></li>
                 </ul>
+                </div>
             </div>
             <div id="file_delete">
                 <button id="file_delete_button" disabled><img th:src="@{img/trash_icon.png}" alt="trash_icon" class="trash_icon">삭제 하기</button>

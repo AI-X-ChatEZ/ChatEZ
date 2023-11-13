@@ -54,15 +54,40 @@ jobs:
 
       #dockerfile을 통해 이미지를 빌드하고 이를 docker repo로 push
       #이때 ${{ secrets.DOCKER_REPO }}/directors-dev 가 위에서 만든 도커 repository 입니다.
-      - name: docker build & push to docker repo
+      - name: docker-compose build & push to docker repo
+        env:
+          JE_DOCKER_USERNAME: ${{ secrets.JE_DOCKER_USERNAME }}
+          JE_DOCKER_REPO: ${{ secrets.JE_DOCKER_REPO }}
         run: |
           docker login -u ${{ secrets.JE_DOCKER_USERNAME }} -p ${{ secrets.JE_DOCKER_PASSWORD }}
-          docker build -f Dockerfile -t ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }} .
-          docker push ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }}:latest
+          docker-compose build chatez-app
+          docker-compose push chatez-app
 
       # appleboy/ssh-action@master 액션을 사용하여 지정한 서버에 ssh로 접속하고, script를 실행합니다.
       # script의 내용은 도커의 기존 프로세스들을 제거하고, docker repo로부터 방금 위에서 push한 내용을 pull 받아 실행
       # cicd container 생성하고 cicd 컨테이너 start
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Replace environment variable placeholders
+        run: |
+          sed -i "s/\${JE_DOCKER_USERNAME}/${{ secrets.JE_DOCKER_USERNAME }}/g" ./docker-compose.yml
+          sed -i "s/\${JE_DOCKER_REPO}/${{ secrets.JE_DOCKER_REPO }}/g" ./docker-compose.yml
+
+      - name: Copy docker-compose file to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.JE_HOST }}
+          username: ubuntu
+          key: ${{ secrets.JE_PRIVATE_KEY }}
+          source: "./docker-compose.yml"
+          target: "~/chatez"
+
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         #        id: deploy
@@ -70,15 +95,13 @@ jobs:
           host: ${{ secrets.JE_HOST }}
           username: ubuntu
           key: ${{ secrets.JE_PRIVATE_KEY }}
-          #          envs: GITHUB_SHA
           script: |
+            cd ~/chatez 
             CONTAINERS=$(sudo docker ps -qa)
             if [ ! -z "$CONTAINERS" ]; then
-              sudo docker rm -f $CONTAINERS
-            fi
-            sudo docker pull ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }}:latest
-            sudo docker run -d -p 8080:8080 --name chatez ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }}:latest
-            sudo docker image prune -f
-
-
-
+            sudo docker rm -f $CONTAINERS
+            fi 
+            docker-compose -f docker-compose.yml down
+            docker pull ${{ secrets.JE_DOCKER_USERNAME }}/${{ secrets.JE_DOCKER_REPO }}:latest
+            docker-compose -f docker-compose.yml up -d
+            docker image prune -f

@@ -67,6 +67,11 @@
     width: 30px !important;
     height: 38px !important;
 }
+
+div.chatEZ_list{
+    height: 70vh;
+    overflow-y: auto;
+}
 .chatEZ_list table {
     width: 100%;
     table-layout: fixed;
@@ -191,6 +196,8 @@
 
 .chat_list ul{
     margin-top: 20px;
+    overflow-y: auto;
+    height: 70vh;
 }
 
 .chatez_get_file {
@@ -207,6 +214,13 @@
     align-items: center;      /* 항목들을 중앙에 정렬합니다. */
     justify-content: flex-start;  /* 항목들을 왼쪽부터 시작하도록 정렬합니다. */
     gap: 10px;                /* 이미지와 텍스트 사이에 간격을 줍니다. */
+}
+
+.chatez_get_file>span{
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .chatez_get_file:hover{
@@ -318,24 +332,19 @@
     width: 44px;
     height: 44px;
 }
-.file_index {
-    height: 65vh;
-    overflow-y: auto;
-    font-size: 18px;
-}
 
-.file_index ul{
-    height: 70px;
-    border-radius: 20px;
-    background-color: #ddd;
-    margin-bottom:10px;
-    margin-right:10px;
+div#file_title{
+    position: relative;
 }
-
+div#file_title ul{
+    width: 100%;
+    position: absolute;
+    bottom: -40px;
+}
 
 #file_title ul li{
-    vertical-align: middle;
-    padding: 10px 0 10px 0;
+    vertical-align: bottom;
+    padding: 10px 0 0 0;
     display: inline-block;
     text-align: center;
 }
@@ -348,19 +357,50 @@
     width: 15%;
 }
 
+div.file_detail_list{
+    padding-top: 30px;
+}
+
+
+
+.file_index {
+    height: 65vh;
+    overflow-y: auto;
+    font-size: 18px;
+    position: relative;
+}
+
+.file_index input.checkAll{
+    position: absolute;
+    top: 20px;
+}
+
+.file_index ul{
+    height: 70px;
+    border-radius: 20px;
+    background-color: #ddd;
+    margin-bottom:10px;
+    margin-right:10px;
+}
+
+
 .file_index ul li{
     vertical-align: middle;
     padding-top: 15px;
     display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .file_index ul li img{
     vertical-align: middle;
 }
 
+
 .file_index ul li:nth-child(2){
-    margin-left: 20px;
-    width: 43%;
+    margin-left: 40px;
+    width: 35%;
 }
 
 .file_index ul li:nth-child(n+3):nth-child(-n+5){
@@ -553,6 +593,7 @@
 
 .updateScreen.panel.active {
     right: 60px;
+    z-index: 10;
 }
 
 .updateScreen.panel h4{
@@ -594,6 +635,7 @@
 
 .chatScreen.active {
     right: 60px;
+    z-index: 10;
 }
 
 .chatScreen .edit_icon {
@@ -669,8 +711,8 @@
 }
 
 #chatContent li{
-    background-color: #3366FF;
-    color: #FFF;
+    background-color: #C5E0E8;
+    color: #1E2628;
     display: block;
     width: fit-content;
     padding: 5px 10px;
@@ -685,7 +727,7 @@
 
 #chatContent li.server-response{
     float: left;
-    background-color: #FF6633;
+    background-color: #3366FF;
     color: #FFF;
 }
 
@@ -737,18 +779,28 @@
 
 /* 스크롤바의 폭 너비 */
 #fileList::-webkit-scrollbar,
-.chat::-webkit-scrollbar{
+.chat::-webkit-scrollbar,
+.chat_list ul::-webkit-scrollbar,
+div.file_index::-webkit-scrollbar,
+div.chatEZ_list::-webkit-scrollbar
+{
     width: 10px;
 }
 
 #fileList::-webkit-scrollbar-thumb,
-.chat::-webkit-scrollbar-thumb{
+.chat::-webkit-scrollbar-thumb,
+.chat_list ul::-webkit-scrollbar-thumb,
+div.file_index::-webkit-scrollbar-thumb,
+div.chatEZ_list::-webkit-scrollbar-thumb{
     background: #6289FF; /* 스크롤바 색상 */
     border-radius: 10px; /* 스크롤바 둥근 테두리 */
 }
 
 #fileList::-webkit-scrollbar-track,
-.chat::-webkit-scrollbar-track{
+.chat::-webkit-scrollbar-track,
+.chat_list ul::-webkit-scrollbar-track,
+div.file_index::-webkit-scrollbar-track,
+div.chatEZ_list::-webkit-scrollbar-track{
     background: #ddd;  /*스크롤바 뒷 배경 색상*/
 }
 
